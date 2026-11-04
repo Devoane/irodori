@@ -1,93 +1,122 @@
-# Irodori 彩り
+<p align="center"><img src="frontend/logo.svg" width="90" alt=""></p>
+<h1 align="center">Irodori 彩り</h1>
 
-Kolorowe wydruki z kilku szpul. Z teksturowanego albo malowanego modelu dobiera 2–4 szpule (podgląd do 8), tworzy
-z nich do 251 mieszanek warstwowych, pokazuje przewidywany wydruk i zapisuje projekt dla Snapmaker Orca 2.4 albo
-G-code dla Snapmaker U1. Działa lokalnie, bez internetu. Instrukcja dla użytkownika: `frontend/help.html`.
+<p align="center"><b>Kolorowy model 3D na wielokolorowy wydruk z 4 szpul na drukarce Snapmaker U1.</b><br>
+Działa na Twoim komputerze. Bez konta i bez wysyłania modeli do internetu.</p>
 
-## Uruchamianie
+![Okno Irodori z modelem hełmu i proponowanymi zestawami szpul](docs/podglad.png)
 
-| System | Jak |
+<sub>Model: „Damaged Helmet”, theblueturtle_, CC BY 4.0. Nie ma go w tym repozytorium.</sub>
+
+*English: Irodori turns a coloured 3D model into a multi-colour print project for the Snapmaker U1. The interface and documentation are in Polish. To run it, install Python 3.11+ and start `irodori.py`.*
+
+## Co to robi
+
+Wrzucasz kolorowy model. Irodori:
+
+1. sprawdza, jakie kolory ma model,
+2. dobiera 2–4 szpule, z których da się je uzyskać,
+3. układa cienkie warstwy różnych szpul tak, żeby z daleka wyglądały jak nowy kolor,
+4. pokazuje, jak powinien wyglądać wydruk,
+5. zapisuje gotowy projekt dla Snapmaker Orca albo G-code dla drukarki.
+
+## Czego potrzebujesz
+
+| Co | Po co | Czy trzeba? |
+|---|---|---|
+| [Python 3.11 lub nowszy](https://www.python.org/downloads/) | uruchamia program | **tak** |
+| Internet przy pierwszym starcie | jednorazowe pobranie około 400 MB bibliotek | **tak**, potem już nie |
+| Przeglądarka | w niej działa okno programu | **tak** |
+| Snapmaker Orca 2.4 | otwarcie projektu 3MF albo przygotowanie G-code | **tak**, żeby wydrukować |
+| Drukarka Snapmaker U1 | na nią powstaje projekt | **tak**, żeby wydrukować |
+| [Blender](https://www.blender.org/download/) | tylko do plików FBX | nie |
+
+## Instalacja krok po kroku
+
+### 1. Pobierz program
+
+Na górze tej strony kliknij zielony przycisk **Code**, a potem **Download ZIP**. Rozpakuj plik, na przykład na Pulpit.
+
+### 2. Zainstaluj Pythona
+
+Pobierz go ze strony [python.org](https://www.python.org/downloads/) i zainstaluj.
+
+> **Windows:** na pierwszym ekranie instalatora zaznacz **Add python.exe to PATH**. To najczęstsza przyczyna problemów.
+
+Na Linuksie Python zwykle już jest. Sprawdzisz to poleceniem `python3 --version`.
+
+### 3. Uruchom Irodori
+
+| System | Co zrobić |
 |---|---|
-| Linux | `./run.sh` (zatrzymanie: `./run.sh --stop`). Tutaj: menu „Irodori (on Druk3d)” |
-| Windows | Python 3.11+ z python.org, dwuklik `Irodori.bat` |
-| macOS | Python 3.11+, dwuklik `Irodori.command` |
+| **Windows** | kliknij dwa razy `Irodori.bat` |
+| **macOS** | kliknij prawym przyciskiem `Irodori.command`, wybierz **Otwórz** i potwierdź |
+| **Linux** | otwórz terminal w folderze programu i wpisz `./run.sh` |
 
-`irodori.py` przy pierwszym starcie tworzy `.venv` i instaluje `requirements.txt`, potem uruchamia serwer na
-`http://127.0.0.1:8765/` i otwiera przeglądarkę. Zmienne: `IRODORI_PORT`, `IRODORI_NO_BROWSER`, `IRODORI_ORCA`,
-`IRODORI_BLENDER`, `IRODORI_ORCA_CONFIG`, `IRODORI_CONTAINER` (distrobox z narzędziami, gdy serwer stoi poza nim).
-Szukanie narzędzi i folderów: `backend/tools.py`.
+Pierwszy start trwa kilka minut, bo program pobiera biblioteki. Nie zamykaj okna, nawet jeśli przez chwilę nic się w nim nie zmienia. Potem przeglądarka otworzy się sama. Jeśli tak się nie stanie, wejdź na **http://127.0.0.1:8765/**.
 
-## Bezpieczeństwo
+Okno terminala ma zostać otwarte przez cały czas pracy.
 
-- Serwer słucha tylko na 127.0.0.1. `backend/guard.py` odrzuca żądania z obcym nagłówkiem `Host` (DNS rebinding),
-  z obcym `Origin` albo `Sec-Fetch-Site: cross-site` (CSRF) i większe niż 1 GiB.
-- CSP `default-src 'self'` z hashem import mapy; czcionki i biblioteki są w `frontend/`, strona nie łączy się z niczym na zewnątrz.
-- Nazwy wgrywanych plików są przycinane do samej nazwy (bez folderów i `..`); 3MF, który rozpakowuje się do ponad 4 GiB, jest odrzucany.
-- Blender startuje z `--factory-startup --disable-autoexec`; Orca i Blender są wołane listą argumentów, bez powłoki.
-- Zależności mają przedziały wersji w `requirements.txt`.
+## Pierwszy wydruk
+
+1. **Wczytaj model.** Przeciągnij plik na pole **Upuść model albo kliknij**. Działają: GLB, OBJ z MTL, FBX z teksturami i malowany 3MF. Jeśli model potrzebuje dodatkowych plików, program poprosi o nie.
+2. **Kliknij Analizuj.** Przy domyślnej dokładności duży model może liczyć się kilka minut.
+3. **Wybierz zestaw po prawej.** Procent mówi, jak blisko wynik jest kolorów modelu. Im wyżej, tym lepiej. Kliknięty zestaw zobaczysz w podglądzie.
+4. **Włóż pasujące szpule.** Nazwy i kolory są na karcie zestawu. F1 to głowica 1, F2 to głowica 2 i tak dalej.
+5. **Pobierz plik.** Kliknij **3MF** i otwórz go w Snapmaker Orca albo kliknij **G-code**, jeśli chcesz od razu plik dla drukarki.
+6. **Wydrukuj.** Zacznij od małego modelu.
+
+Masz własne szpule? Wpisz je w **Moje filamenty**. Program pokaże wtedy osobny wynik dla szpul założonych w drukarce. Opis wszystkich ustawień jest w programie pod **Pomoc**.
+
+## Jak zamknąć program
+
+Zamknij okno terminala albo wpisz w nim `Ctrl+C`. Na Linuksie możesz też użyć `./run.sh --stop`.
+
+## Gdy coś nie działa
+
+| Problem | Rozwiązanie |
+|---|---|
+| `python` nie jest rozpoznany albo okno od razu znika | Zainstaluj Pythona ponownie i zaznacz **Add python.exe to PATH** |
+| Pierwszy start stoi w miejscu | Poczekaj. Biblioteki mają około 400 MB. Sprawdź internet |
+| Przeglądarka się nie otwiera | Wejdź ręcznie na http://127.0.0.1:8765/ |
+| macOS nie chce otworzyć pliku | Kliknij go prawym przyciskiem i wybierz **Otwórz** |
+| `Permission denied` na Linuksie | Wpisz `python3 irodori.py` |
+| `Nie znaleziono programu Snapmaker Orca` | Zainstaluj Orkę albo pobierz 3MF i otwórz go ręcznie. Możesz też podać ścieżkę w zmiennej `IRODORI_ORCA` |
+| `Blender (potrzebny do FBX)` | Zainstaluj Blendera albo zapisz model jako GLB |
+| Port 8765 jest zajęty | Ustaw inny w zmiennej `IRODORI_PORT` |
+| Model jest biały albo ma złe kolory | Dodaj brakujące tekstury, gdy program o nie poprosi |
+
+Nie ma tu Twojego problemu? [Zgłoś go](https://github.com/Devoane/irodori/issues) i dopisz system, typ pliku oraz treść błędu.
 
 ## Jak to działa
 
-- Receptura to cykl slotów, jedna cyfra = jedna warstwa; ta sama szpula najwyżej 2 razy z rzędu (wewnętrzna ściana: 3).
-- Kolor receptury przewiduje FilamentMixer z Orca (`filament_mixer_model.h`, MIT), mieszany w kolejności slotów jak
-  `blend_color_multi`, więc kolor jednej receptury jest identyczny z próbką w Orca.
-- „W slicerze” = `compute_mixed_filament_display_color` z Orca, przeniesione do `recipes.slicer_colors`: przy dwóch grupach
-  wzorca Orca uśrednia grupę zewnętrzną na 1 ścianie i wewnętrzną na pozostałych (`wall_loops`) w cyklu min(NWW, 48).
-  Bez filtra próbka w Orca różniła się od wydruku nawet o 0,15 OKLab, dlatego dwie receptury ścian biorą tylko pary
-  z różnicą < 0,035, a domyślnie jest jedna receptura.
-- Mieszanki: zachłanny facility location ważony polem; „ile trzeba” ucina listę, gdy reszta poprawia średni
-  błąd o mniej niż 1% (min. 0,0005 OKLab / 0,05 ΔE).
-- Dokładność „najwyższa” (`Settings.precise`, domyślnie): mieszanki dobierane i przypisywane w ΔE2000 (tej samej mierze
-  co % zgodności; przypis = 6 najbliższych w OKLab przeliczonych ΔE2000), ranking ocenia 200 zestawów na 1200 kubełkach
-  i dopracowuje 6 najlepszych oraz zestawy CMY / T1–T4 wymianą pojedynczych szpul na dowolną z biblioteki
-  (`palette._improve`), a pełne palety buduje dla 2× więcej propozycji i zostawia najlepsze. Pomiar (match %, szybka →
-  najwyższa): DamagedHelmet 91,3 → 93,0 (54 → 188 s), GradientBox 83,4 → 85,5, Duck 98,7 → 98,8;
-  zestawy CMY na hełmie 75,7 → 84,3. „Tylko zestawy CMY” domyślnie WYŁ. (wyłącza przeszukiwanie biblioteki).
-- Czas względny: pole × liczba szpul receptury; pola jednoszpulowe tańsze o stosunek warstw przy „grubych warstwach”.
-- Wtapianie nakładek: próbki z alfą < 1 mieszane z najbliższą nieprzezroczystą powierzchnią (zasięg 1% rozmiaru, min. 0,5 mm).
-- Podstawki (`bases.py`): siatka biegunowa na elipsie obejmującej model, osobna część obiektu, model zagłębiony 0,6 mm. Wybór podstawki nie jest zapamiętywany (`UNSAVED` w app.js): każdy nowy model startuje bez niej.
-- Kalibracja (`calibration.py`): zdjęcie karty → po jednym wzmocnieniu na kanał w świetle liniowym (ekspozycja i balans bieli z czystych pól; bogatsza mapa ściągała szpule na kolor z katalogu) → model kwadratowy w OKLab. Wyrazy modelu należą do szpul i par, więc każdy zestaw o zmierzonych parach korzysta z nich w dowolnej kolejności. Zapisywana tylko, gdy błąd na pominiętych polach jest mniejszy niż modelu i niż ΔE 8 (próg przyjęty z testów na sztucznych zdjęciach, do sprawdzenia na prawdziwej karcie); JSON trzyma też surowe pomiary.
-- Nieszczelne siatki: liczba nawinięć + marching cubes; kolory zawsze z oryginału.
+Drukarka ma tylko 4 szpule, ale warstwy są bardzo cienkie. Gdy na przemian drukują się warstwy niebieskie i żółte, z daleka oko widzi zieleń. Podobnie działa ekran albo druk w gazecie.
 
-## Format eksportu (sprawdzony z Orca 2.4.0 CLI)
+Irodori szuka 2–4 szpul, które razem najlepiej pokrywają kolory modelu, i tworzy z nich do 251 mieszanek. Każdy fragment modelu dostaje najbliższą mieszankę. Do oceny służy ΔE2000, czyli miara różnicy kolorów dopasowana do ludzkiego wzroku.
 
-- Mieszanka: `1,2,1,1,<mix_b>,0,g<sloty>,w<wagi>,m2,z0,xa0,xb0,d0,o0,u<id>,<wzorzec>`; przy a=1, b=2 cyfry wzorca to sloty.
-  Dwie receptury: `zewnętrzna,wewnętrzna`.
-- Kilka części 3MF (np. warstwowy litofan) zostaje osobnymi częściami z własną szpulą.
-- `paint_color` stan 0 = szpula obiektu (tło za kolorowym pasem: CMY+W → Magenta, CMY+K → Yellow).
-- Wieża czyszcząca (`export_3mf.tower_spot`): róg stołu wolny od modelu, liczony dla wieży 60×90 mm, bo Orca kotwiczy
-  ją w lewym przednim rogu i powiększa z liczbą mieszanek; domyślne (15, 220) w GUI dawało „G-code path goes beyond
-  plate boundaries”.
-- Pomalowane 3MF: bryły nieszczelne już w źródle (krawędź nie dzielona przez dokładnie 2 trójkąty, liczone na
-  oryginalnych indeksach w `source._broken_bodies`, zanim malowanie potnie trójkąty) są przebudowywane
-  (`geometry.mend_bodies`: winding number + marching cubes 0,12 mm + Taubin), kolor z najbliższego trójkąta; reszta
-  bez zmian. Tygrys: 10 brył (opuszki, poduszki łap), Orca zgłaszała „428 non-manifold edges”. Wierzchołki zapisywane z 9 cyframi.
-- Kolor w głąb = `mmu_segmented_region_max_width` 0. Splot na dachach maluje dachy podziałami trójkątów.
-  Splot (`export_3mf._weave_plans`) bierze 1–2 szpule, których kropki uśrednione jak światło (liniowe RGB, nie model
-  warstw) są najbliżej koloru ścian, z karą za kontrast; pary o kontraście > 0,2 OKLab (np. niebieski+żółty) i dachy,
-  których kropki nie trafiają w kolor (> 0,08 OKLab, np. brąz z WBRY), zostają mieszanką warstw. Wcześniej Bayer ze
-  wszystkich szpul receptury robił pstrokate konfetti (tygrys z podstawką, 2026-10-27). Domyślny poziom 6 (1,3 mm).
-  Splot tylko na prawdziwych dachach (`_flat_roofs`): spójny obszar z normalną z > 0,985, ≥ 25 mm², rozrzut wysokości
-  ≤ 0,15 mm. Wcześniej (normalna > 0,95) prawie płaskie czubki kopuł i łap dostawały samotne łaty kratki.
-- Profile warstw (VOL, grube warstwy, cienkie pod dachami) w `Metadata/layer_heights_profile.txt`: oba końce każdej
-  warstwy przypięte, ostatni punkt na górze obiektu. Każdy profil wymusza podpory `tree_hybrid`.
-- Cienkie warstwy pod dachami tylko dla płaskich dachów (normal z > 0,985) o ≥ 25 mm² na danej wysokości; inaczej
-  zaokrąglone modele dostawały tysiące cienkich warstw i druk się wydłużał.
-- Warstwy < 0,08 mm: projekt i maszyna w CLI dostają `min_layer_height` 0,04.
-- Zatopienie: CLI kładzie zatopiony obiekt z powrotem na stół, więc eksport tnie siatkę (`manifold3d.trim_by_plane`).
+Pełny opis formatu eksportu, algorytmów i testów jest w [docs/technika.md](docs/technika.md).
 
-Pułapki Orca 2.4 CLI: `<plate>` w `model_settings.config` = crash (issue #935); profile systemowe trzeba spłaszczyć;
-„floating regions” bez podpór to błąd; nieszczelna siatka z mieszankami psuje wieżę czyszczącą; dwie receptury ścian
-z podporami na szpuli 0 wywalają `WipeTower2::prime`, więc podpory dostają szpulę tła.
+## Co warto wiedzieć przed drukiem
 
-## Testy
+- **Tylko Snapmaker U1.** Projekty powstają dla tej drukarki i Snapmaker Orca 2.4. Tryb 5–8 głowic służy tylko do podglądu.
+- **Podgląd to przewidywanie.** Prawdziwy kolor zależy od partii filamentu i światła. Kalibracja kartą ma to poprawiać, ale nie została jeszcze sprawdzona na prawdziwym wydruku.
+- **Odpad bywa duży.** Mieszanki wymagają wieży czyszczącej. W jednym z testów wieża zużyła 58 g, a sam model 13,5 g.
+- **Bardzo duże modele są upraszczane.** Domyślny limit to 1 milion trójkątów.
+- **Testowane na Linuksie.** Pliki startowe dla Windows i macOS są gotowe, ale nie były sprawdzane na tych systemach. Jeśli coś nie działa, zgłoś to.
 
-```
-.venv/bin/python -m pytest -q tests/test_core.py
-.venv/bin/python tests/orca_slice.py projekt.3mf     # tnie prawdziwą Orcą
-node tests/e2e.mjs /tmp/out tests/samples/fbx/Duck.fbx tests/samples/fbx/Image_0.png   # przy działającym serwerze, Playwright
-```
+## Prywatność
 
-Czcionki w `frontend/fonts`, licencje obok: Antykwa Toruńska (GUST Font License, nagłówki i liczby), M PLUS 1 i Shippori Mincho (SIL OFL 1.1, tekst i znaki japońskie, ograniczone do potrzebnych znaków).
+Program działa tylko na Twoim komputerze i nasłuchuje wyłącznie na adresie `127.0.0.1`. Modele nie są nigdzie wysyłane. Internet jest potrzebny tylko przy pierwszym pobraniu bibliotek.
 
-Wygląd: czerwień i biel wspólne dla flag Polski i Japonii, kobalt jak ceramika z Bolesławca i japońskie indygo. `logo.svg` łączy biało-czerwony pas z dyskiem, `fala.svg` to seigaiha z oczek bolesławieckich, `herb.svg` to kamon cięty jak wycinanka. Tło podglądu jest neutralnie szare, żeby nie zmieniać odbioru kolorów.
+## Licencja
+
+Kod jest dostępny na licencji [GNU AGPL-3.0](LICENSE). Część danych i logiki koloru pochodzi z OrcaSlicer i Snapmaker Orca.
+
+| Składnik | Licencja |
+|---|---|
+| Model mieszania FilamentMixer (z Orca) | MIT |
+| three.js, three-mesh-bvh | MIT |
+| Antykwa Toruńska | GUST Font License |
+| M PLUS 1, Shippori Mincho | SIL OFL 1.1 |
+
+Irodori to niezależny projekt, niezwiązany z firmą Snapmaker ani producentami filamentów. Ich nazwy służą tylko do opisania zgodności.

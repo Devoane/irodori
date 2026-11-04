@@ -1,8 +1,6 @@
 // UI test against a running server:  node tests/e2e.mjs <outdir> <model> [extra files...]
-import { createRequire } from 'node:module';
+import { chromium } from 'playwright';
 import fs from 'node:fs';
-const require = createRequire('./package.json');
-const { chromium } = require('playwright');
 const [out, ...files] = process.argv.slice(2);
 const browser = await chromium.launch({ args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
 const page = await browser.newPage({ viewport: { width: 1500, height: 1000 }, acceptDownloads: true });
