@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Irodori</title>
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+<script type="importmap">
+{ "imports": {
+  "three": "./vendor/three.module.js",
+  "three/addons/": "./vendor/jsm/",
+  "three-mesh-bvh": "./vendor/three-mesh-bvh.module.js"
+} }
+</script>
+</head>
+<body>
+<header class="bar">
+  <a class="brand" href="./"><img src="logo.svg" alt="" width="34" height="34">
+    <span><b>Irodori</b> <span class="kanji">彩り</span></span></a>
+  <nav>
+    <button id="btnInventory" class="nav" type="button">Moje filamenty</button>
+    <button id="btnCalib" class="nav" type="button">Kalibracja</button>
+    <a class="nav" href="help.html" target="_blank">Pomoc</a>
+  </nav>
+</header>
+
+<main class="work">
+  <aside class="side">
+    <section class="panel">
+      <h2><i>1</i> Model</h2>
+      <label id="drop" class="drop">
+        <input id="file" type="file" accept=".glb,.3mf,.fbx,.obj,.mtl,.png,.jpg,.jpeg,.webp,.tif,.tiff,.tga,.bmp" multiple hidden>
+        <b id="dropTitle">Upuść model albo kliknij</b>
+        <small id="dropSub">GLB · OBJ z MTL · FBX z teksturami · malowany 3MF</small>
+      </label>
+      <section id="deps" class="deps" hidden>
+        <b>Model potrzebuje tych plików</b>
+        <ul id="depList"></ul>
+        <div class="row2">
+          <label class="btn">+ pliki<input id="depFiles" type="file" accept=".png,.jpg,.jpeg,.webp,.tif,.tiff,.tga,.bmp,.mtl" multiple hidden></label>
+          <label class="btn">+ folder<input id="depFolder" type="file" webkitdirectory multiple hidden></label>
+        </div>
+        <label class="chk"><input id="depAllow" type="checkbox"> Analizuj bez nich (albo są wbudowane w plik)</label>
+      </section>
+      <div id="fileInfo" class="fileinfo"></div>
+      <div class="go">
+        <label class="heads" title="Liczba fizycznych filamentów. Snapmaker U1 ma 4 głowice; 5–8 tylko do podglądu.">Głowice
+          <select id="s_toolheads"><option>2</option><option>3</option><option selected>4</option><option>5</option>
+            <option>6</option><option>7</option><option>8</option></select></label>
+        <button id="btnAnalyze" class="go-btn" type="button" disabled>Analizuj</button>
+      </div>
+      <div class="progress"><div class="pbar"><i id="progBar"></i></div><b id="progPct">0%</b></div>
+      <div id="status" class="status"></div>
+      <div id="warnings" class="status warn"></div>
+    </section>
+
+    <section class="panel settings" id="adv">
+      <h2><i>2</i> Ustawienia</h2>
+      <p class="legend"><span class="dot re"></span> wymaga ponownej analizy <span class="dot ex"></span> działa przy pobieraniu</p>
+
+      <details class="grp" open><summary>Kolory</summary>
+        <div class="opt re"><label for="s_capacity">Liczba kolorów</label>
+          <select id="s_capacity"><option value="0" selected>Ile trzeba</option><option value="64">do 64</option>
+            <option value="255">do 255</option><option value="-1" id="capNoDither">tylko 4 szpule</option></select>
+          <small>„Ile trzeba” kończy dobieranie mieszanek, gdy następne niczego już nie poprawiają.</small></div>
+        <div class="opt re"><label for="s_precise">Dokładność</label>
+          <select id="s_precise"><option value="1" selected>Najwyższa (wolniej)</option><option value="0">Szybka</option></select>
+          <small>Najwyższa przeszukuje całą bibliotekę wymianą szpul i dobiera mieszanki tak, jak oko widzi różnicę (ΔE2000). Analiza trwa 2–4× dłużej.</small></div>
+        <div class="opt re"><label for="s_samples">Propozycje zestawów</label>
+          <select id="s_samples"><option>1</option><option>2</option><option>3</option><option selected>4</option>
+            <option>5</option><option>6</option><option>7</option><option>8</option></select>
+          <small>Zestawy CMY (4 głowice) zawsze dochodzą osobno.</small></div>
+        <div class="opt re"><label for="s_source">Skąd filamenty</label>
+          <select id="s_source"><option value="library" selected>Cała biblioteka</option><option value="owned">Tylko moje szpule</option>
+            <option value="loaded">To, co jest w T1–T4</option></select></div>
+        <div class="opt re"><label for="s_cmyk_optimized">Tylko zestawy CMY</label>
+          <select id="s_cmyk_optimized"><option value="1">Tak</option><option value="0" selected>Nie, szukaj też innych</option></select>
+          <small>„Tak” pomija przeszukiwanie biblioteki: szybciej, ale zwykle mniej trafnie.</small></div>
+        <div class="opt re"><label for="s_lock_colors">Czyste kolory szpul</label>
+          <select id="s_lock_colors"><option value="0" selected>Wył.</option><option value="1">Wł.</option></select>
+          <small>Kolor modelu równy kolorowi szpuli (ΔE &lt; 2,5) drukuje się samą szpulą.</small></div>
+        <div class="opt re"><label for="s_texture_optimization">Przyciąganie do szpul</label>
+          <select id="s_texture_optimization"><option value="0" selected>Wył.</option><option value="1">Wł.</option></select>
+          <small>Odcienie bliskie szpuli drukuje czystym filamentem, gradienty zostają.</small></div>
+        <div class="opt re"><label for="s_color_threshold">Scalanie drobinek <b id="ctVal" class="val">0</b></label>
+          <input id="s_color_threshold" type="range" min="0" max="10" value="0">
+          <small>0 = każdy detal, 10 = mniej małych plam koloru i szybszy druk.</small></div>
+      </details>
+
+      <details class="grp"><summary>Model</summary>
+        <div class="opt re"><label for="s_longest_side">Najdłuższy bok (mm)</label>
+          <input id="s_longest_side" type="number" min="1" max="1000" step="1" placeholder="auto: z pliku">
+          <small>Puste = rozmiar z pliku; gdy nie mieści się na stole, 50 mm.</small></div>
+        <div class="opt re"><label for="s_max_triangles">Maks. trójkątów</label>
+          <input id="s_max_triangles" type="number" min="16" max="1000000" step="1000" value="1000000"></div>
+        <div class="opt re"><label for="s_repair">Pogrubianie cienkich ścianek</label>
+          <select id="s_repair"><option value="auto" selected>Gdy potrzeba</option><option value="on">Zawsze</option><option value="off">Nigdy</option></select>
+          <small>Nieszczelną siatkę przebudowuje w bryłę do druku, kolory zostają z oryginału.</small></div>
+        <div class="opt re"><label for="s_bake_overlays">Wtapianie nakładek</label>
+          <select id="s_bake_overlays"><option value="1" selected>Wł.</option><option value="0">Wył.</option></select>
+          <small>Półprzezroczyste naklejki i oczy mieszają się z powierzchnią pod spodem.</small></div>
+        <div class="opt re"><label for="s_front_only">Kolory z przodu</label>
+          <select id="s_front_only"><option value="0" selected>Wył.</option><option value="1">Wł.</option></select>
+          <small>Kolory widoczne od frontu przechodzą przez cały model.</small></div>
+      </details>
+
+      <details class="grp"><summary>Ściany i wnętrze</summary>
+        <div class="opt ex"><label for="s_colored_walls">Kolorowe ściany</label>
+          <input id="s_colored_walls" type="number" min="1" max="1000" value="5"></div>
+        <div class="opt re"><label for="s_dual_wall">Dwie receptury ścian</label>
+          <select id="s_dual_wall"><option value="0" selected>Wył.</option><option value="1">Wł.</option></select>
+          <small>Osobny wzór dla zewnętrznej ściany. Bierze tylko pary, które Orca pokaże w tym samym kolorze co wydruk.</small></div>
+        <div class="opt ex"><label for="s_take_interior">Kolor w głąb</label>
+          <select id="s_take_interior"><option value="1" selected>Wł.</option><option value="0">Wył.</option></select>
+          <small>Kolor idzie przez cały przekrój; mniej szwów, zwykle krótszy druk.</small></div>
+        <div class="opt ex"><label for="s_interweave">Splot na dachach <b id="iwVal" class="val">6</b></label>
+          <input id="s_interweave" type="range" min="0" max="10" value="6">
+          <small>Płaskie góry mieszanek drukuje kropkami 1–2 szpul, które z daleka dają ten sam kolor; wyżej = drobniejsze pola (1,8 → 0,9 mm). Gdy kropki nie trafią w kolor albo byłyby pstrokate, dach zostaje mieszanką warstw.</small></div>
+        <div class="opt ex"><label for="s_supports">Podpory</label>
+          <select id="s_supports"><option value="1" selected>Drzewiaste</option><option value="0">Brak</option></select></div>
+        <div class="opt re"><label>Receptury: cykl · z rzędu · prześwit</label>
+          <div class="trio"><input id="s_max_recipe_len" type="number" min="2" max="40" value="20" title="Najdłuższy cykl warstw">
+            <input id="s_max_run" type="number" min="1" max="4" value="2" title="Ile warstw tej samej szpuli z rzędu">
+            <input id="s_backing" type="number" min="0" max="0.6" step="0.05" value="0.3" title="Ile koloru ściany wewnętrznej widać przez zewnętrzną"></div></div>
+      </details>
+
+      <details class="grp"><summary>Warstwy</summary>
+        <div class="opt ex"><label for="s_layer_height">Wysokość warstwy</label>
+          <select id="s_layer_height"><option>0.04</option><option>0.06</option><option>0.08</option><option selected>0.10</option>
+            <option>0.12</option><option>0.14</option><option>0.16</option><option>0.18</option><option>0.20</option>
+            <option>0.22</option><option>0.24</option><option>0.26</option><option>0.28</option></select>
+          <small>Do 0,16 mm pierwsza warstwa ma 0,20 mm.</small></div>
+        <div class="opt ex"><label for="s_variable_layer">Grube warstwy bez mieszania</label>
+          <select id="s_variable_layer"><option value="0">Wył.</option><option>0.12</option><option>0.14</option><option>0.16</option>
+            <option>0.18</option><option selected>0.20</option><option>0.22</option><option>0.24</option><option>0.26</option><option>0.28</option></select>
+          <small>Na wysokościach, gdzie nic się nie miesza.</small></div>
+        <div class="opt ex"><label for="s_detailed_top">Cienkie warstwy pod dachami</label>
+          <select id="s_detailed_top"><option value="0">Wył.</option><option selected>0.08</option><option>0.10</option><option>0.12</option>
+            <option>0.14</option><option>0.16</option><option>0.18</option><option>0.20</option><option>0.22</option>
+            <option>0.24</option><option>0.26</option></select>
+          <small>Tylko pod płaskimi dachami o realnej powierzchni.</small></div>
+        <div class="opt ex"><label for="s_vol">Falujące warstwy (VOL)</label>
+          <select id="s_vol"><option value="0" selected>Wył.</option><option value="1">Wł.</option></select>
+          <small>Cykl 40 warstw: niższe, bazowe i wyższe o 20%.</small></div>
+        <div class="opt ex"><label for="s_subdivide_mix">Podział warstw mieszanych</label>
+          <select id="s_subdivide_mix"><option value="0" selected>Wył.</option><option value="1">Wł.</option></select>
+          <small>Natywny Local-Z w Snapmaker Orca.</small></div>
+      </details>
+
+      <details class="grp"><summary>Pozycja na stole</summary>
+        <div class="opt ex"><label>Obrót X · Y · Z (°) <button id="rotAuto" class="mini" type="button">jak w pliku</button></label>
+          <div class="trio"><input id="s_rot_x" type="number" step="1" placeholder="X"><input id="s_rot_y" type="number" step="1" placeholder="Y">
+            <input id="s_rot_z" type="number" step="1" placeholder="Z"></div>
+          <small id="rotState">Orientacja z pliku</small></div>
+        <div class="opt ex"><label for="s_z_offset">Zatopienie w stole (mm) <button id="zAuto" class="mini" type="button">0</button></label>
+          <input id="s_z_offset" type="number" max="0" step="0.5" placeholder="0">
+          <small id="zState">Spód na stole</small></div>
+      </details>
+
+      <details class="grp"><summary>Efekty</summary>
+        <div class="opt re"><label for="s_rainbow">Tęcza</label>
+          <select id="s_rainbow"><option value="0" selected>Wył.</option><option value="1">Wł.</option></select>
+          <small>Zastępuje kolory modelu spiralą tęczy i włącza „Kolor w głąb”.</small>
+          <div id="rainbowBox" class="sub" hidden>
+            <label>W pionie <b id="rvVal" class="val">1</b><input id="s_rainbow_v" type="range" min="0" max="5" step="0.1" value="1"></label>
+            <label>Od środka <b id="rhVal" class="val">1</b><input id="s_rainbow_h" type="range" min="0" max="5" step="0.1" value="1"></label>
+            <label>Kierunek <select id="s_rainbow_ccw"><option value="0" selected>zgodnie z zegarem</option><option value="1">przeciwnie</option></select></label>
+            <label>Przesunięcie barwy <b id="roVal" class="val">0</b><input id="s_rainbow_offset" type="range" min="0" max="360" step="5" value="0"></label>
+            <label>Pastel <b id="rwVal" class="val">0</b><input id="s_rainbow_white" type="range" min="0" max="75" step="5" value="0"></label>
+            <button id="rainbowReset" class="mini" type="button">domyślne</button>
+          </div></div>
+      </details>
+    </section>
+  </aside>
+
+  <section class="stage">
+    <div class="panel viewer">
+      <div class="vtop">
+        <div class="seg" id="viewMode"><button data-v="predicted" type="button">Wydruk</button><button data-v="slicer" type="button" title="Kolory, które pokaże Snapmaker Orca po otwarciu projektu">W slicerze</button><button data-v="source" class="on" type="button">Model</button></div>
+        <div class="seg" id="matMode"><button data-m="translucent" class="on" type="button" title="Filamenty przepuszczające światło">przezierne</button><button data-m="opaque" type="button" title="Kryjące: każda kolorowa ściana ma ten sam wzór">kryjące</button></div>
+        <button id="resetView" class="mini" type="button">⟲ widok</button>
+      </div>
+      <div id="canvasWrap"><div id="empty" class="empty"><span>彩</span>Wczytaj model</div>
+        <div class="cams" id="cams"><button data-c="top" type="button">góra</button><button data-c="front" type="button">przód</button>
+          <button data-c="left" type="button">lewo</button><button data-c="right" type="button">prawo</button><button data-c="back" type="button">tył</button></div>
+        <div class="gridlbl">stół 270 × 270 mm</div></div>
+      <div class="tools">
+        <div class="tool"><button id="brushToggle" class="mini" type="button">✎ Pędzel priorytetu</button>
+          <div class="seg small" id="brushMode"><button data-b="paint" class="on" type="button">maluj</button><button data-b="erase" type="button">zmazuj</button></div>
+          <input id="brushSize" type="range" min="1" max="40" value="6" title="Rozmiar pędzla"><span id="brushSizeVal">6 mm</span>
+          <button id="brushClear" class="mini" type="button">wyczyść</button><span id="focusInfo" class="muted">cały model</span></div>
+        <div class="tool"><label>Jasność <input id="s_brightness" type="range" min="-100" max="100" value="0"><b id="brVal" class="val">0%</b></label>
+          <button class="mini" data-reset="s_brightness" type="button">0</button>
+          <label>Nasycenie <input id="s_saturation" type="range" min="-100" max="100" value="0"><b id="saVal" class="val">0%</b></label>
+          <button class="mini" data-reset="s_saturation" type="button">0</button></div>
+        <div class="tool bases"><span>Podstawka</span><div id="baseList" class="chips"></div>
+          <button id="baseRemove" class="mini" type="button" hidden>bez podstawki</button>
+          <input id="s_base" type="hidden" value=""><input id="s_base_size" type="hidden" value="0"></div>
+      </div>
+    </div>
+    <details class="panel diagbox" id="diagBox"><summary>Diagnostyka</summary><dl id="diag" class="dl"></dl></details>
+  </section>
+
+  <section id="results" class="results" hidden>
+    <div class="rhead"><h2><i>3</i> <span id="resultsTitle">Liczę…</span></h2>
+      <button id="btnReanalyze" class="go-btn small" type="button" hidden>Przelicz</button></div>
+    <div id="brands" class="brands" hidden><span>Rodziny CMY:</span><div id="brandList"></div></div>
+    <div class="panel mine" id="mineCard">
+      <div class="mhead"><b>Moje kolory</b><span class="muted small">wpisz kolory szpul, które masz</span>
+        <button class="collapse" data-col="mineCard" type="button">−</button></div>
+      <div class="body">
+        <div id="mineSlots" class="sw4"></div>
+        <div class="mfoot"><span id="mineMsg" class="muted small"></span><span id="mineCount" hidden></span></div>
+      </div>
+    </div>
+    <datalist id="libList"></datalist>
+    <div id="rows" class="rows"></div>
+    <section class="panel" id="rankCard" hidden>
+      <b>Ranking zestawów</b><p class="muted small">Szacunek dla wielu kombinacji z biblioteki. „Policz” robi pełną paletę.</p>
+      <div id="ranking" class="ranking"></div>
+    </section>
+  </section>
+</main>
+
+<dialog id="dlgInventory">
+  <form method="dialog" class="inv">
+    <h2>Moje filamenty</h2>
+    <h3>W drukarce</h3>
+    <div id="invLoaded" class="invloaded"></div>
+    <h3>Na półce <span id="invCount" class="muted"></span></h3>
+    <div class="invbar">
+      <input id="invSearch" type="search" placeholder="marka, nazwa, #hex">
+      <select id="invBrand"><option value="">Wszystkie marki</option></select>
+      <label class="chk"><input id="invOnly" type="checkbox"> tylko moje</label>
+    </div>
+    <div id="invList" class="invlist"></div>
+    <h3>Własny filament</h3>
+    <div class="invadd">
+      <input id="invName" type="text" placeholder="Nazwa" maxlength="40">
+      <input id="invHex" type="color" value="#808080">
+      <input id="invTd" type="number" min="0" max="100" step="0.1" placeholder="TD">
+      <button id="invAdd" type="button" class="btn">Dodaj</button>
+    </div>
+    <menu><button value="cancel" class="btn">Anuluj</button><button id="invSave" value="ok" class="btn accent">Zapisz</button></menu>
+  </form>
+</dialog>
+
+<dialog id="dlgCalib">
+  <form method="dialog" class="calib">
+    <h2>Kalibracja kartą</h2>
+    <ol>
+      <li>Wybierz zestaw i pobierz kartę (pionowa płytka z 48 polami mieszanek).</li>
+      <li>Wydrukuj ją bez zmian ustawień.</li>
+      <li>Sfotografuj przód na wprost, w rozproszonym świetle, bez flesza.</li>
+      <li>Wgraj zdjęcie i kliknij rogi przedniej ściany: lewy górny, prawy górny, prawy dolny, lewy dolny.</li>
+    </ol>
+    <label>Zestaw <select id="calSet"></select></label>
+    <div class="row2"><button id="calCard" class="btn" type="button">Pobierz kartę 3MF</button>
+      <label class="btn">Wgraj zdjęcie <input id="calPhoto" type="file" accept="image/*" hidden></label></div>
+    <div class="calcanvas"><canvas id="calCanvas"></canvas></div>
+    <div id="calStatus" class="status"></div>
+    <menu><button value="cancel" class="btn">Zamknij</button><button id="calFit" class="btn accent" type="button" disabled>Zapisz kalibrację</button></menu>
+  </form>
+</dialog>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

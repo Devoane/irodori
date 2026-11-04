@@ -1,0 +1,3383 @@
+{
+ "filaments": [
+  {
+   "id": "sm-34265",
+   "brand": "Snapmaker PLA Full Spectrum",
+   "name": "Semi-Translucent Gray",
+   "hex": "#9199A4",
+   "td": 8.8,
+   "profile": "Snapmaker PLA Full Spectrum @U1 0.4 nozzle"
+  },
+  {
+   "id": "sm-34266",
+   "brand": "Snapmaker PLA Full Spectrum",
+   "name": "Semi-Translucent White",
+   "hex": "#F5F4F2",
+   "td": 6.5,
+   "profile": "Snapmaker PLA Full Spectrum @U1 0.4 nozzle"
+  },
+  {
+   "id": "sm-34267",
+   "brand": "Snapmaker PLA Full Spectrum",
+   "name": "Semi-Translucent Cyan",
+   "hex": "#00C3FF",
+   "td": 5.5,
+   "profile": "Snapmaker PLA Full Spectrum @U1 0.4 nozzle"
+  },
+  {
+   "id": "sm-34268",
+   "brand": "Snapmaker PLA Full Spectrum",
+   "name": "Semi-Translucent Magenta",
+   "hex": "#F54399",
+   "td": 5.5,
+   "profile": "Snapmaker PLA Full Spectrum @U1 0.4 nozzle"
+  },
+  {
+   "id": "sm-34269",
+   "brand": "Snapmaker PLA Full Spectrum",
+   "name": "Semi-Translucent Yellow",
+   "hex": "#FAE727",
+   "td": 9.5,
+   "profile": "Snapmaker PLA Full Spectrum @U1 0.4 nozzle"
+  },
+  {
+   "id": "sm-34076",
+   "brand": "Snapmaker PLA Matte",
+   "name": "Ivory White",
+   "hex": "#FFFFFF",
+   "td": null,
+   "profile": "Snapmaker PLA Matte @U1"
+  },
+  {
+   "id": "sm-34077",
+   "brand": "Snapmaker PLA Matte",
+   "name": "Lava Orange",
+   "hex": "#F78E0E",
+   "td": null,
+   "profile": "Snapmaker PLA Matte @U1"
+  },
+  {
+   "id": "sm-34078",
+   "brand": "Snapmaker PLA Matte",
+   "name": "Sunburst Yellow",
+   "hex": "#F0BE02",
+   "td": null,
+   "profile": "Snapmaker PLA Matte @U1"
+  },
+  {
+   "id": "sm-34079",
+   "brand": "Snapmaker PLA Matte",
+   "name": "Carbon Black",
+   "hex": "#000000",
+   "td": null,
+   "profile": "Snapmaker PLA Matte @U1"
+  },
+  {
+   "id": "sm-34080",
+   "brand": "Snapmaker PLA Matte",
+   "name": "Moss Mist",
+   "hex": "#BEC9A5",
+   "td": null,
+   "profile": "Snapmaker PLA Matte @U1"
+  },
+  {
+   "id": "sm-34081",
+   "brand": "Snapmaker PLA Matte",
+   "name": "Pine Green",
+   "hex": "#519F61",
+   "td": null,
+   "profile": "Snapmaker PLA Matte @U1"
+  },
+  {
+   "id": "sm-34082",
+   "brand": "Snapmaker PLA Matte",
+   "name": "Engine Red",
+   "hex": "#DE1619",
+   "td": null,
+   "profile": "Snapmaker PLA Matte @U1"
+  },
+  {
+   "id": "sm-34083",
+   "brand": "Snapmaker PLA Matte",
+   "name": "Ash Grey",
+   "hex": "#485155",
+   "td": null,
+   "profile": "Snapmaker PLA Matte @U1"
+  },
+  {
+   "id": "sm-34084",
+   "brand": "Snapmaker PLA Matte",
+   "name": "Celestial Blue",
+   "hex": "#8BD5EE",
+   "td": null,
+   "profile": "Snapmaker PLA Matte @U1"
+  },
+  {
+   "id": "sm-34085",
+   "brand": "Snapmaker PLA Matte",
+   "name": "Sakura Pink",
+   "hex": "#F3D6E5",
+   "td": null,
+   "profile": "Snapmaker PLA Matte @U1"
+  },
+  {
+   "id": "sm-34086",
+   "brand": "Snapmaker PLA Matte",
+   "name": "Watermelon Red",
+   "hex": "#FC6371",
+   "td": null,
+   "profile": "Snapmaker PLA Matte @U1"
+  },
+  {
+   "id": "sm-34087",
+   "brand": "Snapmaker PLA Matte",
+   "name": "Marine Blue",
+   "hex": "#0078BF",
+   "td": null,
+   "profile": "Snapmaker PLA Matte @U1"
+  },
+  {
+   "id": "sm-34088",
+   "brand": "Snapmaker PLA Matte",
+   "name": "Latte Brown",
+   "hex": "#D3B7A7",
+   "td": null,
+   "profile": "Snapmaker PLA Matte @U1"
+  },
+  {
+   "id": "sm-34089",
+   "brand": "Snapmaker PLA Matte",
+   "name": "Butter Cream",
+   "hex": "#FEE5A5",
+   "td": null,
+   "profile": "Snapmaker PLA Matte @U1"
+  },
+  {
+   "id": "sm-34090",
+   "brand": "Snapmaker PLA Matte",
+   "name": "Violet Purple",
+   "hex": "#6600CC",
+   "td": null,
+   "profile": "Snapmaker PLA Matte @U1"
+  },
+  {
+   "id": "sm-34091",
+   "brand": "Snapmaker PLA Matte",
+   "name": "Lavender Purple",
+   "hex": "#AE96D4",
+   "td": null,
+   "profile": "Snapmaker PLA Matte @U1"
+  },
+  {
+   "id": "sm-34092",
+   "brand": "Snapmaker PLA Matte",
+   "name": "Mocha Brown",
+   "hex": "#775C50",
+   "td": null,
+   "profile": "Snapmaker PLA Matte @U1"
+  },
+  {
+   "id": "sm-34093",
+   "brand": "Snapmaker PLA Matte",
+   "name": "Lime Green",
+   "hex": "#D4E458",
+   "td": null,
+   "profile": "Snapmaker PLA Matte @U1"
+  },
+  {
+   "id": "sm-34094",
+   "brand": "Snapmaker PLA Matte",
+   "name": "Olive Green",
+   "hex": "#68724D",
+   "td": null,
+   "profile": "Snapmaker PLA Matte @U1"
+  },
+  {
+   "id": "sm-34095",
+   "brand": "Snapmaker PLA Matte",
+   "name": "Steel Blue",
+   "hex": "#2E4462",
+   "td": null,
+   "profile": "Snapmaker PLA Matte @U1"
+  },
+  {
+   "id": "sm-34097",
+   "brand": "Snapmaker PLA Matte",
+   "name": "Sky Blue",
+   "hex": "#56B7E6",
+   "td": null,
+   "profile": "Snapmaker PLA Matte @U1"
+  },
+  {
+   "id": "sm-34098",
+   "brand": "Snapmaker PLA Matte",
+   "name": "Terracotta Red",
+   "hex": "#D84B2E",
+   "td": null,
+   "profile": "Snapmaker PLA Matte @U1"
+  },
+  {
+   "id": "sm-34099",
+   "brand": "Snapmaker PLA Matte",
+   "name": "Periwinkle",
+   "hex": "#ADB4E6",
+   "td": null,
+   "profile": "Snapmaker PLA Matte @U1"
+  },
+  {
+   "id": "sm-34061",
+   "brand": "Snapmaker PLA SnapSpeed",
+   "name": "Pearl White",
+   "hex": "#E2DEDB",
+   "td": null,
+   "profile": "Snapmaker PLA SnapSpeed @U1"
+  },
+  {
+   "id": "sm-34062",
+   "brand": "Snapmaker PLA SnapSpeed",
+   "name": "Black",
+   "hex": "#080A0D",
+   "td": null,
+   "profile": "Snapmaker PLA SnapSpeed @U1"
+  },
+  {
+   "id": "sm-34063",
+   "brand": "Snapmaker PLA SnapSpeed",
+   "name": "Grey",
+   "hex": "#8C9099",
+   "td": null,
+   "profile": "Snapmaker PLA SnapSpeed @U1"
+  },
+  {
+   "id": "sm-34064",
+   "brand": "Snapmaker PLA SnapSpeed",
+   "name": "Blue",
+   "hex": "#003776",
+   "td": null,
+   "profile": "Snapmaker PLA SnapSpeed @U1"
+  },
+  {
+   "id": "sm-34065",
+   "brand": "Snapmaker PLA SnapSpeed",
+   "name": "Red",
+   "hex": "#E72F1D",
+   "td": null,
+   "profile": "Snapmaker PLA SnapSpeed @U1"
+  },
+  {
+   "id": "sm-34066",
+   "brand": "Snapmaker PLA SnapSpeed",
+   "name": "Purple",
+   "hex": "#6C5BB1",
+   "td": null,
+   "profile": "Snapmaker PLA SnapSpeed @U1"
+  },
+  {
+   "id": "sm-34067",
+   "brand": "Snapmaker PLA SnapSpeed",
+   "name": "Orange",
+   "hex": "#F97429",
+   "td": null,
+   "profile": "Snapmaker PLA SnapSpeed @U1"
+  },
+  {
+   "id": "sm-34068",
+   "brand": "Snapmaker PLA SnapSpeed",
+   "name": "Green",
+   "hex": "#2D9E59",
+   "td": null,
+   "profile": "Snapmaker PLA SnapSpeed @U1"
+  },
+  {
+   "id": "sm-34069",
+   "brand": "Snapmaker PLA SnapSpeed",
+   "name": "Yellow",
+   "hex": "#F4C032",
+   "td": null,
+   "profile": "Snapmaker PLA SnapSpeed @U1"
+  },
+  {
+   "id": "sm-34070",
+   "brand": "Snapmaker PLA SnapSpeed",
+   "name": "Brown",
+   "hex": "#6F4C2F",
+   "td": null,
+   "profile": "Snapmaker PLA SnapSpeed @U1"
+  },
+  {
+   "id": "sm-34071",
+   "brand": "Snapmaker PLA SnapSpeed",
+   "name": "Pink",
+   "hex": "#FFC0CB",
+   "td": null,
+   "profile": "Snapmaker PLA SnapSpeed @U1"
+  },
+  {
+   "id": "sm-34072",
+   "brand": "Snapmaker PLA SnapSpeed",
+   "name": "Cream",
+   "hex": "#FFF5E0",
+   "td": null,
+   "profile": "Snapmaker PLA SnapSpeed @U1"
+  },
+  {
+   "id": "sm-34073",
+   "brand": "Snapmaker PLA SnapSpeed",
+   "name": "Cool White",
+   "hex": "#D9DFE5",
+   "td": null,
+   "profile": "Snapmaker PLA SnapSpeed @U1"
+  },
+  {
+   "id": "sm-34074",
+   "brand": "Snapmaker PLA SnapSpeed",
+   "name": "Magenta",
+   "hex": "#F24574",
+   "td": null,
+   "profile": "Snapmaker PLA SnapSpeed @U1"
+  },
+  {
+   "id": "sm-34075",
+   "brand": "Snapmaker PLA SnapSpeed",
+   "name": "Sky Blue",
+   "hex": "#5EBDDB",
+   "td": null,
+   "profile": "Snapmaker PLA SnapSpeed @U1"
+  },
+  {
+   "id": "sm-34112",
+   "brand": "Snapmaker PLA SnapSpeed",
+   "name": "Bright Yellow",
+   "hex": "#F8F81C",
+   "td": null,
+   "profile": "Snapmaker PLA SnapSpeed @U1"
+  },
+  {
+   "id": "sm-34113",
+   "brand": "Snapmaker PLA SnapSpeed",
+   "name": "Olive Green",
+   "hex": "#AFC33C",
+   "td": null,
+   "profile": "Snapmaker PLA SnapSpeed @U1"
+  },
+  {
+   "id": "sm-34114",
+   "brand": "Snapmaker PLA SnapSpeed",
+   "name": "Blue Gray",
+   "hex": "#94B7C9",
+   "td": null,
+   "profile": "Snapmaker PLA SnapSpeed @U1"
+  },
+  {
+   "id": "sm-34115",
+   "brand": "Snapmaker PLA SnapSpeed",
+   "name": "Warm Beige",
+   "hex": "#C19E86",
+   "td": null,
+   "profile": "Snapmaker PLA SnapSpeed @U1"
+  },
+  {
+   "id": "sm-34116",
+   "brand": "Snapmaker PLA SnapSpeed",
+   "name": "Cocoa Brown",
+   "hex": "#674B47",
+   "td": null,
+   "profile": "Snapmaker PLA SnapSpeed @U1"
+  },
+  {
+   "id": "sm-34117",
+   "brand": "Snapmaker PLA SnapSpeed",
+   "name": "Cyan",
+   "hex": "#0086D6",
+   "td": null,
+   "profile": "Snapmaker PLA SnapSpeed @U1"
+  },
+  {
+   "id": "sm-34118",
+   "brand": "Snapmaker PLA SnapSpeed",
+   "name": "Vivid Magenta",
+   "hex": "#EC008C",
+   "td": null,
+   "profile": "Snapmaker PLA SnapSpeed @U1"
+  },
+  {
+   "id": "sm-34119",
+   "brand": "Snapmaker PLA SnapSpeed",
+   "name": "Lemon Yellow",
+   "hex": "#FCE300",
+   "td": null,
+   "profile": "Snapmaker PLA SnapSpeed @U1"
+  },
+  {
+   "id": "sm-34120",
+   "brand": "Snapmaker PLA SnapSpeed",
+   "name": "Pure White",
+   "hex": "#FFFFFF",
+   "td": null,
+   "profile": "Snapmaker PLA SnapSpeed @U1"
+  },
+  {
+   "id": "sm-34121",
+   "brand": "Snapmaker PLA SnapSpeed",
+   "name": "Turquoise Blue",
+   "hex": "#53D6D0",
+   "td": null,
+   "profile": "Snapmaker PLA SnapSpeed @U1"
+  },
+  {
+   "id": "sm-34122",
+   "brand": "Snapmaker PLA SnapSpeed",
+   "name": "Azure Blue",
+   "hex": "#0066D9",
+   "td": null,
+   "profile": "Snapmaker PLA SnapSpeed @U1"
+  },
+  {
+   "id": "sm-34123",
+   "brand": "Snapmaker PLA SnapSpeed",
+   "name": "Charcoal Gray",
+   "hex": "#485259",
+   "td": null,
+   "profile": "Snapmaker PLA SnapSpeed @U1"
+  },
+  {
+   "id": "sm-34124",
+   "brand": "Snapmaker PLA SnapSpeed",
+   "name": "Burgundy Red",
+   "hex": "#911821",
+   "td": null,
+   "profile": "Snapmaker PLA SnapSpeed @U1"
+  },
+  {
+   "id": "sm-34125",
+   "brand": "Snapmaker PLA SnapSpeed",
+   "name": "Peach Beige",
+   "hex": "#EEDDD2",
+   "td": null,
+   "profile": "Snapmaker PLA SnapSpeed @U1"
+  },
+  {
+   "id": "sm-34126",
+   "brand": "Snapmaker PLA SnapSpeed",
+   "name": "Caramel Brown",
+   "hex": "#CB8748",
+   "td": null,
+   "profile": "Snapmaker PLA SnapSpeed @U1"
+  },
+  {
+   "id": "sm-34127",
+   "brand": "Snapmaker PLA SnapSpeed",
+   "name": "Army Green",
+   "hex": "#31532E",
+   "td": null,
+   "profile": "Snapmaker PLA SnapSpeed @U1"
+  },
+  {
+   "id": "sm-34128",
+   "brand": "Snapmaker PLA SnapSpeed",
+   "name": "Mint Green",
+   "hex": "#AFD6C1",
+   "td": null,
+   "profile": "Snapmaker PLA SnapSpeed @U1"
+  },
+  {
+   "id": "sm-34129",
+   "brand": "Snapmaker PLA SnapSpeed",
+   "name": "Light Purple",
+   "hex": "#D3D0EB",
+   "td": null,
+   "profile": "Snapmaker PLA SnapSpeed @U1"
+  },
+  {
+   "id": "sm-34130",
+   "brand": "Snapmaker PLA SnapSpeed",
+   "name": "Plum Purple",
+   "hex": "#660066",
+   "td": null,
+   "profile": "Snapmaker PLA SnapSpeed @U1"
+  },
+  {
+   "id": "sm-34322",
+   "brand": "Snapmaker PLA Translucent",
+   "name": "Translucent Amber",
+   "hex": "#C08559",
+   "td": null,
+   "profile": "Snapmaker PLA Translucent @U1 0.4 nozzle"
+  },
+  {
+   "id": "sm-34323",
+   "brand": "Snapmaker PLA Translucent",
+   "name": "Translucent Yellow",
+   "hex": "#FFF200",
+   "td": null,
+   "profile": "Snapmaker PLA Translucent @U1 0.4 nozzle"
+  },
+  {
+   "id": "sm-34324",
+   "brand": "Snapmaker PLA Translucent",
+   "name": "Translucent Green",
+   "hex": "#008729",
+   "td": null,
+   "profile": "Snapmaker PLA Translucent @U1 0.4 nozzle"
+  },
+  {
+   "id": "sm-34325",
+   "brand": "Snapmaker PLA Translucent",
+   "name": "Translucent Cyan",
+   "hex": "#7FEBE2",
+   "td": null,
+   "profile": "Snapmaker PLA Translucent @U1 0.4 nozzle"
+  },
+  {
+   "id": "sm-34326",
+   "brand": "Snapmaker PLA Translucent",
+   "name": "Translucent Light Gray",
+   "hex": "#B1ACA6",
+   "td": null,
+   "profile": "Snapmaker PLA Translucent @U1 0.4 nozzle"
+  },
+  {
+   "id": "sm-34327",
+   "brand": "Snapmaker PLA Translucent",
+   "name": "Translucent Light Purple",
+   "hex": "#A7A8D9",
+   "td": null,
+   "profile": "Snapmaker PLA Translucent @U1 0.4 nozzle"
+  },
+  {
+   "id": "sm-34328",
+   "brand": "Snapmaker PLA Translucent",
+   "name": "Translucent Blue",
+   "hex": "#46BAE0",
+   "td": null,
+   "profile": "Snapmaker PLA Translucent @U1 0.4 nozzle"
+  },
+  {
+   "id": "sm-34329",
+   "brand": "Snapmaker PLA Translucent",
+   "name": "Translucent Pink",
+   "hex": "#EEBCC8",
+   "td": null,
+   "profile": "Snapmaker PLA Translucent @U1 0.4 nozzle"
+  },
+  {
+   "id": "sm-34330",
+   "brand": "Snapmaker PLA Translucent",
+   "name": "Translucent Magenta",
+   "hex": "#DC0080",
+   "td": null,
+   "profile": "Snapmaker PLA Translucent @U1 0.4 nozzle"
+  },
+  {
+   "id": "sm-34331",
+   "brand": "Snapmaker PLA Translucent",
+   "name": "Translucent Dark Red",
+   "hex": "#990002",
+   "td": null,
+   "profile": "Snapmaker PLA Translucent @U1 0.4 nozzle"
+  },
+  {
+   "id": "sm-34011",
+   "brand": "Snapmaker PLA Basic",
+   "name": "Black",
+   "hex": "#000000",
+   "td": null,
+   "profile": "Snapmaker PLA Basic @U1"
+  },
+  {
+   "id": "sm-34012",
+   "brand": "Snapmaker PLA Basic",
+   "name": "White",
+   "hex": "#FFFFFF",
+   "td": null,
+   "profile": "Snapmaker PLA Basic @U1"
+  },
+  {
+   "id": "c-bambu-lab-basic-0",
+   "brand": "Bambu Lab Basic",
+   "name": "Jade White",
+   "hex": "#F5F5F3",
+   "td": 8.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-basic-1",
+   "brand": "Bambu Lab Basic",
+   "name": "Cream White",
+   "hex": "#FFFAEF",
+   "td": 8.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-basic-2",
+   "brand": "Bambu Lab Basic",
+   "name": "Silver",
+   "hex": "#B8BCBE",
+   "td": 2.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-basic-3",
+   "brand": "Bambu Lab Basic",
+   "name": "Light Gray",
+   "hex": "#A8AAAC",
+   "td": 2.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-basic-4",
+   "brand": "Bambu Lab Basic",
+   "name": "Gray",
+   "hex": "#6B6D6F",
+   "td": 1.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-basic-5",
+   "brand": "Bambu Lab Basic",
+   "name": "Dark Gray",
+   "hex": "#414345",
+   "td": 0.8,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-basic-6",
+   "brand": "Bambu Lab Basic",
+   "name": "Charcoal",
+   "hex": "#2D2926",
+   "td": 0.4,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-basic-7",
+   "brand": "Bambu Lab Basic",
+   "name": "Black",
+   "hex": "#101012",
+   "td": 0.3,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-basic-8",
+   "brand": "Bambu Lab Basic",
+   "name": "Lemon Yellow",
+   "hex": "#FFF176",
+   "td": 7.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-basic-9",
+   "brand": "Bambu Lab Basic",
+   "name": "Yellow",
+   "hex": "#FCE300",
+   "td": 6.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-basic-10",
+   "brand": "Bambu Lab Basic",
+   "name": "Banana Yellow",
+   "hex": "#FFD54F",
+   "td": 6.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-basic-11",
+   "brand": "Bambu Lab Basic",
+   "name": "Gold",
+   "hex": "#FFAB00",
+   "td": 5.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-basic-12",
+   "brand": "Bambu Lab Basic",
+   "name": "Tangerine",
+   "hex": "#FF7043",
+   "td": 5.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-basic-13",
+   "brand": "Bambu Lab Basic",
+   "name": "Orange",
+   "hex": "#E65100",
+   "td": 4.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-basic-14",
+   "brand": "Bambu Lab Basic",
+   "name": "Flame Red",
+   "hex": "#D32F2F",
+   "td": 3.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-basic-15",
+   "brand": "Bambu Lab Basic",
+   "name": "Vivid Red",
+   "hex": "#E53935",
+   "td": 3.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-basic-16",
+   "brand": "Bambu Lab Basic",
+   "name": "Cherry Red",
+   "hex": "#B71C1C",
+   "td": 2.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-basic-17",
+   "brand": "Bambu Lab Basic",
+   "name": "Coral",
+   "hex": "#FF6B6B",
+   "td": 5.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-basic-18",
+   "brand": "Bambu Lab Basic",
+   "name": "Sakura Pink",
+   "hex": "#F8BBD0",
+   "td": 7.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-basic-19",
+   "brand": "Bambu Lab Basic",
+   "name": "Hot Pink",
+   "hex": "#F06292",
+   "td": 6.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-basic-20",
+   "brand": "Bambu Lab Basic",
+   "name": "Magenta",
+   "hex": "#EC008C",
+   "td": 8.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-basic-21",
+   "brand": "Bambu Lab Basic",
+   "name": "Fuchsia",
+   "hex": "#D500F9",
+   "td": 7.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-basic-22",
+   "brand": "Bambu Lab Basic",
+   "name": "Lilac",
+   "hex": "#CE93D8",
+   "td": 6.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-basic-23",
+   "brand": "Bambu Lab Basic",
+   "name": "Lavender",
+   "hex": "#B39DDB",
+   "td": 5.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-basic-24",
+   "brand": "Bambu Lab Basic",
+   "name": "Purple",
+   "hex": "#7B1FA2",
+   "td": 3.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-basic-25",
+   "brand": "Bambu Lab Basic",
+   "name": "Violet",
+   "hex": "#4527A0",
+   "td": 3.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-basic-26",
+   "brand": "Bambu Lab Basic",
+   "name": "Cobalt Blue",
+   "hex": "#1565C0",
+   "td": 3.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-basic-27",
+   "brand": "Bambu Lab Basic",
+   "name": "Azure Blue",
+   "hex": "#1976D2",
+   "td": 4.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-basic-28",
+   "brand": "Bambu Lab Basic",
+   "name": "Blue",
+   "hex": "#0047AB",
+   "td": 3.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-basic-29",
+   "brand": "Bambu Lab Basic",
+   "name": "Sky Blue",
+   "hex": "#64B5F6",
+   "td": 6.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-basic-30",
+   "brand": "Bambu Lab Basic",
+   "name": "Baby Blue",
+   "hex": "#BBDEFB",
+   "td": 7.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-basic-31",
+   "brand": "Bambu Lab Basic",
+   "name": "Cyan",
+   "hex": "#0086D6",
+   "td": 5.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-basic-32",
+   "brand": "Bambu Lab Basic",
+   "name": "Teal",
+   "hex": "#00796B",
+   "td": 3.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-basic-33",
+   "brand": "Bambu Lab Basic",
+   "name": "Mint",
+   "hex": "#A5D6A7",
+   "td": 7.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-basic-34",
+   "brand": "Bambu Lab Basic",
+   "name": "Grass Green",
+   "hex": "#43A047",
+   "td": 4.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-basic-35",
+   "brand": "Bambu Lab Basic",
+   "name": "Forest Green",
+   "hex": "#2E7D32",
+   "td": 3.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-basic-36",
+   "brand": "Bambu Lab Basic",
+   "name": "Lime Green",
+   "hex": "#C6E24E",
+   "td": 7.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-basic-37",
+   "brand": "Bambu Lab Basic",
+   "name": "Olive",
+   "hex": "#827717",
+   "td": 2.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-basic-38",
+   "brand": "Bambu Lab Basic",
+   "name": "Caramel",
+   "hex": "#BF7E45",
+   "td": 3.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-basic-39",
+   "brand": "Bambu Lab Basic",
+   "name": "Brown",
+   "hex": "#795548",
+   "td": 2.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-basic-40",
+   "brand": "Bambu Lab Basic",
+   "name": "Skin",
+   "hex": "#FFCCB3",
+   "td": 7.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-matte-0",
+   "brand": "Bambu Lab Matte",
+   "name": "Ivory White",
+   "hex": "#F2EFDF",
+   "td": 7.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-matte-1",
+   "brand": "Bambu Lab Matte",
+   "name": "Beige",
+   "hex": "#E8D8B8",
+   "td": 6.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-matte-2",
+   "brand": "Bambu Lab Matte",
+   "name": "Cream",
+   "hex": "#FFF8E1",
+   "td": 6.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-matte-3",
+   "brand": "Bambu Lab Matte",
+   "name": "Matte Black",
+   "hex": "#1A1A1A",
+   "td": 0.3,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-matte-4",
+   "brand": "Bambu Lab Matte",
+   "name": "Charcoal",
+   "hex": "#2D2926",
+   "td": 0.4,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-matte-5",
+   "brand": "Bambu Lab Matte",
+   "name": "Stone Gray",
+   "hex": "#7B7B7B",
+   "td": 1.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-matte-6",
+   "brand": "Bambu Lab Matte",
+   "name": "Sunflower",
+   "hex": "#FFC107",
+   "td": 6.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-matte-7",
+   "brand": "Bambu Lab Matte",
+   "name": "Terracotta",
+   "hex": "#C1440E",
+   "td": 3.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-matte-8",
+   "brand": "Bambu Lab Matte",
+   "name": "Brick Red",
+   "hex": "#A93226",
+   "td": 2.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-matte-9",
+   "brand": "Bambu Lab Matte",
+   "name": "Dusty Rose",
+   "hex": "#D4848A",
+   "td": 5.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-matte-10",
+   "brand": "Bambu Lab Matte",
+   "name": "Mauve",
+   "hex": "#BD7EA6",
+   "td": 4.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-matte-11",
+   "brand": "Bambu Lab Matte",
+   "name": "Lilac Purple",
+   "hex": "#A181C1",
+   "td": 4.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-matte-12",
+   "brand": "Bambu Lab Matte",
+   "name": "Deep Purple",
+   "hex": "#512DA8",
+   "td": 2.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-matte-13",
+   "brand": "Bambu Lab Matte",
+   "name": "Ocean Blue",
+   "hex": "#1565C0",
+   "td": 3.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-matte-14",
+   "brand": "Bambu Lab Matte",
+   "name": "Powder Blue",
+   "hex": "#B0BEC5",
+   "td": 6.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-matte-15",
+   "brand": "Bambu Lab Matte",
+   "name": "Sage Green",
+   "hex": "#8FAF8B",
+   "td": 4.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-matte-16",
+   "brand": "Bambu Lab Matte",
+   "name": "Moss Green",
+   "hex": "#6B7C45",
+   "td": 3.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-matte-17",
+   "brand": "Bambu Lab Matte",
+   "name": "Army Green",
+   "hex": "#4A5240",
+   "td": 2.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-matte-18",
+   "brand": "Bambu Lab Matte",
+   "name": "Desert Sand",
+   "hex": "#C2B280",
+   "td": 4.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-matte-19",
+   "brand": "Bambu Lab Matte",
+   "name": "Caramel Brown",
+   "hex": "#9C6330",
+   "td": 2.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-silk-0",
+   "brand": "Bambu Lab Silk",
+   "name": "Silk Gold",
+   "hex": "#D4A843",
+   "td": 2.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-silk-1",
+   "brand": "Bambu Lab Silk",
+   "name": "Silk Rose Gold",
+   "hex": "#B76E79",
+   "td": 2.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-silk-2",
+   "brand": "Bambu Lab Silk",
+   "name": "Silk Copper",
+   "hex": "#B87333",
+   "td": 1.8,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-silk-3",
+   "brand": "Bambu Lab Silk",
+   "name": "Silk Bronze",
+   "hex": "#8C6239",
+   "td": 1.8,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-silk-4",
+   "brand": "Bambu Lab Silk",
+   "name": "Silk Silver",
+   "hex": "#C0C4C8",
+   "td": 2.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-silk-5",
+   "brand": "Bambu Lab Silk",
+   "name": "Silk Black",
+   "hex": "#1A1A1A",
+   "td": 0.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-silk-6",
+   "brand": "Bambu Lab Silk",
+   "name": "Silk Red",
+   "hex": "#B71C1C",
+   "td": 2.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-silk-7",
+   "brand": "Bambu Lab Silk",
+   "name": "Silk Ruby",
+   "hex": "#9B111E",
+   "td": 2.2,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-silk-8",
+   "brand": "Bambu Lab Silk",
+   "name": "Silk Sapphire",
+   "hex": "#1A237E",
+   "td": 2.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-silk-9",
+   "brand": "Bambu Lab Silk",
+   "name": "Silk Jade",
+   "hex": "#1A6644",
+   "td": 2.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-silk-10",
+   "brand": "Bambu Lab Silk",
+   "name": "Silk Galaxy Black",
+   "hex": "#1C1C2E",
+   "td": 0.6,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-silk-11",
+   "brand": "Bambu Lab Silk",
+   "name": "Silk Rainbow",
+   "hex": "#FF6B35",
+   "td": 2.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-bambu-lab-silk-12",
+   "brand": "Bambu Lab Silk",
+   "name": "Silk Ice",
+   "hex": "#C9E8F0",
+   "td": 3.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-0",
+   "brand": "Prusament PLA",
+   "name": "Vanilla White",
+   "hex": "#D9D4C4",
+   "td": 7.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-1",
+   "brand": "Prusament PLA",
+   "name": "Chalk White",
+   "hex": "#F0EDDE",
+   "td": 7.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-2",
+   "brand": "Prusament PLA",
+   "name": "Jet Black",
+   "hex": "#24292A",
+   "td": 0.3,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-3",
+   "brand": "Prusament PLA",
+   "name": "Galaxy Black",
+   "hex": "#17191A",
+   "td": 0.4,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-4",
+   "brand": "Prusament PLA",
+   "name": "Grey Matter",
+   "hex": "#908E8E",
+   "td": 1.8,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-5",
+   "brand": "Prusament PLA",
+   "name": "Galaxy Silver",
+   "hex": "#868F98",
+   "td": 2.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-6",
+   "brand": "Prusament PLA",
+   "name": "Prusa Orange",
+   "hex": "#FE6E31",
+   "td": 6.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-7",
+   "brand": "Prusament PLA",
+   "name": "Carrot Orange",
+   "hex": "#E9601A",
+   "td": 5.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-8",
+   "brand": "Prusament PLA",
+   "name": "Mango Yellow",
+   "hex": "#FFB21F",
+   "td": 6.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-9",
+   "brand": "Prusament PLA",
+   "name": "Sunflower Yellow",
+   "hex": "#F9D011",
+   "td": 6.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-10",
+   "brand": "Prusament PLA",
+   "name": "Lipstick Red",
+   "hex": "#B11A29",
+   "td": 3.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-11",
+   "brand": "Prusament PLA",
+   "name": "Fire Engine Red",
+   "hex": "#CE1F1A",
+   "td": 3.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-12",
+   "brand": "Prusament PLA",
+   "name": "Terracotta",
+   "hex": "#C04821",
+   "td": 3.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-13",
+   "brand": "Prusament PLA",
+   "name": "Coral",
+   "hex": "#E95641",
+   "td": 5.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-14",
+   "brand": "Prusament PLA",
+   "name": "Raspberry Red",
+   "hex": "#9B1B30",
+   "td": 2.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-15",
+   "brand": "Prusament PLA",
+   "name": "Azure Blue",
+   "hex": "#0762AD",
+   "td": 3.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-16",
+   "brand": "Prusament PLA",
+   "name": "Ultramarine",
+   "hex": "#2E3AB1",
+   "td": 3.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-17",
+   "brand": "Prusament PLA",
+   "name": "Cobalt Blue",
+   "hex": "#004EA1",
+   "td": 3.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-18",
+   "brand": "Prusament PLA",
+   "name": "Mystic Petrol",
+   "hex": "#1E6E7E",
+   "td": 3.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-19",
+   "brand": "Prusament PLA",
+   "name": "Pirate Blue",
+   "hex": "#193B81",
+   "td": 2.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-20",
+   "brand": "Prusament PLA",
+   "name": "Gentian Blue",
+   "hex": "#3558C1",
+   "td": 4.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-21",
+   "brand": "Prusament PLA",
+   "name": "Urban Grey",
+   "hex": "#595959",
+   "td": 1.2,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-22",
+   "brand": "Prusament PLA",
+   "name": "Anthracite Grey",
+   "hex": "#3A3A3A",
+   "td": 0.6,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-23",
+   "brand": "Prusament PLA",
+   "name": "Lemon Yellow",
+   "hex": "#F8E045",
+   "td": 7.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-24",
+   "brand": "Prusament PLA",
+   "name": "Mystic Green",
+   "hex": "#256B3A",
+   "td": 3.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-esun-pla+-0",
+   "brand": "eSUN PLA+",
+   "name": "Cold White",
+   "hex": "#F8F8F8",
+   "td": 8.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-esun-pla+-1",
+   "brand": "eSUN PLA+",
+   "name": "Warm White",
+   "hex": "#FFF8E7",
+   "td": 8.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-esun-pla+-2",
+   "brand": "eSUN PLA+",
+   "name": "Black",
+   "hex": "#0A0A0A",
+   "td": 0.3,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-esun-pla+-3",
+   "brand": "eSUN PLA+",
+   "name": "Silver",
+   "hex": "#C0C0C0",
+   "td": 2.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-esun-pla+-4",
+   "brand": "eSUN PLA+",
+   "name": "Dark Gray",
+   "hex": "#404040",
+   "td": 0.8,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-esun-pla+-5",
+   "brand": "eSUN PLA+",
+   "name": "Fire Red",
+   "hex": "#CC1010",
+   "td": 3.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-esun-pla+-6",
+   "brand": "eSUN PLA+",
+   "name": "Red",
+   "hex": "#C0392B",
+   "td": 3.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-esun-pla+-7",
+   "brand": "eSUN PLA+",
+   "name": "Pink",
+   "hex": "#FF69B4",
+   "td": 6.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-esun-pla+-8",
+   "brand": "eSUN PLA+",
+   "name": "Orange",
+   "hex": "#FF5500",
+   "td": 5.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-esun-pla+-9",
+   "brand": "eSUN PLA+",
+   "name": "Yellow",
+   "hex": "#FFD700",
+   "td": 6.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-esun-pla+-10",
+   "brand": "eSUN PLA+",
+   "name": "Lemon Yellow",
+   "hex": "#FFF44F",
+   "td": 7.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-esun-pla+-11",
+   "brand": "eSUN PLA+",
+   "name": "Grass Green",
+   "hex": "#00A86B",
+   "td": 4.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-esun-pla+-12",
+   "brand": "eSUN PLA+",
+   "name": "Pine Green",
+   "hex": "#01796F",
+   "td": 3.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-esun-pla+-13",
+   "brand": "eSUN PLA+",
+   "name": "Teal",
+   "hex": "#008B8B",
+   "td": 3.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-esun-pla+-14",
+   "brand": "eSUN PLA+",
+   "name": "Blue",
+   "hex": "#1560BD",
+   "td": 3.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-esun-pla+-15",
+   "brand": "eSUN PLA+",
+   "name": "Dark Blue",
+   "hex": "#00008B",
+   "td": 2.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-esun-pla+-16",
+   "brand": "eSUN PLA+",
+   "name": "Light Blue",
+   "hex": "#5B9BD5",
+   "td": 5.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-esun-pla+-17",
+   "brand": "eSUN PLA+",
+   "name": "Purple",
+   "hex": "#7B2FBE",
+   "td": 3.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-esun-pla+-18",
+   "brand": "eSUN PLA+",
+   "name": "Magenta",
+   "hex": "#E040FB",
+   "td": 7.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-esun-pla+-19",
+   "brand": "eSUN PLA+",
+   "name": "Skin",
+   "hex": "#FFDAB9",
+   "td": 7.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-esun-pla+-20",
+   "brand": "eSUN PLA+",
+   "name": "Brown",
+   "hex": "#8B4513",
+   "td": 2.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-esun-pla+-21",
+   "brand": "eSUN PLA+",
+   "name": "Wood",
+   "hex": "#966432",
+   "td": 2.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-0",
+   "brand": "Polymaker PolyTerra",
+   "name": "Cotton White",
+   "hex": "#F5F0EB",
+   "td": 7.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-1",
+   "brand": "Polymaker PolyTerra",
+   "name": "Stone White",
+   "hex": "#E0DDD5",
+   "td": 6.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-2",
+   "brand": "Polymaker PolyTerra",
+   "name": "Charcoal",
+   "hex": "#2D2D2D",
+   "td": 0.4,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-3",
+   "brand": "Polymaker PolyTerra",
+   "name": "Stone Grey",
+   "hex": "#7C7C70",
+   "td": 1.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-4",
+   "brand": "Polymaker PolyTerra",
+   "name": "Sakura Pink",
+   "hex": "#F4C2C2",
+   "td": 7.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-5",
+   "brand": "Polymaker PolyTerra",
+   "name": "Coral",
+   "hex": "#F28B66",
+   "td": 5.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-6",
+   "brand": "Polymaker PolyTerra",
+   "name": "Muted Rose",
+   "hex": "#C48B8B",
+   "td": 4.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-7",
+   "brand": "Polymaker PolyTerra",
+   "name": "Army Red",
+   "hex": "#9B2335",
+   "td": 2.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-8",
+   "brand": "Polymaker PolyTerra",
+   "name": "Savanna Yellow",
+   "hex": "#C8A020",
+   "td": 5.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-9",
+   "brand": "Polymaker PolyTerra",
+   "name": "Muted Orange",
+   "hex": "#C0672A",
+   "td": 4.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-10",
+   "brand": "Polymaker PolyTerra",
+   "name": "Jungle Green",
+   "hex": "#29AB87",
+   "td": 4.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-11",
+   "brand": "Polymaker PolyTerra",
+   "name": "Forest Green",
+   "hex": "#228B22",
+   "td": 3.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-12",
+   "brand": "Polymaker PolyTerra",
+   "name": "Army Green",
+   "hex": "#4B5320",
+   "td": 2.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-13",
+   "brand": "Polymaker PolyTerra",
+   "name": "Muted Teal",
+   "hex": "#4E8577",
+   "td": 3.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-14",
+   "brand": "Polymaker PolyTerra",
+   "name": "Midnight Blue",
+   "hex": "#1A1A6E",
+   "td": 2.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-15",
+   "brand": "Polymaker PolyTerra",
+   "name": "Cloud Blue",
+   "hex": "#ADC8E6",
+   "td": 6.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-16",
+   "brand": "Polymaker PolyTerra",
+   "name": "Indigo",
+   "hex": "#4B0082",
+   "td": 2.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-17",
+   "brand": "Polymaker PolyTerra",
+   "name": "Desert Sand",
+   "hex": "#C2B280",
+   "td": 4.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-18",
+   "brand": "Polymaker PolyTerra",
+   "name": "Coffee Brown",
+   "hex": "#7B4A25",
+   "td": 2.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-19",
+   "brand": "Polymaker PolyTerra",
+   "name": "Cotton Candy",
+   "hex": "#FFBCD9",
+   "td": 7.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-hatchbox-pla-0",
+   "brand": "Hatchbox PLA",
+   "name": "White",
+   "hex": "#FDFDFD",
+   "td": 8.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-hatchbox-pla-1",
+   "brand": "Hatchbox PLA",
+   "name": "Black",
+   "hex": "#0D0D0D",
+   "td": 0.3,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-hatchbox-pla-2",
+   "brand": "Hatchbox PLA",
+   "name": "Silver",
+   "hex": "#C0C0C0",
+   "td": 2.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-hatchbox-pla-3",
+   "brand": "Hatchbox PLA",
+   "name": "Gold",
+   "hex": "#CFB53B",
+   "td": 2.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-hatchbox-pla-4",
+   "brand": "Hatchbox PLA",
+   "name": "True Red",
+   "hex": "#CC1010",
+   "td": 3.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-hatchbox-pla-5",
+   "brand": "Hatchbox PLA",
+   "name": "Galaxy Red",
+   "hex": "#8B0000",
+   "td": 2.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-hatchbox-pla-6",
+   "brand": "Hatchbox PLA",
+   "name": "Pink",
+   "hex": "#FF69B4",
+   "td": 6.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-hatchbox-pla-7",
+   "brand": "Hatchbox PLA",
+   "name": "Orange",
+   "hex": "#FF6600",
+   "td": 5.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-hatchbox-pla-8",
+   "brand": "Hatchbox PLA",
+   "name": "Yellow",
+   "hex": "#FFE900",
+   "td": 6.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-hatchbox-pla-9",
+   "brand": "Hatchbox PLA",
+   "name": "Teal",
+   "hex": "#008080",
+   "td": 3.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-hatchbox-pla-10",
+   "brand": "Hatchbox PLA",
+   "name": "Blue",
+   "hex": "#0047AB",
+   "td": 3.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-hatchbox-pla-11",
+   "brand": "Hatchbox PLA",
+   "name": "Green",
+   "hex": "#00A550",
+   "td": 4.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-hatchbox-pla-12",
+   "brand": "Hatchbox PLA",
+   "name": "Purple",
+   "hex": "#7B2FBE",
+   "td": 3.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-hatchbox-pla-13",
+   "brand": "Hatchbox PLA",
+   "name": "Brown",
+   "hex": "#8B4513",
+   "td": 2.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-hatchbox-pla-14",
+   "brand": "Hatchbox PLA",
+   "name": "Wood",
+   "hex": "#8B6914",
+   "td": 2.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-hatchbox-pla-15",
+   "brand": "Hatchbox PLA",
+   "name": "Glow Green",
+   "hex": "#39FF14",
+   "td": 7.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-overture-pla-0",
+   "brand": "Overture PLA",
+   "name": "White",
+   "hex": "#F8F8F8",
+   "td": 8.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-overture-pla-1",
+   "brand": "Overture PLA",
+   "name": "Black",
+   "hex": "#141414",
+   "td": 0.3,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-overture-pla-2",
+   "brand": "Overture PLA",
+   "name": "Gray",
+   "hex": "#787878",
+   "td": 1.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-overture-pla-3",
+   "brand": "Overture PLA",
+   "name": "Marble White",
+   "hex": "#E8E8E8",
+   "td": 5.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-overture-pla-4",
+   "brand": "Overture PLA",
+   "name": "True Red",
+   "hex": "#C01010",
+   "td": 3.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-overture-pla-5",
+   "brand": "Overture PLA",
+   "name": "Scarlet Red",
+   "hex": "#E81010",
+   "td": 3.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-overture-pla-6",
+   "brand": "Overture PLA",
+   "name": "Pink",
+   "hex": "#FF69B4",
+   "td": 6.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-overture-pla-7",
+   "brand": "Overture PLA",
+   "name": "Orange",
+   "hex": "#FF6600",
+   "td": 5.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-overture-pla-8",
+   "brand": "Overture PLA",
+   "name": "Yellow",
+   "hex": "#FFD700",
+   "td": 6.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-overture-pla-9",
+   "brand": "Overture PLA",
+   "name": "Blue",
+   "hex": "#2060C0",
+   "td": 3.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-overture-pla-10",
+   "brand": "Overture PLA",
+   "name": "Sky Blue",
+   "hex": "#6EB5FF",
+   "td": 6.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-overture-pla-11",
+   "brand": "Overture PLA",
+   "name": "Green",
+   "hex": "#009050",
+   "td": 4.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-overture-pla-12",
+   "brand": "Overture PLA",
+   "name": "Purple",
+   "hex": "#6B2FBE",
+   "td": 3.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-overture-pla-13",
+   "brand": "Overture PLA",
+   "name": "Glow Blue",
+   "hex": "#00BFFF",
+   "td": 7.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-anycubic-0",
+   "brand": "Anycubic",
+   "name": "White",
+   "hex": "#F8F8F6",
+   "td": 8.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-anycubic-1",
+   "brand": "Anycubic",
+   "name": "Silk White",
+   "hex": "#F0F0EC",
+   "td": 6.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-anycubic-2",
+   "brand": "Anycubic",
+   "name": "Black",
+   "hex": "#121212",
+   "td": 0.3,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-anycubic-3",
+   "brand": "Anycubic",
+   "name": "Gray",
+   "hex": "#808080",
+   "td": 1.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-anycubic-4",
+   "brand": "Anycubic",
+   "name": "Cyan",
+   "hex": "#00C8FF",
+   "td": 5.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-anycubic-5",
+   "brand": "Anycubic",
+   "name": "Magenta",
+   "hex": "#FF0090",
+   "td": 7.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-anycubic-6",
+   "brand": "Anycubic",
+   "name": "Yellow",
+   "hex": "#FFE500",
+   "td": 6.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-anycubic-7",
+   "brand": "Anycubic",
+   "name": "Red",
+   "hex": "#CC1010",
+   "td": 3.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-anycubic-8",
+   "brand": "Anycubic",
+   "name": "Orange",
+   "hex": "#FF6000",
+   "td": 5.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-anycubic-9",
+   "brand": "Anycubic",
+   "name": "Blue",
+   "hex": "#0050C8",
+   "td": 3.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-anycubic-10",
+   "brand": "Anycubic",
+   "name": "Green",
+   "hex": "#00A040",
+   "td": 4.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-anycubic-11",
+   "brand": "Anycubic",
+   "name": "Purple",
+   "hex": "#8020C0",
+   "td": 3.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-anycubic-12",
+   "brand": "Anycubic",
+   "name": "Pink",
+   "hex": "#FF80A0",
+   "td": 7.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-anycubic-13",
+   "brand": "Anycubic",
+   "name": "Gold Silk",
+   "hex": "#D4A843",
+   "td": 2.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-anycubic-14",
+   "brand": "Anycubic",
+   "name": "Silver Silk",
+   "hex": "#C0C4C8",
+   "td": 2.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-sunlu-pla+-0",
+   "brand": "SUNLU PLA+",
+   "name": "White",
+   "hex": "#F5F5F5",
+   "td": 8.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-sunlu-pla+-1",
+   "brand": "SUNLU PLA+",
+   "name": "Black",
+   "hex": "#121212",
+   "td": 0.3,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-sunlu-pla+-2",
+   "brand": "SUNLU PLA+",
+   "name": "Gray",
+   "hex": "#7C7C7C",
+   "td": 1.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-sunlu-pla+-3",
+   "brand": "SUNLU PLA+",
+   "name": "Red",
+   "hex": "#D01010",
+   "td": 3.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-sunlu-pla+-4",
+   "brand": "SUNLU PLA+",
+   "name": "Orange",
+   "hex": "#FF5500",
+   "td": 5.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-sunlu-pla+-5",
+   "brand": "SUNLU PLA+",
+   "name": "Yellow",
+   "hex": "#FFDD00",
+   "td": 6.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-sunlu-pla+-6",
+   "brand": "SUNLU PLA+",
+   "name": "Green",
+   "hex": "#009050",
+   "td": 4.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-sunlu-pla+-7",
+   "brand": "SUNLU PLA+",
+   "name": "Blue",
+   "hex": "#0055CC",
+   "td": 3.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-sunlu-pla+-8",
+   "brand": "SUNLU PLA+",
+   "name": "Purple",
+   "hex": "#7020B0",
+   "td": 3.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-sunlu-pla+-9",
+   "brand": "SUNLU PLA+",
+   "name": "Pink",
+   "hex": "#FF70A0",
+   "td": 7.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-sunlu-pla+-10",
+   "brand": "SUNLU PLA+",
+   "name": "Skin",
+   "hex": "#FFDAB9",
+   "td": 7.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-sunlu-pla+-11",
+   "brand": "SUNLU PLA+",
+   "name": "Glow Green",
+   "hex": "#39FF14",
+   "td": 7.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-sunlu-pla+-12",
+   "brand": "SUNLU PLA+",
+   "name": "Glow Blue",
+   "hex": "#00BFFF",
+   "td": 7.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-fs-cmy-system-0",
+   "brand": "FS CMY System",
+   "name": "FS White",
+   "hex": "#F8F8F8",
+   "td": 9.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-fs-cmy-system-1",
+   "brand": "FS CMY System",
+   "name": "FS Cyan",
+   "hex": "#00ADEF",
+   "td": 6.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-fs-cmy-system-2",
+   "brand": "FS CMY System",
+   "name": "FS Magenta",
+   "hex": "#EC008C",
+   "td": 8.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-fs-cmy-system-3",
+   "brand": "FS CMY System",
+   "name": "FS Yellow",
+   "hex": "#FFD700",
+   "td": 7.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-fs-cmy-system-4",
+   "brand": "FS CMY System",
+   "name": "FS Black",
+   "hex": "#0A0A0A",
+   "td": 0.3,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-fs-cmy-system-5",
+   "brand": "FS CMY System",
+   "name": "FS Orange",
+   "hex": "#FF6600",
+   "td": 5.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-fs-cmy-system-6",
+   "brand": "FS CMY System",
+   "name": "FS Blue",
+   "hex": "#0047AB",
+   "td": 4.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-fs-cmy-system-7",
+   "brand": "FS CMY System",
+   "name": "FS Green",
+   "hex": "#00A651",
+   "td": 5.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polylite-pla-0",
+   "brand": "Polymaker PolyLite PLA",
+   "name": "Black",
+   "hex": "#101820",
+   "td": 0.3,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polylite-pla-1",
+   "brand": "Polymaker PolyLite PLA",
+   "name": "White",
+   "hex": "#FFFFFF",
+   "td": 8.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polylite-pla-2",
+   "brand": "Polymaker PolyLite PLA",
+   "name": "Cold White",
+   "hex": "#EEF0F5",
+   "td": 8.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polylite-pla-3",
+   "brand": "Polymaker PolyLite PLA",
+   "name": "Natural",
+   "hex": "#E8E6D0",
+   "td": 7.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polylite-pla-4",
+   "brand": "Polymaker PolyLite PLA",
+   "name": "Grey",
+   "hex": "#91999F",
+   "td": 4.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polylite-pla-5",
+   "brand": "Polymaker PolyLite PLA",
+   "name": "Steel Grey",
+   "hex": "#616469",
+   "td": 2.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polylite-pla-6",
+   "brand": "Polymaker PolyLite PLA",
+   "name": "Dark Grey",
+   "hex": "#4A4E51",
+   "td": 1.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polylite-pla-7",
+   "brand": "Polymaker PolyLite PLA",
+   "name": "Red",
+   "hex": "#E72F1D",
+   "td": 3.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polylite-pla-8",
+   "brand": "Polymaker PolyLite PLA",
+   "name": "Wine Red",
+   "hex": "#AE1215",
+   "td": 2.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polylite-pla-9",
+   "brand": "Polymaker PolyLite PLA",
+   "name": "Orange",
+   "hex": "#F67405",
+   "td": 4.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polylite-pla-10",
+   "brand": "Polymaker PolyLite PLA",
+   "name": "Lemon Yellow",
+   "hex": "#F1D335",
+   "td": 6.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polylite-pla-11",
+   "brand": "Polymaker PolyLite PLA",
+   "name": "Cream",
+   "hex": "#E5C8A2",
+   "td": 6.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polylite-pla-12",
+   "brand": "Polymaker PolyLite PLA",
+   "name": "Beige",
+   "hex": "#C6AD74",
+   "td": 5.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polylite-pla-13",
+   "brand": "Polymaker PolyLite PLA",
+   "name": "Brown",
+   "hex": "#55331A",
+   "td": 1.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polylite-pla-14",
+   "brand": "Polymaker PolyLite PLA",
+   "name": "Azure Blue",
+   "hex": "#0066D9",
+   "td": 3.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polylite-pla-15",
+   "brand": "Polymaker PolyLite PLA",
+   "name": "Aqua Blue",
+   "hex": "#39B9DB",
+   "td": 4.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polylite-pla-16",
+   "brand": "Polymaker PolyLite PLA",
+   "name": "Stone Blue",
+   "hex": "#40719A",
+   "td": 3.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polylite-pla-17",
+   "brand": "Polymaker PolyLite PLA",
+   "name": "Teal",
+   "hex": "#52BBB1",
+   "td": 4.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polylite-pla-18",
+   "brand": "Polymaker PolyLite PLA",
+   "name": "Green",
+   "hex": "#06924D",
+   "td": 3.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polylite-pla-19",
+   "brand": "Polymaker PolyLite PLA",
+   "name": "Lime Green",
+   "hex": "#DEDE00",
+   "td": 6.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polylite-pla-20",
+   "brand": "Polymaker PolyLite PLA",
+   "name": "Jungle Green",
+   "hex": "#446B20",
+   "td": 2.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polylite-pla-21",
+   "brand": "Polymaker PolyLite PLA",
+   "name": "Purple",
+   "hex": "#7A4F9E",
+   "td": 3.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polylite-pla-22",
+   "brand": "Polymaker PolyLite PLA",
+   "name": "Magenta",
+   "hex": "#F2306E",
+   "td": 4.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polylite-pla-23",
+   "brand": "Polymaker PolyLite PLA",
+   "name": "Pink",
+   "hex": "#EE9BB5",
+   "td": 5.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-pla-0",
+   "brand": "Polymaker PolyTerra PLA",
+   "name": "Charcoal Black",
+   "hex": "#4C4E56",
+   "td": 0.3,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-pla-1",
+   "brand": "Polymaker PolyTerra PLA",
+   "name": "Cotton White",
+   "hex": "#FFFFFF",
+   "td": 8.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-pla-2",
+   "brand": "Polymaker PolyTerra PLA",
+   "name": "Fossil Grey",
+   "hex": "#9B9EA0",
+   "td": 4.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-pla-3",
+   "brand": "Polymaker PolyTerra PLA",
+   "name": "Lava Red",
+   "hex": "#DE4343",
+   "td": 3.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-pla-4",
+   "brand": "Polymaker PolyTerra PLA",
+   "name": "Army Red",
+   "hex": "#BC3E44",
+   "td": 2.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-pla-5",
+   "brand": "Polymaker PolyTerra PLA",
+   "name": "Sunrise Orange",
+   "hex": "#F99963",
+   "td": 5.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-pla-6",
+   "brand": "Polymaker PolyTerra PLA",
+   "name": "Savannah Yellow",
+   "hex": "#FFE17F",
+   "td": 7.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-pla-7",
+   "brand": "Polymaker PolyTerra PLA",
+   "name": "Forest Green",
+   "hex": "#70AE68",
+   "td": 3.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-pla-8",
+   "brand": "Polymaker PolyTerra PLA",
+   "name": "Muted Green",
+   "hex": "#7D8B72",
+   "td": 4.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-pla-9",
+   "brand": "Polymaker PolyTerra PLA",
+   "name": "Army Dark Green",
+   "hex": "#68724D",
+   "td": 2.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-pla-10",
+   "brand": "Polymaker PolyTerra PLA",
+   "name": "Lime Green",
+   "hex": "#A8D55A",
+   "td": 5.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-pla-11",
+   "brand": "Polymaker PolyTerra PLA",
+   "name": "Sapphire Blue",
+   "hex": "#0078BF",
+   "td": 3.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-pla-12",
+   "brand": "Polymaker PolyTerra PLA",
+   "name": "Arctic Teal",
+   "hex": "#73CEC6",
+   "td": 5.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-pla-13",
+   "brand": "Polymaker PolyTerra PLA",
+   "name": "Army Blue",
+   "hex": "#375172",
+   "td": 1.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-pla-14",
+   "brand": "Polymaker PolyTerra PLA",
+   "name": "Sky Blue",
+   "hex": "#7BBCD5",
+   "td": 5.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-pla-15",
+   "brand": "Polymaker PolyTerra PLA",
+   "name": "Lavender Purple",
+   "hex": "#AE96D4",
+   "td": 5.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-pla-16",
+   "brand": "Polymaker PolyTerra PLA",
+   "name": "Army Purple",
+   "hex": "#5A3E72",
+   "td": 1.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-pla-17",
+   "brand": "Polymaker PolyTerra PLA",
+   "name": "Sakura Pink",
+   "hex": "#E4BDD0",
+   "td": 6.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-pla-18",
+   "brand": "Polymaker PolyTerra PLA",
+   "name": "Pastel Ice",
+   "hex": "#8BD5EE",
+   "td": 6.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-pla-19",
+   "brand": "Polymaker PolyTerra PLA",
+   "name": "Pastel Banana",
+   "hex": "#FEE5A5",
+   "td": 7.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-pla-20",
+   "brand": "Polymaker PolyTerra PLA",
+   "name": "Pastel Watermelon",
+   "hex": "#FC6371",
+   "td": 5.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-pla-21",
+   "brand": "Polymaker PolyTerra PLA",
+   "name": "Pastel Mint",
+   "hex": "#C8EF97",
+   "td": 7.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-pla-22",
+   "brand": "Polymaker PolyTerra PLA",
+   "name": "Pastel Peach",
+   "hex": "#FFC29E",
+   "td": 6.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-pla-23",
+   "brand": "Polymaker PolyTerra PLA",
+   "name": "Wood Brown",
+   "hex": "#D2A273",
+   "td": 5.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-pla-24",
+   "brand": "Polymaker PolyTerra PLA",
+   "name": "Earth Brown",
+   "hex": "#775C50",
+   "td": 2.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-polymaker-polyterra-pla-25",
+   "brand": "Polymaker PolyTerra PLA",
+   "name": "Army Beige",
+   "hex": "#DFC8B7",
+   "td": 6.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-esun-epla-matte-0",
+   "brand": "eSUN ePLA-Matte",
+   "name": "Deep Black",
+   "hex": "#2A2A2A",
+   "td": 0.3,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-esun-epla-matte-1",
+   "brand": "eSUN ePLA-Matte",
+   "name": "Dark Grey",
+   "hex": "#5A5A5A",
+   "td": 1.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-esun-epla-matte-2",
+   "brand": "eSUN ePLA-Matte",
+   "name": "Milky White",
+   "hex": "#EDE8E0",
+   "td": 8.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-esun-epla-matte-3",
+   "brand": "eSUN ePLA-Matte",
+   "name": "Almond Yellow",
+   "hex": "#E8C87A",
+   "td": 5.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-esun-epla-matte-4",
+   "brand": "eSUN ePLA-Matte",
+   "name": "Mint Green",
+   "hex": "#7DCFB0",
+   "td": 5.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-esun-epla-matte-5",
+   "brand": "eSUN ePLA-Matte",
+   "name": "Peach Pink",
+   "hex": "#F0B8A8",
+   "td": 6.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-esun-epla-matte-6",
+   "brand": "eSUN ePLA-Matte",
+   "name": "Light Khaki",
+   "hex": "#C8BA90",
+   "td": 6.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-esun-epla-matte-7",
+   "brand": "eSUN ePLA-Matte",
+   "name": "Lake Blue",
+   "hex": "#4A8FB5",
+   "td": 3.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-esun-epla-matte-8",
+   "brand": "eSUN ePLA-Matte",
+   "name": "Lilac",
+   "hex": "#B89CC8",
+   "td": 5.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-esun-epla-matte-9",
+   "brand": "eSUN ePLA-Matte",
+   "name": "Tangerine",
+   "hex": "#F08040",
+   "td": 5.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-esun-epla-matte-10",
+   "brand": "eSUN ePLA-Matte",
+   "name": "Strawberry Red",
+   "hex": "#C8364A",
+   "td": 3.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-esun-epla-matte-11",
+   "brand": "eSUN ePLA-Matte",
+   "name": "Matcha Green",
+   "hex": "#8AAE78",
+   "td": 4.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-esun-epla-matte-12",
+   "brand": "eSUN ePLA-Matte",
+   "name": "Morandi Green",
+   "hex": "#7A9A80",
+   "td": 4.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-esun-epla-matte-13",
+   "brand": "eSUN ePLA-Matte",
+   "name": "Morandi Purple",
+   "hex": "#8878A8",
+   "td": 4.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-esun-epla-matte-14",
+   "brand": "eSUN ePLA-Matte",
+   "name": "Fire Engine Red",
+   "hex": "#CC2020",
+   "td": 2.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-esun-epla-matte-15",
+   "brand": "eSUN ePLA-Matte",
+   "name": "Olive Green",
+   "hex": "#7A8050",
+   "td": 3.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-esun-epla-matte-16",
+   "brand": "eSUN ePLA-Matte",
+   "name": "Concrete",
+   "hex": "#A0A098",
+   "td": 4.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-colorfabb-pla/pha-0",
+   "brand": "ColorFabb PLA/PHA",
+   "name": "Standard Black",
+   "hex": "#1A1A1A",
+   "td": 0.3,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-colorfabb-pla/pha-1",
+   "brand": "ColorFabb PLA/PHA",
+   "name": "Standard White",
+   "hex": "#F0F0F0",
+   "td": 8.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-colorfabb-pla/pha-2",
+   "brand": "ColorFabb PLA/PHA",
+   "name": "Natural",
+   "hex": "#DDD9C4",
+   "td": 7.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-colorfabb-pla/pha-3",
+   "brand": "ColorFabb PLA/PHA",
+   "name": "Dutch Orange",
+   "hex": "#E85B1A",
+   "td": 4.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-colorfabb-pla/pha-4",
+   "brand": "ColorFabb PLA/PHA",
+   "name": "Traffic Red",
+   "hex": "#CC0000",
+   "td": 2.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-colorfabb-pla/pha-5",
+   "brand": "ColorFabb PLA/PHA",
+   "name": "Sky Blue",
+   "hex": "#5B9DC9",
+   "td": 4.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-colorfabb-pla/pha-6",
+   "brand": "ColorFabb PLA/PHA",
+   "name": "Blue Grey",
+   "hex": "#6B7E8C",
+   "td": 3.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-colorfabb-pla/pha-7",
+   "brand": "ColorFabb PLA/PHA",
+   "name": "Ultra Marine Blue",
+   "hex": "#1B2B8C",
+   "td": 1.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-colorfabb-pla/pha-8",
+   "brand": "ColorFabb PLA/PHA",
+   "name": "Lila",
+   "hex": "#8B7BAD",
+   "td": 4.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-colorfabb-pla/pha-9",
+   "brand": "ColorFabb PLA/PHA",
+   "name": "Fluorescent Pink",
+   "hex": "#F52584",
+   "td": 5.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-colorfabb-pla/pha-10",
+   "brand": "ColorFabb PLA/PHA",
+   "name": "Fluorescent Green",
+   "hex": "#7FCC00",
+   "td": 5.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-colorfabb-pla/pha-11",
+   "brand": "ColorFabb PLA/PHA",
+   "name": "Mint Turquoise",
+   "hex": "#48C9B0",
+   "td": 5.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-colorfabb-pla/pha-12",
+   "brand": "ColorFabb PLA/PHA",
+   "name": "Intense Green",
+   "hex": "#007A4D",
+   "td": 2.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-colorfabb-pla/pha-13",
+   "brand": "ColorFabb PLA/PHA",
+   "name": "Olive Green",
+   "hex": "#6E6E29",
+   "td": 2.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-colorfabb-pla/pha-14",
+   "brand": "ColorFabb PLA/PHA",
+   "name": "Leaf Green",
+   "hex": "#4E9B4A",
+   "td": 3.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-colorfabb-pla/pha-15",
+   "brand": "ColorFabb PLA/PHA",
+   "name": "Light Brown",
+   "hex": "#B07D55",
+   "td": 4.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-colorfabb-pla/pha-16",
+   "brand": "ColorFabb PLA/PHA",
+   "name": "Shining Silver",
+   "hex": "#A0A0A0",
+   "td": 4.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-colorfabb-pla/pha-17",
+   "brand": "ColorFabb PLA/PHA",
+   "name": "Pale Gold",
+   "hex": "#C9A84C",
+   "td": 5.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-colorfabb-pla/pha-18",
+   "brand": "ColorFabb PLA/PHA",
+   "name": "Signal Yellow",
+   "hex": "#E5C100",
+   "td": 6.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-eryone-pla-0",
+   "brand": "ERYONE PLA",
+   "name": "Black",
+   "hex": "#1E1E1E",
+   "td": 0.3,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-eryone-pla-1",
+   "brand": "ERYONE PLA",
+   "name": "Ivory White",
+   "hex": "#DCDCD3",
+   "td": 8.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-eryone-pla-2",
+   "brand": "ERYONE PLA",
+   "name": "Cool White",
+   "hex": "#E8EAEC",
+   "td": 8.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-eryone-pla-3",
+   "brand": "ERYONE PLA",
+   "name": "Red",
+   "hex": "#C02020",
+   "td": 2.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-eryone-pla-4",
+   "brand": "ERYONE PLA",
+   "name": "Rose Red",
+   "hex": "#D44060",
+   "td": 3.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-eryone-pla-5",
+   "brand": "ERYONE PLA",
+   "name": "Orange",
+   "hex": "#E06820",
+   "td": 4.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-eryone-pla-6",
+   "brand": "ERYONE PLA",
+   "name": "Yellow",
+   "hex": "#E8C030",
+   "td": 5.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-eryone-pla-7",
+   "brand": "ERYONE PLA",
+   "name": "Apple Green",
+   "hex": "#60B040",
+   "td": 4.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-eryone-pla-8",
+   "brand": "ERYONE PLA",
+   "name": "Green",
+   "hex": "#208040",
+   "td": 3.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-eryone-pla-9",
+   "brand": "ERYONE PLA",
+   "name": "White Jade",
+   "hex": "#C8E0D0",
+   "td": 7.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-eryone-pla-10",
+   "brand": "ERYONE PLA",
+   "name": "Blue",
+   "hex": "#1848A0",
+   "td": 2.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-eryone-pla-11",
+   "brand": "ERYONE PLA",
+   "name": "Lavender Purple",
+   "hex": "#9070C0",
+   "td": 4.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-eryone-pla-12",
+   "brand": "ERYONE PLA",
+   "name": "Dark Purple",
+   "hex": "#401860",
+   "td": 1.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-eryone-pla-13",
+   "brand": "ERYONE PLA",
+   "name": "Silver",
+   "hex": "#909090",
+   "td": 4.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-eryone-pla-14",
+   "brand": "ERYONE PLA",
+   "name": "Gray",
+   "hex": "#707070",
+   "td": 3.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-eryone-pla-15",
+   "brand": "ERYONE PLA",
+   "name": "Matte Black",
+   "hex": "#2A2A2A",
+   "td": 0.3,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-eryone-pla-16",
+   "brand": "ERYONE PLA",
+   "name": "Matte White",
+   "hex": "#E8E4DC",
+   "td": 8.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-eryone-pla-17",
+   "brand": "ERYONE PLA",
+   "name": "Matte Red",
+   "hex": "#B83030",
+   "td": 2.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-eryone-pla-18",
+   "brand": "ERYONE PLA",
+   "name": "Matte Navy Blue",
+   "hex": "#203060",
+   "td": 1.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-eryone-pla-19",
+   "brand": "ERYONE PLA",
+   "name": "Matte Olive Green",
+   "hex": "#607040",
+   "td": 2.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-eryone-pla-20",
+   "brand": "ERYONE PLA",
+   "name": "Matte Mint Green",
+   "hex": "#80C8A8",
+   "td": 5.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-eryone-pla-21",
+   "brand": "ERYONE PLA",
+   "name": "Matte Pink",
+   "hex": "#E0889A",
+   "td": 6.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-eryone-pla-22",
+   "brand": "ERYONE PLA",
+   "name": "Matte Army Green",
+   "hex": "#506040",
+   "td": 2.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-eryone-pla-23",
+   "brand": "ERYONE PLA",
+   "name": "Matte Aqua Blue",
+   "hex": "#5098B0",
+   "td": 4.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-(hueforge)-0",
+   "brand": "Prusament PLA (HueForge)",
+   "name": "Jet Black",
+   "hex": "#24292A",
+   "td": 0.3,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-(hueforge)-1",
+   "brand": "Prusament PLA (HueForge)",
+   "name": "Gravity Grey",
+   "hex": "#9FA4A7",
+   "td": 0.7,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-(hueforge)-2",
+   "brand": "Prusament PLA (HueForge)",
+   "name": "Pearl Mouse",
+   "hex": "#A49D8D",
+   "td": 2.3,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-(hueforge)-3",
+   "brand": "Prusament PLA (HueForge)",
+   "name": "Galaxy Silver",
+   "hex": "#999A9F",
+   "td": 6.4,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-(hueforge)-4",
+   "brand": "Prusament PLA (HueForge)",
+   "name": "Pristine White",
+   "hex": "#E6EAED",
+   "td": 5.1,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-(hueforge)-5",
+   "brand": "Prusament PLA (HueForge)",
+   "name": "Vanilla White",
+   "hex": "#D9D4C4",
+   "td": 7.1,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-(hueforge)-6",
+   "brand": "Prusament PLA (HueForge)",
+   "name": "Noctua Beige",
+   "hex": "#E7CEB4",
+   "td": 7.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-(hueforge)-7",
+   "brand": "Prusament PLA (HueForge)",
+   "name": "Pineapple Yellow",
+   "hex": "#EFD006",
+   "td": 7.6,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-(hueforge)-8",
+   "brand": "Prusament PLA (HueForge)",
+   "name": "Oh My Gold",
+   "hex": "#CE9F2D",
+   "td": 4.1,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-(hueforge)-9",
+   "brand": "Prusament PLA (HueForge)",
+   "name": "Prusa Orange",
+   "hex": "#FE6E31",
+   "td": 6.6,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-(hueforge)-10",
+   "brand": "Prusament PLA (HueForge)",
+   "name": "Lipstick Red",
+   "hex": "#D03036",
+   "td": 3.3,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-(hueforge)-11",
+   "brand": "Prusament PLA (HueForge)",
+   "name": "Ms. Pink",
+   "hex": "#E34A93",
+   "td": 4.1,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-(hueforge)-12",
+   "brand": "Prusament PLA (HueForge)",
+   "name": "Azure Blue",
+   "hex": "#0682AC",
+   "td": 6.6,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-(hueforge)-13",
+   "brand": "Prusament PLA (HueForge)",
+   "name": "Chalky Blue",
+   "hex": "#6F9AAA",
+   "td": 5.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-(hueforge)-14",
+   "brand": "Prusament PLA (HueForge)",
+   "name": "Army Green",
+   "hex": "#5E6344",
+   "td": 0.4,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-(hueforge)-15",
+   "brand": "Prusament PLA (HueForge)",
+   "name": "Galaxy Green",
+   "hex": "#426639",
+   "td": 3.2,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-(hueforge)-16",
+   "brand": "Prusament PLA (HueForge)",
+   "name": "Simply Green",
+   "hex": "#70A640",
+   "td": 3.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-(hueforge)-17",
+   "brand": "Prusament PLA (HueForge)",
+   "name": "Prusa Pro Green",
+   "hex": "#00C389",
+   "td": 5.0,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-(hueforge)-18",
+   "brand": "Prusament PLA (HueForge)",
+   "name": "Lime Green Blend",
+   "hex": "#A7B852",
+   "td": 3.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-(hueforge)-19",
+   "brand": "Prusament PLA (HueForge)",
+   "name": "Pistachio Green",
+   "hex": "#93A683",
+   "td": 4.5,
+   "profile": "Generic PLA"
+  },
+  {
+   "id": "c-prusament-pla-(hueforge)-20",
+   "brand": "Prusament PLA (HueForge)",
+   "name": "Noctua Brown",
+   "hex": "#653525",
+   "td": 1.5,
+   "profile": "Generic PLA"
+  }
+ ],
+ "presets": [
+  {
+   "id": "cmyw",
+   "name": "Snapmaker FS · CMY+White",
+   "cmy_brand": "Snapmaker PLA Full Spectrum",
+   "filaments": [
+    "sm-34267",
+    "sm-34268",
+    "sm-34269",
+    "sm-34266"
+   ],
+   "alternatives": {
+    "3": [
+     "sm-34266",
+     "sm-34012",
+     "c-fs-cmy-system-0"
+    ]
+   }
+  },
+  {
+   "id": "cmyk",
+   "name": "Snapmaker FS · CMY+Black",
+   "cmy_brand": "Snapmaker PLA Full Spectrum",
+   "filaments": [
+    "sm-34267",
+    "sm-34268",
+    "sm-34269",
+    "sm-34011"
+   ],
+   "alternatives": {
+    "3": [
+     "sm-34011",
+     "c-fs-cmy-system-4"
+    ]
+   }
+  },
+  {
+   "id": "cmyg",
+   "name": "Snapmaker FS · CMY+Gray",
+   "cmy_brand": "Snapmaker PLA Full Spectrum",
+   "filaments": [
+    "sm-34267",
+    "sm-34268",
+    "sm-34269",
+    "sm-34265"
+   ]
+  },
+  {
+   "id": "sys-cmyw",
+   "name": "FS CMY System · CMY+White",
+   "cmy_brand": "FS CMY System",
+   "filaments": [
+    "c-fs-cmy-system-1",
+    "c-fs-cmy-system-2",
+    "c-fs-cmy-system-3",
+    "c-fs-cmy-system-0"
+   ],
+   "alternatives": {
+    "3": [
+     "c-fs-cmy-system-0",
+     "sm-34266",
+     "sm-34012"
+    ]
+   }
+  },
+  {
+   "id": "sys-cmyk",
+   "name": "FS CMY System · CMY+Black",
+   "cmy_brand": "FS CMY System",
+   "filaments": [
+    "c-fs-cmy-system-1",
+    "c-fs-cmy-system-2",
+    "c-fs-cmy-system-3",
+    "c-fs-cmy-system-4"
+   ],
+   "alternatives": {
+    "3": [
+     "c-fs-cmy-system-4",
+     "sm-34011"
+    ]
+   }
+  }
+ ]
+}

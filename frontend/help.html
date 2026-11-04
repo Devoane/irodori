@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Irodori · Pomoc</title>
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+<style>
+  .doc { max-width: 860px; margin: 0 auto; padding: 24px 16px 80px; display: grid; gap: 14px; }
+  .doc h2 { font-size: 17px; margin: 0 0 6px; }
+  .doc p, .doc li { color: #e6d3cf; }
+  .doc dl { display: grid; grid-template-columns: 200px 1fr; gap: 6px 14px; margin: 6px 0 0; }
+  .doc dt { font-weight: 700; }
+  .doc dd { margin: 0; color: #e6d3cf; }
+  .doc code { background: var(--panel2); padding: 1px 5px; border-radius: 5px; }
+  @media (max-width: 700px) { .doc dl { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<header class="bar">
+  <a class="brand" href="./"><img src="logo.svg" alt="" width="34" height="34"><span><b>Irodori</b> <span class="kanji">彩り</span></span></a>
+  <nav><a class="nav" href="./">← wróć</a></nav>
+</header>
+<main class="doc">
+  <section class="panel"><h2>Co robi Irodori</h2>
+    <p>Bierze kolorowy model i dobiera do niego 2–4 szpule. Brakujące odcienie robi z mieszanek, czyli receptur, w których kolejne warstwy
+      drukują się różnymi szpulami. Wynik to projekt 3MF dla Snapmaker Orca albo gotowy G-code dla Snapmaker U1. Wszystko liczy się
+      na tym komputerze: serwer słucha tylko na <code>127.0.0.1</code>, nic nie wychodzi do internetu.</p></section>
+
+  <section class="panel"><h2>Jak zacząć</h2>
+    <ol><li>Upuść model: GLB, OBJ (z plikami .mtl i teksturami), FBX (z teksturami) albo malowany 3MF z Bambu/Orca/Prusa.</li>
+      <li>Wybierz liczbę głowic i kliknij <b>Analizuj</b>.</li>
+      <li>Po prawej porównaj wyniki: kolory szpul, zgodność z modelem (%) i względny czas druku. Kliknięty wynik pokazuje się w podglądzie.</li>
+      <li>Pobierz <b>3MF</b> albo kliknij <b>G-code</b>, żeby pociąć projekt w Orce od razu.</li></ol></section>
+
+  <section class="panel"><h2>Podgląd</h2>
+    <dl><dt>Wydruk</dt><dd>przewidywany wygląd wydruku (z kalibracji kartą, jeśli ją zrobiłeś)</dd>
+      <dt>W slicerze</dt><dd>dokładnie te kolory, które Snapmaker Orca pokaże po otwarciu projektu. Przy jednej recepturze na ściany są takie same jak „Wydruk”.</dd>
+      <dt>Model</dt><dd>kolory z pliku, z jasnością, nasyceniem i tęczą, jeśli je włączyłeś</dd>
+      <dt>Pędzel priorytetu</dt><dd>zamaluj ważny fragment (twarz, logo) i przelicz: zestawy dobierają się pod ten fragment, a model eksportuje się cały</dd>
+      <dt>Podstawka</dt><dd>15 wzorów; drugie kliknięcie zmienia rozmiar. Drukuje się jako osobna część tego samego obiektu.</dd></dl></section>
+
+  <section class="panel"><h2>Wyniki</h2>
+    <dl><dt>% zgodności</dt><dd>100 − 2,5 × średni błąd ΔE2000 ważony powierzchnią. Służy do porównania wyników tej samej analizy.</dd>
+      <dt>czas ≈1,3×</dt><dd>szacunek względem najszybszego wyniku: pole powierzchni × liczba szpul w recepturze. Dokładny czas daje G-code.</dd>
+      <dt>Dokładność</dt><dd>„Najwyższa” szuka zestawów w całej bibliotece i dobiera mieszanki według tego, jak oko widzi różnicę kolorów; analiza trwa 2–4× dłużej, „Szybka” liczy jak dawniej</dd>
+      <dt>A / B / C</dt><dd>zamienniki białej lub czarnej szpuli w zestawach CMY</dd>
+      <dt>◎ i ↺</dt><dd>zmiana koloru szpuli na swój (wynik liczy się od nowa) i powrót do zaproponowanego</dd>
+      <dt>Moje kolory</dt><dd>same wypełniają się szpulami z T1–T4 („Moje filamenty”); zmień dowolny kolor, a wynik przeliczy się sam</dd></dl></section>
+
+  <section class="panel"><h2>Ustawienia</h2>
+    <p>Kropka przy ustawieniu mówi, kiedy działa: <span class="dot re"></span> zmiana wymaga przeliczenia,
+      <span class="dot ex"></span> działa przy następnym pobraniu.</p>
+    <dl><dt>Liczba kolorów</dt><dd>„ile trzeba” zatrzymuje dobieranie mieszanek, gdy kolejne prawie nic nie poprawiają; „tylko szpule” nie miesza</dd>
+      <dt>Dwie receptury ścian</dt><dd>osobny wzór dla zewnętrznej ściany. Bierze tylko pary, które Orca pokaże w kolorze wydruku. Domyślnie wyłączone:
+        jedna receptura daje zgodność slicer = podgląd = wydruk i jest kilka razy szybsza.</dd>
+      <dt>Kolor w głąb</dt><dd>kolor przez cały przekrój zamiast samego pasa ścian; zwykle mniej szwów i krótszy druk</dd>
+      <dt>Splot na dachach</dt><dd>płaskie góry dostają wzór mieszanki zamiast jednego koloru</dd>
+      <dt>Scalanie drobinek</dt><dd>łączy małe plamy koloru z sąsiadami; mniej przejść szpul, mniej detalu</dd>
+      <dt>Grube warstwy bez mieszania</dt><dd>na wysokościach, gdzie nic się nie miesza, warstwa jest grubsza</dd>
+      <dt>Cienkie warstwy pod dachami</dt><dd>płaskie dachy o realnej powierzchni dostają cieńsze warstwy</dd>
+      <dt>Zatopienie w stole</dt><dd>obcina spód modelu na tyle milimetrów</dd>
+      <dt>Wtapianie nakładek</dt><dd>półprzezroczyste naklejki i oczy w GLB mieszają się z powierzchnią pod spodem</dd>
+      <dt>Tęcza</dt><dd>zastępuje kolory modelu spiralą tęczy</dd></dl></section>
+
+  <section class="panel"><h2>Kalibracja kartą</h2>
+    <p>Kalibracja → wybierz zestaw → pobierz kartę 3MF, wydrukuj, sfotografuj na wprost w rozproszonym świetle, wgraj zdjęcie i kliknij 4 rogi.
+      Po przeliczeniu kolory „Wydruk” biorą się z Twojego zdjęcia zamiast z modelu mieszania.</p></section>
+
+  <section class="panel"><h2>Uruchamianie na innych systemach</h2>
+    <dl><dt>Windows</dt><dd>zainstaluj Pythona 3.11+ z python.org, potem dwuklik <code>Irodori.bat</code></dd>
+      <dt>macOS</dt><dd>dwuklik <code>Irodori.command</code> (Python 3.11+)</dd>
+      <dt>Linux</dt><dd><code>./run.sh</code></dd></dl>
+    <p>Pierwsze uruchomienie tworzy folder <code>.venv</code> i instaluje zależności. Snapmaker Orca (dla G-code) i Blender (dla FBX)
+      są wyszukiwane automatycznie; inną ścieżkę podasz w <code>IRODORI_ORCA</code> i <code>IRODORI_BLENDER</code>.</p></section>
+</main>
+</body>
+</html>
