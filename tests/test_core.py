@@ -416,3 +416,64 @@ def test_dual_candidates_show_the_printed_colour_in_orca():
     sw = slicer_colors(recipes, P, 5)
     assert np.linalg.norm(rgb_to_oklab(rgb) - rgb_to_oklab(sw), axis=1).max() < SLICER_TOL + 1e-6
     assert len(recipes) > 1000
+
+
+def _card_photo(ids_n=4, gain=(0.8, 0.9, 1.1), noise=0.0):
+    """A synthetic photo: quadratic 'true' print colours seen through a camera with these gains."""
+    from calibration_card import layout
+    from color import linear_to_srgb, oklab_to_rgb, rgb_to_oklab, srgb_to_linear
+    lay = layout(ids_n)
+    fr = np.array([t["fractions"] for t in lay["tiles"]])
+    pure = [next(i for i, t in enumerate(lay["tiles"]) if t["pure"] == k) for k in range(ids_n)]
+    nominal = np.array([hex_to_rgb(h) for h in CMYW[:ids_n]], dtype=np.float64)
+    lab = fr @ rgb_to_oklab(nominal)
+    lab[:, 0] -= 0.25 * fr[:, 0] * fr[:, 1]     # darker than a linear mix: what a real print adds
+    true_rgb = np.clip(oklab_to_rgb(lab), 0, 255)
+    rng = np.random.default_rng(1)
+    seen = np.clip(srgb_to_linear(true_rgb) * np.array(gain), 0, 1)
+    return fr, np.clip(linear_to_srgb(seen) + rng.normal(0, noise, seen.shape), 0, 255), nominal, pure, true_rgb
+
+
+def test_calibration_recovers_print_colours_through_camera_gains():
+    import calibration
+    from color import delta_e2000, rgb_to_lab
+    fr, photo, nominal, pure, true_rgb = _card_photo(noise=1.0)
+    coef, info = calibration.fit(fr, photo, nominal, pure)
+    got = calibration.Correction(coef).apply_many(fr * 12)
+    assert delta_e2000(rgb_to_lab(got), rgb_to_lab(true_rgb)).mean() < 3.0
+    assert info["heldout_de"] < info["model_de"]
+
+
+def test_calibration_keeps_spool_that_differs_from_catalogue():
+    import calibration
+    from color import delta_e2000, rgb_to_lab
+    fr, photo, nominal, pure, true_rgb = _card_photo(gain=(1, 1, 1))
+    wrong = nominal.copy()
+    wrong[0] = wrong[0] * 0.8      # the catalogue says a darker cyan than the spool really is
+    coef, info = calibration.fit(fr, photo, wrong, pure)
+    got = calibration.Correction(coef).apply_many(fr[[pure[0]]] * 12)
+    assert delta_e2000(rgb_to_lab(got), rgb_to_lab(true_rgb[[pure[0]]]))[0] < 6.0
+    assert info["spool_de"][0] > 3.0
+
+
+def test_calibration_terms_are_reused_for_reordered_and_smaller_sets(tmp_path, monkeypatch):
+    import calibration
+    monkeypatch.setattr(calibration, "CAL_DIR", tmp_path)
+    fr, photo, nominal, pure, _ = _card_photo()
+    coef, info = calibration.fit(fr, photo, nominal, pure)
+    calibration.save(["a", "b", "c", "d"], coef, info, fr, photo)
+    full = calibration.load_correction(["a", "b", "c", "d"]).apply_many(np.array([[1, 2, 0, 0], [0, 0, 3, 1]]))
+    swapped = calibration.load_correction(["d", "c", "b", "a"]).apply_many(np.array([[0, 0, 2, 1], [1, 3, 0, 0]]))
+    assert np.allclose(full, swapped)
+    subset = calibration.load_correction(["b", "a"]).apply_many(np.array([[2, 1]]))
+    assert np.allclose(subset[0], full[0])
+    assert calibration.load_correction(["a", "e"]) is None
+
+
+def test_calibration_rejects_scrambled_photo():
+    import calibration
+    fr, photo, nominal, pure, _ = _card_photo()
+    _, good = calibration.fit(fr, photo, nominal, pure)
+    _, bad = calibration.fit(fr, np.random.default_rng(3).permutation(photo), nominal, pure)
+    assert calibration.acceptable(good)
+    assert not calibration.acceptable(bad)

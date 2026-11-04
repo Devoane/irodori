@@ -46,6 +46,7 @@ Szukanie narzędzi i folderów: `backend/tools.py`.
 - Czas względny: pole × liczba szpul receptury; pola jednoszpulowe tańsze o stosunek warstw przy „grubych warstwach”.
 - Wtapianie nakładek: próbki z alfą < 1 mieszane z najbliższą nieprzezroczystą powierzchnią (zasięg 1% rozmiaru, min. 0,5 mm).
 - Podstawki (`bases.py`): siatka biegunowa na elipsie obejmującej model, osobna część obiektu, model zagłębiony 0,6 mm. Wybór podstawki nie jest zapamiętywany (`UNSAVED` w app.js): każdy nowy model startuje bez niej.
+- Kalibracja (`calibration.py`): zdjęcie karty → po jednym wzmocnieniu na kanał w świetle liniowym (ekspozycja i balans bieli z czystych pól; bogatsza mapa ściągała szpule na kolor z katalogu) → model kwadratowy w OKLab. Wyrazy modelu należą do szpul i par, więc każdy zestaw o zmierzonych parach korzysta z nich w dowolnej kolejności. Zapisywana tylko, gdy błąd na pominiętych polach jest mniejszy niż modelu i niż ΔE 8 (próg przyjęty z testów na sztucznych zdjęciach, do sprawdzenia na prawdziwej karcie); JSON trzyma też surowe pomiary.
 - Nieszczelne siatki: liczba nawinięć + marching cubes; kolory zawsze z oryginału.
 
 ## Format eksportu (sprawdzony z Orca 2.4.0 CLI)

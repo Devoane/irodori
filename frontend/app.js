@@ -1084,22 +1084,25 @@ $('calFit').addEventListener('click', async () => {
   ctx.drawImage(cal.img, 0, 0, cv.width, cv.height);
   const data = ctx.getImageData(0, 0, cv.width, cv.height).data;
   const samples = tileSamplePoints().map((pts) => {
-    const acc = [0, 0, 0]; let n = 0;
+    const channels = [[], [], []];
     for (const [x, y] of pts) {
       const xi = Math.round(x), yi = Math.round(y);
       if (xi < 0 || yi < 0 || xi >= cv.width || yi >= cv.height) continue;
       const i = (yi * cv.width + xi) * 4;
-      for (let k = 0; k < 3; k++) acc[k] += SRGB2LIN[data[i + k]];
-      n++;
+      for (let k = 0; k < 3; k++) channels[k].push(data[i + k]);
     }
-    return acc.map((v) => fromLin(v / Math.max(n, 1)));
+    // median, so a glint or a dark layer line does not shift the tile
+    return channels.map((c) => c.sort((a, b) => a - b)[c.length >> 1] ?? 0);
   });
   drawCal();
   const fd = new FormData(); fd.append('filaments', cal.ids); fd.append('samples', JSON.stringify(samples));
   const r = await fetch('/api/calibration/fit', { method: 'POST', body: fd });
   const j = await r.json();
   if (!r.ok) { $('calStatus').textContent = j.detail; return; }
-  $('calStatus').textContent = `Zapisano kalibrację (${j.tiles} pól, błąd dopasowania ${j.fit_error_oklab}). Użyj „Analizuj ponownie”, żeby ją zastosować.`;
+  const spools = j.names.map((n, i) => `${n} ${j.spool_de[i] ?? '–'}`).join(', ');
+  const result = `Błąd na polach sprawdzających: ΔE ${j.heldout_de} (sam model: ΔE ${j.model_de}). Szpule względem katalogu: ${spools}.`;
+  if (!j.saved) { $('calStatus').textContent = `Nie zapisano, bo pomiar jest niewiarygodny. ${result} Zrób zdjęcie w lepszym świetle albo sprawdź rogi.`; return; }
+  $('calStatus').textContent = `Zapisano. ${result} Użyj „Analizuj ponownie”, żeby ją zastosować.`;
   await loadLibrary();
   state.calDirty = true; updateDirty();
 });

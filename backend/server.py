@@ -318,7 +318,10 @@ async def api_fit(filaments: str = Form(...), samples: str = Form(...)):
     nominal = np.array([hex_to_rgb(f["hex"]) for f in fil])
     pure = [next((i for i, t in enumerate(lay["tiles"]) if t["pure"] == k), -1) for k in range(len(fil))]
     coef, info = calibration.fit(fr, meas, nominal, pure)
-    calibration.save(ids, coef, info)
+    info["saved"] = calibration.acceptable(info)
+    if info["saved"]:
+        calibration.save(ids, coef, info, fr, meas)
+    info["names"] = [f["name"] for f in fil]
     return info
 
 
