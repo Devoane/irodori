@@ -8,18 +8,19 @@
 <link rel="stylesheet" href="style.css">
 <style>
   .doc { max-width: 860px; margin: 0 auto; padding: 24px 16px 80px; display: grid; gap: 14px; }
-  .doc h2 { font-size: 17px; margin: 0 0 6px; }
-  .doc p, .doc li { color: #e6d3cf; }
+  .doc h2 { margin: 0 0 6px; }
+  .doc p, .doc li { color: var(--ink); }
   .doc dl { display: grid; grid-template-columns: 200px 1fr; gap: 6px 14px; margin: 6px 0 0; }
   .doc dt { font-weight: 700; }
-  .doc dd { margin: 0; color: #e6d3cf; }
-  .doc code { background: var(--panel2); padding: 1px 5px; border-radius: 5px; }
+  .doc dd { margin: 0; color: var(--ink); }
+  .doc code { background: var(--white); border: 1px solid var(--line2); padding: 0 4px; }
   @media (max-width: 700px) { .doc dl { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
 <header class="bar">
-  <a class="brand" href="./"><img src="logo.svg" alt="" width="34" height="34"><span><b>Irodori</b> <span class="kanji">彩り</span></span></a>
+  <a class="brand" href="./"><img src="logo.svg" alt="" width="38" height="38"><b>Irodori</b><span class="kanji" lang="ja">彩り</span></a>
+  <div class="fala"></div>
   <nav><a class="nav" href="./">← wróć</a></nav>
 </header>
 <main class="doc">

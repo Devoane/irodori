@@ -88,4 +88,6 @@ z podporami na szpuli 0 wywalają `WipeTower2::prime`, więc podpory dostają sz
 node tests/e2e.mjs /tmp/out tests/samples/fbx/Duck.fbx tests/samples/fbx/Image_0.png   # przy działającym serwerze, Playwright
 ```
 
-Czcionka M PLUS Rounded 1c (`frontend/fonts`, SIL OFL 1.1, licencja obok).
+Czcionki w `frontend/fonts`, licencje obok: Antykwa Toruńska (GUST Font License, nagłówki i liczby), M PLUS 1 i Shippori Mincho (SIL OFL 1.1, tekst i znaki japońskie, ograniczone do potrzebnych znaków).
+
+Wygląd: czerwień i biel wspólne dla flag Polski i Japonii, kobalt jak ceramika z Bolesławca i japońskie indygo. `logo.svg` łączy biało-czerwony pas z dyskiem, `fala.svg` to seigaiha z oczek bolesławieckich, `herb.svg` to kamon cięty jak wycinanka. Tło podglądu jest neutralnie szare, żeby nie zmieniać odbioru kolorów.

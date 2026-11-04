@@ -16,8 +16,9 @@
 </head>
 <body>
 <header class="bar">
-  <a class="brand" href="./"><img src="logo.svg" alt="" width="34" height="34">
-    <span><b>Irodori</b> <span class="kanji">彩り</span></span></a>
+  <a class="brand" href="./"><img src="logo.svg" alt="" width="38" height="38">
+    <b>Irodori</b><span class="kanji" lang="ja">彩り</span></a>
+  <div class="fala"></div>
   <nav>
     <button id="btnInventory" class="nav" type="button">Moje filamenty</button>
     <button id="btnCalib" class="nav" type="button">Kalibracja</button>
@@ -59,7 +60,7 @@
       <h2><i>2</i> Ustawienia</h2>
       <p class="legend"><span class="dot re"></span> wymaga ponownej analizy <span class="dot ex"></span> działa przy pobieraniu</p>
 
-      <details class="grp" open><summary>Kolory</summary>
+      <details class="grp" open><summary>Kolory <span class="ja" lang="ja">色</span></summary>
         <div class="opt re"><label for="s_capacity">Liczba kolorów</label>
           <select id="s_capacity"><option value="0" selected>Ile trzeba</option><option value="64">do 64</option>
             <option value="255">do 255</option><option value="-1" id="capNoDither">tylko 4 szpule</option></select>
@@ -88,7 +89,7 @@
           <small>0 = każdy detal, 10 = mniej małych plam koloru i szybszy druk.</small></div>
       </details>
 
-      <details class="grp"><summary>Model</summary>
+      <details class="grp"><summary>Model <span class="ja" lang="ja">形</span></summary>
         <div class="opt re"><label for="s_longest_side">Najdłuższy bok (mm)</label>
           <input id="s_longest_side" type="number" min="1" max="1000" step="1" placeholder="auto: z pliku">
           <small>Puste = rozmiar z pliku; gdy nie mieści się na stole, 50 mm.</small></div>
@@ -105,7 +106,7 @@
           <small>Kolory widoczne od frontu przechodzą przez cały model.</small></div>
       </details>
 
-      <details class="grp"><summary>Ściany i wnętrze</summary>
+      <details class="grp"><summary>Ściany i wnętrze <span class="ja" lang="ja">壁</span></summary>
         <div class="opt ex"><label for="s_colored_walls">Kolorowe ściany</label>
           <input id="s_colored_walls" type="number" min="1" max="1000" value="5"></div>
         <div class="opt re"><label for="s_dual_wall">Dwie receptury ścian</label>
@@ -125,7 +126,7 @@
             <input id="s_backing" type="number" min="0" max="0.6" step="0.05" value="0.3" title="Ile koloru ściany wewnętrznej widać przez zewnętrzną"></div></div>
       </details>
 
-      <details class="grp"><summary>Warstwy</summary>
+      <details class="grp"><summary>Warstwy <span class="ja" lang="ja">層</span></summary>
         <div class="opt ex"><label for="s_layer_height">Wysokość warstwy</label>
           <select id="s_layer_height"><option>0.04</option><option>0.06</option><option>0.08</option><option selected>0.10</option>
             <option>0.12</option><option>0.14</option><option>0.16</option><option>0.18</option><option>0.20</option>
@@ -148,7 +149,7 @@
           <small>Natywny Local-Z w Snapmaker Orca.</small></div>
       </details>
 
-      <details class="grp"><summary>Pozycja na stole</summary>
+      <details class="grp"><summary>Pozycja na stole <span class="ja" lang="ja">位置</span></summary>
         <div class="opt ex"><label>Obrót X · Y · Z (°) <button id="rotAuto" class="mini" type="button">jak w pliku</button></label>
           <div class="trio"><input id="s_rot_x" type="number" step="1" placeholder="X"><input id="s_rot_y" type="number" step="1" placeholder="Y">
             <input id="s_rot_z" type="number" step="1" placeholder="Z"></div>
@@ -158,7 +159,7 @@
           <small id="zState">Spód na stole</small></div>
       </details>
 
-      <details class="grp"><summary>Efekty</summary>
+      <details class="grp"><summary>Efekty <span class="ja" lang="ja">効果</span></summary>
         <div class="opt re"><label for="s_rainbow">Tęcza</label>
           <select id="s_rainbow"><option value="0" selected>Wył.</option><option value="1">Wł.</option></select>
           <small>Zastępuje kolory modelu spiralą tęczy i włącza „Kolor w głąb”.</small>
@@ -179,14 +180,14 @@
       <div class="vtop">
         <div class="seg" id="viewMode"><button data-v="predicted" type="button">Wydruk</button><button data-v="slicer" type="button" title="Kolory, które pokaże Snapmaker Orca po otwarciu projektu">W slicerze</button><button data-v="source" class="on" type="button">Model</button></div>
         <div class="seg" id="matMode"><button data-m="translucent" class="on" type="button" title="Filamenty przepuszczające światło">przezierne</button><button data-m="opaque" type="button" title="Kryjące: każda kolorowa ściana ma ten sam wzór">kryjące</button></div>
-        <button id="resetView" class="mini" type="button">⟲ widok</button>
+        <button id="resetView" class="mini" type="button">widok</button>
       </div>
-      <div id="canvasWrap"><div id="empty" class="empty"><span>彩</span>Wczytaj model</div>
+      <div id="canvasWrap"><div id="empty" class="empty"><img src="herb.svg" alt="" width="190" height="190">Wczytaj model</div>
         <div class="cams" id="cams"><button data-c="top" type="button">góra</button><button data-c="front" type="button">przód</button>
           <button data-c="left" type="button">lewo</button><button data-c="right" type="button">prawo</button><button data-c="back" type="button">tył</button></div>
         <div class="gridlbl">stół 270 × 270 mm</div></div>
       <div class="tools">
-        <div class="tool"><button id="brushToggle" class="mini" type="button">✎ Pędzel priorytetu</button>
+        <div class="tool"><button id="brushToggle" class="mini" type="button">Pędzel priorytetu</button>
           <div class="seg small" id="brushMode"><button data-b="paint" class="on" type="button">maluj</button><button data-b="erase" type="button">zmazuj</button></div>
           <input id="brushSize" type="range" min="1" max="40" value="6" title="Rozmiar pędzla"><span id="brushSizeVal">6 mm</span>
           <button id="brushClear" class="mini" type="button">wyczyść</button><span id="focusInfo" class="muted">cały model</span></div>
