@@ -4,6 +4,7 @@ from __future__ import annotations
 import base64
 import json
 import math
+import re
 import struct
 from dataclasses import asdict, fields
 from pathlib import Path
@@ -53,7 +54,7 @@ def _settings(raw: str | None, base: Settings | None = None) -> Settings:
         s.source = "library"
     s.color_threshold = int(np.clip(s.color_threshold, 0, 10))
     s.interweave = int(np.clip(s.interweave, 0, 10))
-    s.max_triangles = int(np.clip(s.max_triangles, 16, 1_000_000))
+    s.max_triangles = int(np.clip(s.max_triangles, 1000, 1_000_000))
     s.colored_walls = int(np.clip(s.colored_walls, 1, 1000))
     s.max_recipe_len = int(np.clip(s.max_recipe_len, 2, 40))
     s.max_run = int(np.clip(s.max_run, 1, 4))
@@ -71,6 +72,7 @@ def _settings(raw: str | None, base: Settings | None = None) -> Settings:
     s.rainbow_offset = float(np.mod(s.rainbow_offset, 360))
     s.rainbow_white = float(np.clip(s.rainbow_white, 0, 75))
     s.z_offset = float(np.clip(s.z_offset, -1000, 0))
+    s.rot_x, s.rot_y, s.rot_z = (float(np.mod(a, 360)) for a in (s.rot_x, s.rot_y, s.rot_z))
     if s.repair not in ("auto", "on", "off"):
         s.repair = "auto"
     if s.base not in STYLES:
@@ -99,6 +101,7 @@ def _row(s: analysis.Session, idx: int):
 
 
 def _download(data: bytes, name: str, media: str) -> Response:
+    name = re.sub(r'[\\/:*?"<>|]|%22', "_", name)     # browsers send a quote in a file name as %22
     quoted = quote(name)
     disposition = f'attachment; filename="{name}"' if quoted == name else f"attachment; filename*=UTF-8''{quoted}"
     return Response(data, media_type=media, headers={"Content-Disposition": disposition})
@@ -174,28 +177,51 @@ def api_labels(sid: str, idx: int):
 
 
 @app.post("/api/recolor/{sid}/{idx}")
-async def api_recolor(sid: str, idx: int, colors: str = Form(...), replace: int = Form(0)):
-    """Palette for the user's own colours: a new "My colors" row, or with
-    replace=1 the edited row itself (same title, other swatches)."""
+async def api_recolor(sid: str, idx: int, colors: str = Form(...), mode: str = Form("mine")):
+    """New spool colors. mode "repaint" or "match" edits a suggested row in place: repaint keeps its mixes on the
+    same faces, match rebuilds them for the model. "mine" replaces the "My colors" row, and "new" adds one."""
     s = _session(sid)
     if s.busy:
         raise HTTPException(409, "Analysis in progress")
     base = _row(s, idx)
-    hexes = json.loads(colors)
+    if mode not in ("repaint", "match", "mine", "new"):
+        raise HTTPException(400, "Invalid data")
+    try:
+        hexes = json.loads(colors)
+    except ValueError:
+        raise HTTPException(400, "Invalid data") from None
     if not isinstance(hexes, list) or len(hexes) != len(base.filaments):
         raise HTTPException(400, "Wrong number of colors")
     for h in hexes:
-        if not isinstance(h, str):
-            raise ValueError("Invalid data")
-        hex_to_rgb(h)
-    row = analysis.custom_row(s, base, hexes)
-    if replace:
-        row.title, row.family, row.cmy_brand, row.alternatives, row.grouped = \
-            base.title, base.family, base.cmy_brand, base.alternatives, base.grouped
-        s.rows[idx] = row
-        return {"index": idx, "row": row.to_json()}
-    s.rows.append(row)
-    return {"index": len(s.rows) - 1, "row": row.to_json()}
+        if not isinstance(h, str) or not re.fullmatch(r"#[0-9A-Fa-f]{6}", h):
+            raise HTTPException(400, "Invalid data")
+    if mode == "new":
+        s.rows.append(analysis.custom_row(s, base, hexes))
+        return {"index": len(s.rows) - 1, "row": s.rows[-1].to_json()}
+    if mode == "mine":
+        row = analysis.custom_row(s, base, hexes)
+        row.title, row.family = base.title, base.family
+    else:
+        origin = base.origin or base
+        if [h.upper() for h in hexes] == [f["hex"].upper() for f in origin.filaments]:
+            row = origin
+        else:
+            row = analysis.repainted_row(s, origin, hexes) if mode == "repaint" else analysis.custom_row(s, origin, hexes)
+            row.title, row.family, row.cmy_brand, row.alternatives, row.grouped, row.origin = \
+                origin.title, origin.family, origin.cmy_brand, origin.alternatives, origin.grouped, origin
+    s.rows[idx] = row
+    return {"index": idx, "row": row.to_json()}
+
+
+@app.post("/api/reset/{sid}/{idx}")
+def api_reset(sid: str, idx: int):
+    """Back to the row as it was suggested: its own mixes and labels."""
+    s = _session(sid)
+    if s.busy:
+        raise HTTPException(409, "Analysis in progress")
+    row = _row(s, idx)
+    s.rows[idx] = row.origin or row
+    return {"index": idx, "row": s.rows[idx].to_json()}
 
 
 @app.get("/api/export/{sid}/{idx}.3mf")
@@ -293,12 +319,14 @@ async def api_set(sid: str, ids: str = Form(...), replace: int = Form(-1), loade
         raise HTTPException(409, "Analysis in progress")
     _, by_id = load_library()
     ids = ids.split(",")
-    if any(i not in by_id for i in ids) or len(ids) != (s.analysed_settings or s.settings).toolheads:
+    like = _row(s, replace) if replace >= 0 and not loaded else None
+    known = set(by_id) | ({f["id"] for f in like.filaments} if like else set())
+    if any(i not in known for i in ids) or len(ids) != (s.analysed_settings or s.settings).toolheads:
         raise HTTPException(400, "Unknown filament set")
     if loaded:
         row = analysis.set_row(s, ids, loaded=True)
     elif replace >= 0:
-        row = analysis.set_row(s, ids, like=_row(s, replace))
+        row = analysis.set_row(s, ids, like=like)
     else:
         row = analysis.set_row(s, ids)
     if replace >= 0:
@@ -336,7 +364,10 @@ async def api_fit(filaments: str = Form(...), samples: str = Form(...)):
     ids = filaments.split(",")
     fil = _library_filaments(ids)
     lay = calibration_card.layout(len(fil))
-    meas = np.array(json.loads(samples), dtype=np.float64)
+    try:
+        meas = np.array(json.loads(samples), dtype=np.float64)
+    except (TypeError, ValueError):
+        raise HTTPException(400, "Wrong number of samples") from None
     if meas.shape != (len(lay["tiles"]), 3) or not np.isfinite(meas).all():
         raise HTTPException(400, "Wrong number of samples")
     fr = np.array([t["fractions"] for t in lay["tiles"]])

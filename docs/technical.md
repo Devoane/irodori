@@ -47,10 +47,12 @@ every locale has the same keys and placeholders.
   for 2× more suggestions and the best are kept. Measured match %, fast → highest: DamagedHelmet 91.3 → 93.0 (54 → 188 s),
   GradientBox 83.4 → 85.5, Duck 98.7 → 98.8; CMY sets on the helmet 75.7 → 84.3. "CMY sets only" is off by default.
 - Relative time: area × number of spools in the recipe. Single-spool areas are cheaper by the layer ratio with "thick layers".
+- Changing a spool color on a result: "Repaint the model" (`palette.repaint_row`) keeps the row's mixes on the same faces and predicts them for the new spools, so the match % drops on purpose. "Keep the model's colors" rebuilds the mixes for the model (`analysis.custom_row`). An edited row keeps the suggested one in `Row.origin`, and every edit starts from it, so going back restores its exact labels (`/api/reset`).
+- Preview light: 72 % ambient plus 28 % headlight, adding up to 1 after Lambert's division by pi. A surface facing the viewer shows exactly the swatch color; before, a white spool rendered as gray.
 - Overlay blending: samples with alpha < 1 are mixed with the nearest opaque surface (reach 1% of the size, at least 0.5 mm).
 - Bases (`bases.py`): a polar grid on an ellipse around the model, a separate part of the object, model sunk 0.6 mm. The chosen base is not remembered (`UNSAVED` in `app.js`): every new model starts without one.
 - Calibration (`calibration.py`): photo of the card → one gain per channel in linear light (exposure and white balance from the pure tiles; a richer map pulled spools onto their catalog color) → a quadratic model in OKLab. The terms belong to spools and pairs, so any set whose pairs were measured can use them in any order. It is saved only if the error on held-out tiles beats the model and ΔE 8. That threshold comes from tests on synthetic photos and has not been checked on a real card. The JSON also stores the raw measurements.
-- Leaky meshes: winding number + marching cubes; colors always come from the original.
+- Leaky meshes: winding number + marching cubes; colors always come from the original. Thin shells are thickened by the true distance to the triangles, which also grows the model by up to 0.85 voxel on each side.
 
 ## Export format (checked with the Orca 2.4.0 CLI)
 

@@ -19,7 +19,7 @@ from calibration import load_correction
 from export_3mf import PLATE, write_project
 from geometry import build_print_mesh, face_adjacency_graph
 from orca_cli import slice_project
-from palette import (Row, Settings, Targets, build_row, diverse, load_inventory, load_library, preset_rows,
+from palette import (Row, Settings, Targets, build_row, repaint_row, diverse, load_inventory, load_library, preset_rows,
                      rank_sets)
 from source import SourceModel, load_source
 
@@ -98,6 +98,10 @@ def _status(s: Session, stage: str, msg: str, progress: float | None = None):
         s.progress = progress
 
 
+KNOWN_LOAD_ERRORS = ("The 3MF is too large", "The 3MF has no filament_colour", "Blender could not convert", "Supported formats",
+                     "Program ")     # the rest is a parser's own message about a broken file
+
+
 def _run(s: Session):
     with s.lock:
         t0 = time.time()
@@ -107,7 +111,13 @@ def _run(s: Session):
             src_key = (st.longest_side, st.bake_overlays)
             if s.src is None or s.src_key != src_key:
                 _status(s, "load", "Loading the model and sampling the texture…", 0.03)
-                s.src, s.warnings = load_source(s.files, s.main, st.longest_side, st.bake_overlays)
+                try:
+                    s.src, s.warnings = load_source(s.files, s.main, st.longest_side, st.bake_overlays)
+                except Exception as e:
+                    traceback.print_exc()
+                    if str(e).startswith(KNOWN_LOAD_ERRORS):
+                        raise
+                    raise ValueError("Could not read the file: it is damaged or holds no 3D model") from None
                 s.src_key = src_key
                 s.mesh = None
             mesh_key = (src_key, st.max_triangles, st.repair, st.front_only, st.base, st.base_size)
@@ -241,7 +251,8 @@ def set_row(s: Session, ids: list[str], like: Row | None = None, loaded: bool = 
     (`loaded`), or a preset row with another neutral filament (`like` keeps its
     title, family and alternatives)."""
     _, by_id = load_library()
-    fil = [by_id[i] for i in ids]
+    own = {f["id"]: f for f in like.filaments} if like is not None else {}      # edited spools are not in the library
+    fil = [by_id.get(i) or own[i] for i in ids]
     if like is not None:
         title, family = like.title, like.family
     elif loaded:
@@ -252,7 +263,7 @@ def set_row(s: Session, ids: list[str], like: Row | None = None, loaded: bool = 
     row = build_row(title, fil, _targets(s), s.analysed_settings or s.settings, family,
                     correction=load_correction(ids), adjacency=s.adj, face_area=s.area)
     if like is not None:
-        row.alternatives, row.cmy_brand = like.alternatives, like.cmy_brand
+        row.alternatives, row.cmy_brand, row.grouped = like.alternatives, like.cmy_brand, like.grouped
     return row
 
 
@@ -266,15 +277,30 @@ def _targets(s: Session) -> Targets:
     return Targets(rgb, area)
 
 
-def custom_row(s: Session, base: Row, hexes: list[str]) -> Row:
+def _edited_filaments(base: Row, hexes: list[str]) -> list[dict]:
+    """The row's spools with new colors; an unchanged spool keeps its identity (and its calibration)."""
     fil = []
     for f, h in zip(base.filaments, hexes):
         nf = dict(f)
-        if h.upper() != f["hex"].upper():
-            nf.update(hex=h.upper(), name=f"Custom {h.upper()}", brand="Custom", id=f"custom-{h.upper()}")
+        h = h.upper()
+        if h != f["hex"].upper():
+            nf.update(hex=h, name=f"Custom {h}", brand="Custom", id=f"custom-{h[1:]}", td=None)
         fil.append(nf)
+    return fil
+
+
+def custom_row(s: Session, base: Row, hexes: list[str]) -> Row:
+    """The new spools reproduce the model's colors as well as they can."""
+    fil = _edited_filaments(base, hexes)
     return build_row("My colors", fil, _targets(s), s.analysed_settings or s.settings, "custom",
                      correction=load_correction([f["id"] for f in fil]), adjacency=s.adj, face_area=s.area)
+
+
+def repainted_row(s: Session, base: Row, hexes: list[str]) -> Row:
+    """The same mixes on the same faces with the new spools."""
+    fil = _edited_filaments(base, hexes)
+    return repaint_row(base, fil, _targets(s), s.analysed_settings or s.settings,
+                       correction=load_correction([f["id"] for f in fil]), face_area=s.area)
 
 
 def backing_slot(row: Row) -> int:

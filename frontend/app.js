@@ -64,8 +64,42 @@ const state = {
   view: 'source', opaque: false, brushOn: false, brush: 'paint', brushSize: 6,
   mesh: null,            // { nV, nF, src: source rgb per face, cen: face centroids }
   labels: null, focus: null, focusDirty: false,
-  analysed: null, diag: null, library: null, orig: {}, brandsOff: new Set(), gjobs: new WeakMap(),
+  analysed: null, diag: null, library: null, brandsOff: new Set(), gjobs: new WeakMap(),
 };
+
+// server errors: a clean message whatever came back, and a way out when the session is gone
+const SESSION_LOST = 'Session expired, load the model again';
+async function failure(r) {
+  let msg = '';
+  try { msg = (await r.json()).detail; } catch { /* not JSON */ }
+  if (msg === SESSION_LOST) sessionLost();
+  return msg || 'Something went wrong on the local server, see its log';
+}
+function sessionLost() {
+  Object.assign(state, { sid: null, version: -1, selected: -1, newFiles: true, rows: [], busy: false, analysed: null, labels: null });
+  $('rows').innerHTML = '';
+  $('rankCard').hidden = true;
+  $('brands').hidden = true;
+  setResultsTitle('Results · {n}', { n: 0 });
+  updateDirty();
+}
+const NO_SERVER = 'The local server is not responding. Start the app again.';
+async function send(url, opts) {
+  try { return await fetch(url, opts); } catch { return new Response(JSON.stringify({ detail: NO_SERVER }), { status: 503 }); }
+}
+// a download that keeps the page when the server refuses it
+async function download(url) {
+  const r = await send(url);
+  if (!r.ok) { setStatus(await failure(r), false, true); return false; }
+  const name = decodeURIComponent((r.headers.get('Content-Disposition') || '').match(/filename\*=UTF-8''([^;]+)/)?.[1] || '') ||
+    (r.headers.get('Content-Disposition') || '').match(/filename="([^"]+)"/)?.[1] || 'kaicho';
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(await r.blob());
+  a.download = name;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 60000);
+  return true;
+}
 
 const analysedHeads = () => state.analysed?.toolheads || readSettings().toolheads;
 
@@ -81,9 +115,10 @@ const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 5000);
 camera.up.set(0, 0, 1);
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
-scene.add(new THREE.HemisphereLight(0xffffff, 0x3a4050, 1.5));
-const sun = new THREE.DirectionalLight(0xffffff, 1.5);
-camera.add(sun); sun.position.set(0.4, 0.6, 1);
+// a surface facing the viewer shows exactly the swatch color: Lambert divides by pi, so these light levels add up to 1
+scene.add(new THREE.AmbientLight(0xffffff, 0.72 * Math.PI));
+const sun = new THREE.DirectionalLight(0xffffff, 0.28 * Math.PI);
+camera.add(sun, sun.target); sun.position.set(0, 0, 0); sun.target.position.set(0, 0, -1);
 scene.add(camera);
 const grid = new THREE.GridHelper(270, 27, 0x7f7f7d, 0x949492);
 grid.rotation.x = Math.PI / 2;
@@ -326,7 +361,8 @@ const UNSAVED = ['base', 'base_size'];
 function readSettings() {
   const s = {};
   for (const [k, kind] of Object.entries(SETTINGS)) {
-    const v = $('s_' + k).value;
+    let v = $('s_' + k).value;
+    if (v === '' && (kind === 'int' || kind === 'float')) v = $('s_' + k).defaultValue;     // a cleared field means the default
     s[k] = kind === 'bool' ? v === '1' : kind === 'str' ? v : kind === 'auto' ? (v === '' ? 0 : Number(v)) : Number(v);
   }
   s.rotate = ['rot_x', 'rot_y', 'rot_z'].some((k) => $('s_' + k).value !== '');
@@ -350,7 +386,14 @@ function loadSaved() {
     if (!(raw._v >= 3) && raw.interweave === '1') delete raw.interweave;
     // v4: 0.08 mm became the default, and thin layers under flat tops no longer apply to it
     if (!(raw._v >= 4)) { delete raw.layer_height; delete raw.detailed_top; }
-    for (const [k, v] of Object.entries(raw)) if ($('s_' + k) && !UNSAVED.includes(k)) $('s_' + k).value = v;
+    for (const [k, v] of Object.entries(raw)) {
+      const el = $('s_' + k);
+      if (!el || UNSAVED.includes(k)) continue;
+      const before = el.value;
+      el.value = v;
+      if (el.tagName === 'SELECT' && el.selectedIndex < 0) el.value = before;     // an option that no longer exists
+      if (el.type === 'number' && v === '' && SETTINGS[k] !== 'auto') el.value = before;
+    }
     if (raw._opaque) { state.opaque = true; for (const b of $('matMode').children) b.classList.toggle('on', b.dataset.m === 'opaque'); }
   } catch { /* storage unavailable */ }
 }
@@ -387,7 +430,19 @@ function onSetting(k) {
 }
 loadSaved();
 syncLabels();
-for (const k of Object.keys(SETTINGS)) $('s_' + k).addEventListener('input', () => onSetting(k));
+for (const k of Object.keys(SETTINGS)) {
+  $('s_' + k).addEventListener('input', () => onSetting(k));
+  // a number outside its range, or a field left empty, shows the value that is really used
+  if ($('s_' + k).type === 'number') $('s_' + k).addEventListener('change', (e) => {
+    const el = e.target;
+    if (el.value === '' && SETTINGS[k] !== 'auto') el.value = el.defaultValue;
+    else if (el.value !== '') {
+      const lo = el.min === '' ? -Infinity : Number(el.min), hi = el.max === '' ? Infinity : Number(el.max);
+      el.value = Math.min(hi, Math.max(lo, Number(el.value)));
+    }
+    onSetting(k);
+  });
+}
 $('rotAuto').addEventListener('click', () => { for (const a of ['rot_x', 'rot_y', 'rot_z']) $('s_' + a).value = ''; onSetting('rot_x'); });
 $('zAuto').addEventListener('click', () => { $('s_z_offset').value = ''; onSetting('z_offset'); });
 $('rainbowReset').addEventListener('click', () => {
@@ -437,11 +492,11 @@ const MODEL_RE = /\.(glb|3mf|fbx|obj)$/i;
 const IMG_RE = /\.(png|jpe?g|tga|tiff?|webp|bmp)$/i;
 const base = (p) => p.replace(/\\/g, '/').split('/').pop();
 let deps = { need: [], kind: '' };
-$('file').addEventListener('change', (e) => setFiles([...e.target.files]));
+$('file').addEventListener('change', (e) => { setFiles([...e.target.files]); e.target.value = ''; });     // the same file can be chosen again
 drop.addEventListener('dragover', (e) => { e.preventDefault(); drop.classList.add('over'); });
 drop.addEventListener('dragleave', () => drop.classList.remove('over'));
 drop.addEventListener('drop', (e) => { e.preventDefault(); drop.classList.remove('over'); setFiles([...e.dataTransfer.files]); });
-$('depFiles').addEventListener('change', (e) => addFiles([...e.target.files]));
+$('depFiles').addEventListener('change', (e) => { addFiles([...e.target.files]); e.target.value = ''; });
 $('depFolder').addEventListener('change', (e) => addFiles([...e.target.files].filter((f) => IMG_RE.test(f.name) || /\.mtl$/i.test(f.name))));
 $('depAllow').addEventListener('change', () => { renderDeps(); updateDirty(); });
 
@@ -530,10 +585,10 @@ async function analyze() {
   setStatus('Sending the model to the local server…', true);
   state.busy = true; updateDirty();
   try {
-    const r = await fetch('/api/analyze', { method: 'POST', body: fd });
-    if (!r.ok) throw new Error((await r.json()).detail || r.statusText);
+    const r = await send('/api/analyze', { method: 'POST', body: fd });
+    if (!r.ok) throw new Error(await failure(r));
     const { session } = await r.json();
-    Object.assign(state, { sid: session, version: -1, selected: -1, newFiles: false, rows: [], orig: {} });
+    Object.assign(state, { sid: session, version: -1, selected: -1, newFiles: false, rows: [] });
     $('results').hidden = false;
     $('rows').innerHTML = '';
     setResultsTitle('Working…');
@@ -550,9 +605,9 @@ async function reanalyze() {
     fd.append('focus', btoa(s));
   }
   state.busy = true; updateDirty();
-  const r = await fetch(`/api/reanalyze/${state.sid}`, { method: 'POST', body: fd });
-  if (!r.ok) { setStatus((await r.json()).detail, false, true); state.busy = false; updateDirty(); return; }
-  state.focusDirty = false; state.calDirty = false; state.orig = {};
+  const r = await send(`/api/reanalyze/${state.sid}`, { method: 'POST', body: fd });
+  if (!r.ok) { const msg = await failure(r); setStatus(msg, false, true); state.busy = false; updateDirty(); return; }
+  state.focusDirty = false; state.calDirty = false;
   setResultsTitle('Recalculating…');
   poll();
 }
@@ -560,17 +615,20 @@ $('btnAnalyze').addEventListener('click', analyze);
 $('btnReanalyze').addEventListener('click', reanalyze);
 
 async function poll() {
-  const r = await fetch(`/api/status/${state.sid}`);
-  if (!r.ok) { setStatus((await r.json()).detail, false, true); state.busy = false; updateDirty(); return; }
+  const r = await send(`/api/status/${state.sid}`);
+  if (!r.ok) { const msg = await failure(r); setStatus(msg, false, true); state.busy = false; updateDirty(); return; }
   const st = await r.json();
   setStatus(st.message, st.busy, !!st.error);
   setProgress(st.progress || 0);
-  $('warnings').textContent = (state.warnings = st.warnings || []).map((w) => t(w)).join(' · ');
+  state.warnings = st.warnings || [];
+  renderWarnings();
   if (st.version !== state.version && st.version > 0 && ['targets', 'search', 'rows', 'done'].includes(st.stage)) {
     state.version = st.version;
     const keep = state.focus;
-    const [mb] = await Promise.all([fetch(`/api/mesh/${state.sid}.bin`).then((x) => x.arrayBuffer()), loadSource(state.sid)]);
-    buildPrintMesh(mb);
+    try {
+      const [mb] = await Promise.all([fetch(`/api/mesh/${state.sid}.bin`).then((x) => x.arrayBuffer()), loadSource(state.sid)]);
+      buildPrintMesh(mb);
+    } catch { setStatus(NO_SERVER, false, true); state.busy = false; updateDirty(); return; }
     if (keep && keep.length === state.focus.length) state.focus.set(keep);
   }
   if (st.busy) { setTimeout(poll, 400); return; }
@@ -580,6 +638,7 @@ async function poll() {
     state.rows = st.rows;
     state.analysed = st.settings;
     state.diag = st.diag;
+    renderWarnings();
     setResultsTitle('Results · {n}', { n: state.rows.length });
     renderBrands();
     mineIdx = null;
@@ -590,6 +649,11 @@ async function poll() {
     if (state.view === 'source') $('viewMode').querySelector('[data-v=predicted]').click();
   }
   updateDirty();
+}
+
+function renderWarnings() {
+  const size = state.diag && !state.diag.fits ? [t('Does not fit in {size} mm: reduce the longest side', { size: state.diag.plate.join(' × ') })] : [];
+  $('warnings').textContent = [...(state.warnings || []).map((w) => t(w)), ...size].join(' · ');
 }
 
 // ---------------------------------------------------------------- result rows
@@ -625,6 +689,7 @@ function capText(m) {
   return m.capacity === 0 ? t('as many as needed') : m.capacity <= 8 ? t('spools only') : t('up to {n}', { n: m.capacity });
 }
 function rowSub(row) {
+  if (row.edited) return t('Colors changed by you');
   if (FAMILY_NOTE[row.family]) return t(FAMILY_NOTE[row.family]);
   if (row.family === 'search') return '';
   const m = row.metrics;
@@ -643,7 +708,7 @@ function renderRows() {
     const m = row.metrics, n = row.filaments.length;
     const rel = costs[i] > 0 ? costs[i] / fastest : 1;
     const virt = stripOrder(row.entries);
-    const orig = state.orig[i], job = visibleJob(row);
+    const orig = row.edited, job = visibleJob(row);
     const hasAlts = Object.values(row.alternatives || {}).some((a) => a.length > 1);
     const sw = row.filaments.map((f, k) => {
       const alts = (row.alternatives || {})[k];
@@ -656,7 +721,6 @@ function renderRows() {
         <b>F${k + 1} · ${esc(t(f.name))}</b>
         <div class="hexl"><span>${f.hex}</span>
           <label class="ico" title="${t('Edit {hex}', { hex: f.hex })}">◎<input type="color" value="${f.hex.toLowerCase()}" data-k="${k}"></label>
-          ${orig ? `<button type="button" class="ico" data-reset-row="${i}" title="${t('Back to the suggested ones')}">↺</button>` : ''}
 </div>
         ${m.usage ? `<span class="use" title="${t('Share of the spool in the colored surface')}">${fmt(m.usage[k])}%</span>` : ''}</div>`;
     }).join('');
@@ -671,6 +735,7 @@ function renderRows() {
         <div class="score"><span class="m ${matchClass(m.match)}" title="${t('Color match with the model')}">${fmt(m.match)}%</span>
           ${row.grouped ? `<small>+${tn('{n} similar', row.grouped)}</small>` : ''}
           ${m.time ? `<span class="time" title="${esc(timeNote(row, s))}">${t('time ≈{n}×', { n: fmt(rel, 1) })} <i>ⓘ</i></span>` : ''}</div>
+        ${orig ? `<button class="collapse" type="button" data-reset-row="${i}" title="${t('Back to the suggested ones')}">↺</button>` : ''}
         <button class="collapse" type="button" data-col-row="${i}" title="${t('Collapse')}">−</button></div>
       <div class="body">
         <div class="sw4" style="--n:${n}">${sw}</div>
@@ -695,47 +760,79 @@ $('rows').addEventListener('click', async (e) => {
   if (t.closest('a, label, details, input')) return;
   if (i !== state.selected) selectRow(i);
 });
+// the swatch follows the picker at once, the model when the picker closes
+$('rows').addEventListener('input', (e) => {
+  if (e.target.type !== 'color') return;
+  const box = e.target.closest('.swc');
+  box.querySelector('.chip').style.background = e.target.value;
+  box.querySelector('.hexl span').textContent = e.target.value.toUpperCase();
+});
 $('rows').addEventListener('change', (e) => {
   const inp = e.target; if (inp.type !== 'color') return;
   const i = +inp.closest('.rowcard').dataset.i, row = state.rows[i];
   const hexes = row.filaments.map((f) => f.hex);
   hexes[+inp.dataset.k] = inp.value.toUpperCase();
-  recolor(i, hexes, true);
+  recolor(i, hexes, row.family === 'custom' ? 'mine' : state.editMode);
 });
 
+let labelsAsked = 0;
 async function selectRow(i) {
   state.selected = i;
   renderRows();
   renderDiag();
-  const buf = await fetch(`/api/labels/${state.sid}/${i}.bin`).then((x) => x.arrayBuffer());
+  const ask = ++labelsAsked, r = await send(`/api/labels/${state.sid}/${i}.bin`);
+  if (!r.ok) { const msg = await failure(r); setStatus(msg, false, true); return; }
+  const buf = await r.arrayBuffer();
+  if (ask !== labelsAsked) return;     // another row was picked meanwhile: its colors must not get these labels
   state.labels = new Uint16Array(buf);
   refreshColors();
 }
-async function recolor(i, hexes, replace, keepOrig = true, select = true) {
+// color edits run one after another, so the server and the page end on the same result
+let edits = Promise.resolve();
+function recolor(i, hexes, mode, select = true) {
+  const run = edits.then(() => recolorNow(i, hexes, mode, select));
+  edits = run.catch(() => {});
+  return run;
+}
+async function recolorNow(i, hexes, mode, select) {
   setStatus('Calculating for your colors…', true);
-  const fd = new FormData(); fd.append('colors', JSON.stringify(hexes)); fd.append('replace', replace ? '1' : '0');
-  const r = await fetch(`/api/recolor/${state.sid}/${i}`, { method: 'POST', body: fd });
-  if (!r.ok) { setStatus((await r.json()).detail, false, true); return null; }
+  const fd = new FormData(); fd.append('colors', JSON.stringify(hexes)); fd.append('mode', mode);
+  const r = await send(`/api/recolor/${state.sid}/${i}`, { method: 'POST', body: fd });
+  if (!r.ok) { const msg = await failure(r); setStatus(msg, false, true); renderRows(); return null; }
   const j = await r.json();
-  if (replace) { if (keepOrig && !state.orig[i]) state.orig[i] = state.rows[i]; state.rows[i] = j.row; }
-  else state.rows.push(j.row);
+  if (mode === 'new') state.rows.push(j.row); else state.rows[i] = j.row;
   setStatus('Done');
   if (select) await selectRow(j.index); else renderRows();
   return j.index;
 }
 async function resetRow(i) {
-  const orig = state.orig[i]; if (!orig) return;
-  await recolor(i, orig.filaments.map((f) => f.hex), true);
-  state.rows[i] = orig; delete state.orig[i];
-  renderRows();
+  const r = await send(`/api/reset/${state.sid}/${i}`, { method: 'POST' });
+  if (!r.ok) { const msg = await failure(r); setStatus(msg, false, true); return; }
+  state.rows[i] = (await r.json()).row;
+  setStatus('Done');
+  await selectRow(i);
 }
+// what changing a spool color means, for rows already changed too
+let savedEdit = 'repaint';
+try { savedEdit = localStorage.getItem('kaicho.edit') === 'match' ? 'match' : 'repaint'; } catch { /* storage unavailable */ }
+state.editMode = savedEdit;
+function showEditMode() { for (const b of $('editMode').children) b.classList.toggle('on', b.dataset.e === state.editMode); }
+showEditMode();
+$('editMode').addEventListener('click', async (e) => {
+  const m = e.target.dataset.e; if (!m || m === state.editMode) return;
+  state.editMode = m;
+  showEditMode();
+  try { localStorage.setItem('kaicho.edit', m); } catch { /* storage unavailable */ }
+  const selected = state.selected;
+  for (const [i, row] of state.rows.entries()) if (row.edited) await recolor(i, row.filaments.map((f) => f.hex), m, i === selected);
+});
 async function swapAlt(i, slot, id) {
   const row = state.rows[i];
   const ids = row.filaments.map((f) => f.id); ids[slot] = id;
   setStatus('Calculating with another spool…', true);
   const fd = new FormData(); fd.append('ids', ids.join(',')); fd.append('replace', String(i));
-  const r = await fetch(`/api/set/${state.sid}`, { method: 'POST', body: fd });
-  if (!r.ok) { setStatus((await r.json()).detail, false, true); return; }
+  const r = await send(`/api/set/${state.sid}`, { method: 'POST', body: fd });
+  if (!r.ok) { const msg = await failure(r); setStatus(msg, false, true); return; }
   state.rows[i] = (await r.json()).row;
   setStatus('Done');
   await selectRow(i);
@@ -758,19 +855,25 @@ function paintJobs() {
   for (const row of state.rows) if (state.gjobs.has(row)) paintJob(row);
 }
 async function exportRow(i, kind) {
-  if (kind === 'glb') { location.href = `/api/export/${state.sid}/${i}.glb`; return; }
-  if (kind === '3mf') { location.href = `/api/export/${state.sid}/${i}.3mf?settings=${encodeURIComponent(exportSettings())}`; return; }
+  if (kind === 'glb' || kind === '3mf') {
+    setStatus('Saving the project…', true);
+    const query = kind === '3mf' ? `?settings=${encodeURIComponent(exportSettings())}` : '';
+    if (await download(`/api/export/${state.sid}/${i}.${kind}${query}`)) setStatus('Done');
+    return;
+  }
   const row = state.rows[i];
   const settings = exportSettings();
   const show = (html, { err = false, busy = false } = {}) => { state.gjobs.set(row, { html, err, busy, settings }); paintJob(row); };
   show(() => '', { busy: true });
   const fd = new FormData(); fd.append('settings', settings);
-  const r = await fetch(`/api/gcode/${state.sid}/${i}`, { method: 'POST', body: fd });
-  if (!r.ok) { const { detail } = await r.json(); show(() => esc(t(detail)), { err: true }); return; }
+  const r = await send(`/api/gcode/${state.sid}/${i}`, { method: 'POST', body: fd });
+  if (!r.ok) { const detail = await failure(r); show(() => esc(t(detail)), { err: true }); return; }
   const { job } = await r.json();
   const url = `/api/gcode/${state.sid}/job/${job}`;
   for (;;) {
-    const j = await fetch(url).then((x) => x.json());
+    const jr = await send(url);
+    if (!jr.ok) { const detail = await failure(jr); show(() => esc(t(detail)), { err: true }); return; }
+    const j = await jr.json();
     if (j.busy) { show(() => `<span class="spin"></span>${esc(t(j.message))}`, { busy: true }); await new Promise((ok) => setTimeout(ok, 1500)); continue; }
     if (j.error) show(() => esc(t(j.message)), { err: true });
     else {
@@ -789,6 +892,12 @@ function renderBrands() {
 }
 $('brandList').addEventListener('change', (e) => {
   if (e.target.checked) state.brandsOff.delete(e.target.value); else state.brandsOff.add(e.target.value);
+  const hidden = (row) => row.cmy_brand && state.brandsOff.has(row.cmy_brand);
+  // the model must not keep showing a result that is no longer on the list
+  if (state.rows[state.selected] && hidden(state.rows[state.selected])) {
+    const next = state.rows.findIndex((row) => !hidden(row));
+    if (next >= 0) { selectRow(next); return; }
+  }
   renderRows();
 });
 
@@ -835,6 +944,13 @@ function renderMine() {
   mine.forEach((_, k) => mineSlot(k));
 }
 const validHex = (h) => /^#[0-9A-F]{6}$/.test(h);
+// #RRGGBB, RRGGBB, #RGB, RGB, or a library entry ending in its hex
+function readHex(text) {
+  const m = text.trim().match(/(?:^|#|\s)([0-9a-f]{6}|[0-9a-f]{3})$/i);
+  if (!m) return '';
+  const h = m[1].length === 3 ? [...m[1]].map((c) => c + c).join('') : m[1];
+  return `#${h.toUpperCase()}`;
+}
 function mineSlot(k) {
   const chip = document.querySelector(`[data-chip="${k}"]`), h = mine[k];
   chip.classList.toggle('empty', !validHex(h));
@@ -855,7 +971,7 @@ async function runMine(select) {
   if (mineRunning) { mineAgain = true; return; }
   mineRunning = true;
   const fresh = mineIdx === null;
-  const idx = await recolor(fresh ? 0 : mineIdx, mine, !fresh, false, select);
+  const idx = await recolor(fresh ? 0 : mineIdx, mine, fresh ? 'new' : 'mine', select);
   mineRunning = false;
   if (idx === null) return;
   mineIdx = idx;
@@ -868,8 +984,7 @@ $('mineSlots').addEventListener('input', (e) => {
     mine[k] = e.target.value.toUpperCase();
     document.querySelector(`#mineSlots input.hex[data-k="${k}"]`).value = mine[k];
   } else {
-    const m = e.target.value.match(/#[0-9A-F]{6}/i);
-    mine[k] = m ? m[0].toUpperCase() : '';
+    mine[k] = readHex(e.target.value);
   }
   try { localStorage.setItem(MINE, JSON.stringify(mine)); } catch { /* storage unavailable */ }
   mineSlot(+k);
@@ -881,7 +996,9 @@ document.querySelector('[data-col=mineCard]').addEventListener('click', (e) => {
 
 // ---------------------------------------------------------------- ranking
 async function loadRanking() {
-  const list = await fetch(`/api/ranking/${state.sid}`).then((r) => r.json());
+  const res = await send(`/api/ranking/${state.sid}`);
+  if (!res.ok) { await failure(res); return; }
+  const list = await res.json();
   $('rankCard').hidden = !list.length;
   const built = new Set(state.rows.map((r) => r.filaments.map((f) => f.id).join(',')));
   $('ranking').innerHTML = list.map((r, i) => {
@@ -897,8 +1014,8 @@ $('ranking').addEventListener('click', async (e) => {
   e.target.disabled = true;
   setStatus('Calculating the full palette for the set…', true);
   const fd = new FormData(); fd.append('ids', ids);
-  const r = await fetch(`/api/set/${state.sid}`, { method: 'POST', body: fd });
-  if (!r.ok) { setStatus((await r.json()).detail, false, true); e.target.disabled = false; return; }
+  const r = await send(`/api/set/${state.sid}`, { method: 'POST', body: fd });
+  if (!r.ok) { const msg = await failure(r); setStatus(msg, false, true); e.target.disabled = false; return; }
   const j = await r.json();
   state.rows.push(j.row);
   setStatus('Done');
@@ -909,7 +1026,9 @@ $('ranking').addEventListener('click', async (e) => {
 
 // ---------------------------------------------------------------- library, my filaments
 async function loadLibrary() {
-  state.library = await fetch('/api/library').then((r) => r.json());
+  const r = await send('/api/library');
+  if (!r.ok) { setStatus(await failure(r), false, true); return; }
+  state.library = await r.json();
   inv.data = state.library.inventory;
   $('libList').innerHTML = state.library.filaments.map((f) => `<option value="${esc(`${f.brand} — ${f.name} ${f.hex}`)}">`).join('');
   renderBases();
@@ -984,6 +1103,7 @@ $('invList').addEventListener('click', (e) => {
 $('invAdd').addEventListener('click', () => {
   const hex = $('invHex').value.toUpperCase(), id = `custom-${hex.slice(1)}`;
   const td = $('invTd').value;
+  if (td !== '' && !(Number(td) >= 0 && Number(td) <= 100)) { alert(t('TD must be between 0 and 100 mm.')); return; }
   inv.custom = inv.custom.filter((c) => c.id !== id);
   inv.custom.push({ id, brand: 'Custom', name: $('invName').value.trim() || hex, hex, td: td === '' ? null : Number(td) });
   inv.owned.add(id);
@@ -997,8 +1117,8 @@ $('invSave').addEventListener('click', async (e) => {
   const set = loaded.slice(0, n);
   if (set.some((x) => x) && set.some((x) => !x)) { alert(t('Set all of T1–T{n} or leave them empty.', { n })); return; }
   const body = { owned: [...inv.owned], custom: inv.custom, loaded: set.every((x) => x) ? loaded.filter((x) => x) : [] };
-  const r = await fetch('/api/inventory', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-  if (!r.ok) { alert(t((await r.json()).detail)); return; }
+  const r = await send('/api/inventory', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  if (!r.ok) { alert(t(await failure(r))); return; }
   const before = loadedHexes(analysedHeads());
   await loadLibrary();
   $('dlgInventory').close();
@@ -1019,8 +1139,8 @@ async function loadedRow() {
   if (at >= 0 && state.rows[at].filaments.map((f) => f.id).join() === ids.join()) return;
   setStatus('Calculating for the spools in T1–T4…', true);
   const fd = new FormData(); fd.append('ids', ids.join(',')); fd.append('loaded', '1'); fd.append('replace', String(at));
-  const r = await fetch(`/api/set/${state.sid}`, { method: 'POST', body: fd });
-  if (!r.ok) { setStatus((await r.json()).detail, false, true); return; }
+  const r = await send(`/api/set/${state.sid}`, { method: 'POST', body: fd });
+  if (!r.ok) { const msg = await failure(r); setStatus(msg, false, true); return; }
   const j = await r.json();
   state.rows[j.index] = j.row;
   setStatus('Done');
@@ -1034,23 +1154,30 @@ $('btnCalib').addEventListener('click', () => {
   const opts = (state.library?.presets || []).map((p) => ({ name: p.name, ids: p.filaments }));
   const row = state.rows[state.selected];
   if (inv.data.loaded.length) opts.unshift({ name: t('Loaded in the printer'), ids: inv.data.loaded });
-  if (row && row.filaments.length <= 4) opts.unshift({ name: t('Selected palette: {names}', { names: row.filaments.map((f) => f.name).join(' + ') }), ids: row.filaments.map((f) => f.id) });
+  const known = new Set((state.library?.filaments || []).map((f) => f.id));
+  if (row && row.filaments.length <= 4 && row.filaments.every((f) => known.has(f.id))) opts.unshift({ name: t('Selected palette: {names}', { names: row.filaments.map((f) => f.name).join(' + ') }), ids: row.filaments.map((f) => f.id) });
   opts.forEach((o) => { const op = document.createElement('option'); op.value = o.ids.join(','); op.textContent = o.name; sel.appendChild(op); });
   cal.pts = []; cal.img = null; drawCal(); $('calStatus').textContent = ''; $('calFit').disabled = true;
   $('dlgCalib').showModal();
 });
 $('calCard').addEventListener('click', () => {
-  location.href = `/api/calibration/card.3mf?filaments=${encodeURIComponent($('calSet').value)}&layer_height=${readSettings().layer_height}`;
+  download(`/api/calibration/card.3mf?filaments=${encodeURIComponent($('calSet').value)}&layer_height=${readSettings().layer_height}`)
+    .then((ok) => { if (!ok) $('calStatus').textContent = t(lastStatus[0]); });
 });
 $('calPhoto').addEventListener('change', async (e) => {
   const f = e.target.files[0]; if (!f) return;
-  cal.img = await createImageBitmap(f);
+  e.target.value = '';
+  try { cal.img = await createImageBitmap(f); } catch { cal.img = null; drawCal(); $('calStatus').textContent = t('This file is not an image.'); return; }
   cal.pts = [];
   cal.ids = $('calSet').value;
-  cal.layout = await fetch(`/api/calibration/layout?filaments=${encodeURIComponent(cal.ids)}`).then((r) => r.json());
+  const lay = await send(`/api/calibration/layout?filaments=${encodeURIComponent(cal.ids)}`);
+  if (!lay.ok) { cal.img = null; drawCal(); $('calStatus').textContent = t(await failure(lay)); return; }
+  cal.layout = await lay.json();
   drawCal();
   $('calStatus').textContent = t(CORNERS[0]);
 });
+// the photo belongs to the set it was taken of
+$('calSet').addEventListener('change', () => { cal.img = null; cal.pts = []; drawCal(); $('calStatus').textContent = ''; $('calFit').disabled = true; });
 const CORNERS = ['Click the top-left corner of the card front.', 'Click the top-right corner.', 'Click the bottom-right corner.', 'Click the bottom-left corner.'];
 $('calCanvas').addEventListener('click', (e) => {
   if (!cal.img || cal.pts.length >= 4) return;
@@ -1121,9 +1248,9 @@ $('calFit').addEventListener('click', async () => {
   });
   drawCal();
   const fd = new FormData(); fd.append('filaments', cal.ids); fd.append('samples', JSON.stringify(samples));
-  const r = await fetch('/api/calibration/fit', { method: 'POST', body: fd });
+  const r = await send('/api/calibration/fit', { method: 'POST', body: fd });
+  if (!r.ok) { $('calStatus').textContent = t(await failure(r)); return; }
   const j = await r.json();
-  if (!r.ok) { $('calStatus').textContent = t(j.detail); return; }
   const spools = j.names.map((n, i) => `${n} ${j.spool_de[i] ?? '–'}`).join(', ');
   const result = t('Error on check tiles: ΔE {a} (model alone: ΔE {b}). Spools against the catalog: {c}.', { a: j.heldout_de, b: j.model_de, c: spools });
   if (!j.saved) { $('calStatus').textContent = t('Not saved because the measurement is unreliable. {r} Take the photo in better light or check the corners.', { r: result }); return; }
@@ -1135,7 +1262,7 @@ $('calFit').addEventListener('click', async () => {
 // ---------------------------------------------------------------- language
 onLanguage(() => {
   setStatus(...lastStatus);
-  $('warnings').textContent = (state.warnings || []).map((w) => t(w)).join(' · ');
+  renderWarnings();
   setResultsTitle(...resultsTitle);
   syncLabels();
   updateFocusInfo();

@@ -10,7 +10,7 @@ import trimesh
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "backend"))
 
-from color import blend_multi, hex_to_rgb, mixer_lerp  # noqa: E402
+from color import blend_multi, hex_to_rgb, mixer_lerp, rgb_to_hex  # noqa: E402
 from export_3mf import mixed_definition_row, vol_schedule, write_project  # noqa: E402
 from paint import decode_triangle, encode_state, encode_tree, subdivide_states  # noqa: E402
 from palette import Settings  # noqa: E402
@@ -221,6 +221,107 @@ def test_slicing_does_not_change_cached_presets(tmp_path):
         z.writestr("Metadata/project_settings.config", json.dumps({"different_settings_to_system": ["a;b", "c"]}))
     cfg = json.loads(zipfile.ZipFile(_without_change_list(project, tmp_path)).read("Metadata/project_settings.config"))
     assert cfg["different_settings_to_system"] == ["", ""]
+
+
+def _edit_session():
+    from analysis import Session
+    from palette import Targets, build_row
+    m = trimesh.creation.box(extents=(20, 20, 20)).subdivide().subdivide()
+    x = (m.triangles_center[:, 0] + 10) / 20
+    rgb = np.c_[255 * x, 60 + 0 * x, 255 * (1 - x)]
+    fil = [{"id": f"f{i}", "brand": "B", "name": f"N{i}", "hex": h, "td": 3.0, "profile": "P"} for i, h in enumerate(CMYW)]
+    st = Settings(precise=False)
+    s = Session(id="x", files={}, main="m.glb", settings=st, mesh=m, face_rgb=rgb, area=m.area_faces, analysed_settings=st)
+    row = build_row("Suggestion 1", fil, Targets(rgb, m.area_faces), st, "search", face_area=m.area_faces)
+    return s, row
+
+
+def test_repaint_keeps_mixes_and_shows_the_new_spool():
+    import analysis
+    s, row = _edit_session()
+    hexes = ["#FF00FF", *[f["hex"] for f in row.filaments[1:]]]
+    new = analysis.repainted_row(s, row, hexes)
+    assert new.recipes is row.recipes and new.labels is row.labels
+    assert rgb_to_hex(new.entry_rgb[0]) == "#FF00FF"
+    assert not np.array_equal(new.entry_rgb[len(hexes):], row.entry_rgb[len(hexes):])
+    f = new.filaments[0]
+    assert (f["id"], f["brand"], f["td"]) == ("custom-FF00FF", "Custom", None)
+    assert new.filaments[1] == row.filaments[1]
+
+
+def test_repaint_predicts_two_wall_recipes_like_the_search():
+    from color import mixer_lerp
+    from recipes import recipe_colors
+    phys = np.array([hex_to_rgb(h) for h in CMYW], dtype=float)
+    plain, dual = Recipe((1, 2)), Recipe((1, 2), (3, 4))
+    got = recipe_colors([plain, dual], phys, backing=0.25)
+    from recipes import predict_many
+    outer = predict_many(np.array([[1, 1, 0, 0]]), phys)
+    inner = predict_many(np.array([[0, 0, 1, 1]]), phys)
+    assert got[0] == pytest.approx(outer[0])
+    assert got[1] == pytest.approx(mixer_lerp(outer, inner, 0.25)[0])
+
+
+def test_recolor_and_reset_keep_the_row_that_was_suggested():
+    import asyncio
+
+    import analysis
+    import server
+    from fastapi import HTTPException
+    s, row = _edit_session()
+    s.rows, s.adj = [row], None
+    analysis.SESSIONS[s.id] = s
+    hexes = ["#123456", *[f["hex"] for f in row.filaments[1:]]]
+    edit = lambda colors, mode: asyncio.run(server.api_recolor(s.id, 0, colors=json.dumps(colors), mode=mode))   # noqa: E731
+    r = edit(hexes, "repaint")
+    assert r["row"]["edited"] and s.rows[0].labels is row.labels and s.rows[0].origin is row
+    r = edit(hexes, "match")
+    assert r["row"]["edited"] and s.rows[0].origin is row and r["row"]["title"] == row.title
+    # another A/B/C spool on an edited row: the custom spool stays valid
+    ids = ",".join(f["id"] for f in s.rows[0].filaments)
+    asyncio.run(server.api_set(s.id, ids=ids, replace=0, loaded=0))
+    assert s.rows[0].filaments[0]["hex"] == "#123456"
+    edit(hexes[:1] + ["#000000"] + hexes[2:], "repaint")
+    s.rows[0].origin = row
+    r = server.api_reset(s.id, 0)
+    assert s.rows[0] is row and not r["row"]["edited"]
+    with pytest.raises(HTTPException):
+        edit(["red", "x", "y", "z"], "repaint")
+    del analysis.SESSIONS[s.id]
+
+
+def test_a_broken_file_gets_a_readable_message():
+    import analysis
+    s = analysis.Session(id="y", files={"m.glb": b"not a glb"}, main="m.glb", settings=Settings())
+    analysis._run(s)
+    assert s.error == "Could not read the file: it is damaged or holds no 3D model"
+
+
+def test_calibration_refuses_a_photo_of_something_else():
+    import calibration
+    assert calibration.acceptable({"heldout_de": 5.0, "model_de": 30.0, "spool_de": [4.0, None]})
+    assert not calibration.acceptable({"heldout_de": 5.0, "model_de": 30.0, "spool_de": [4.0, 40.0]})
+
+
+def test_download_name_has_no_forbidden_characters():
+    from server import _download
+    assert 'filename="a_x__1.3mf"' in _download(b"", 'a"x%22<1.3mf'.replace("<", "_"), "x").headers["content-disposition"]
+
+
+def test_settings_keep_rotation_and_triangles_in_range():
+    from server import _settings
+    s = _settings(json.dumps({"rot_x": 725, "rot_y": -90, "max_triangles": 16}))
+    assert (s.rot_x, s.rot_y, s.max_triangles) == (5, 270, 1000)
+
+
+def test_solidify_leaves_flat_faces_flat():
+    from geometry import solidify
+    a, b = trimesh.creation.box(extents=(20, 40, 40)), trimesh.creation.box(extents=(20, 40, 40))
+    b.apply_translation([20, 0, 0])
+    m = trimesh.util.concatenate([a, b])
+    out = solidify(m, 200_000)
+    top = out.vertices[np.all(np.abs(out.vertices[:, :2] - [10, 0]) < [15, 12], axis=1) & (out.vertices[:, 2] > 15)]
+    assert np.ptp(top[:, 2]) < 0.02
 
 
 def test_write_project_keeps_overlapping_parts():

@@ -100,6 +100,10 @@ Check the cost before you print. Sliced at 0.08 mm with 4 spools, these sample m
 | Duck, 47 mm tall | 5 h 12 min | 25.3 g | 4.5 g |
 | Damaged Helmet, 46 mm tall | 14 h 00 min | 49.8 g | 4.9 g |
 
+### Change a suggested color
+
+Click the small circle next to a spool's color. **Repaint the model** shows every part printed with that spool in the new color. **Keep the model's colors** makes the new spools reproduce the original model as closely as they can. The ↺ button brings back the suggestion.
+
 ### Other tools
 
 | | |

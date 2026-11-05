@@ -342,7 +342,7 @@
 "\"Highest\" searches sets across the whole library and picks mixes by how the eye sees color difference; analysis takes 2–4× longer. \"Fast\" skips that.": "«Наивысшая» ищет наборы по всей библиотеке и подбирает смеси так, как глаз видит разницу цветов; анализ идёт в 2–4 раза дольше. «Быстрая» этого не делает.",
 "substitutes for the white or black spool in CMY sets": "замены белой или чёрной катушки в наборах CMY",
 "◎ and ↺": "◎ и ↺",
-"change a spool color to your own (the result is recalculated) and return to the suggested one": "заменить цвет катушки на свой (результат пересчитается) и вернуть предложенный",
+"change a spool color (the switch above the results sets how the model follows) and return to the suggested one": "изменить цвет катушки (переключатель над результатами определяет, как изменится модель) и вернуться к предложенному",
 "fill in by themselves from the spools in T1–T4 (\"My filaments\"); change any color and the result recalculates by itself": "заполняются сами катушками из T1–T4 («Мои филаменты»); измените любой цвет, и результат пересчитается сам",
 "The dot next to a setting tells when it applies: <span class=\"dot re\"></span> a change requires recalculating, <span class=\"dot ex\"></span> it applies to the next download.": "Точка у настройки показывает, когда она действует: <span class=\"dot re\"></span> изменение требует пересчёта, <span class=\"dot ex\"></span> применяется при следующем скачивании.",
 "\"as many as needed\" stops adding mixes when the next ones improve almost nothing; \"spools only\" does not mix": "«сколько нужно» прекращает подбор, когда новые смеси почти ничего не улучшают; «только катушки» не смешивает",
@@ -397,5 +397,14 @@
 "Export works for 2–4 toolheads: a 3MF project can be saved for 2–4 filaments": "Экспорт работает для 2–4 головок: проект 3MF можно сохранить для 2–4 филаментов",
 "\"Loaded in the printer\" works for 2–4 toolheads": "«Заправлено в принтер» работает для 2–4 головок",
 "For toolchanger printers. It takes a colored model and picks 2–4 spools for it. Missing shades come from mixes: recipes in which consecutive layers print with different spools. The result is a 3MF project for Snapmaker Orca or ready G-code; the export profile is currently made for the Snapmaker U1. Everything is calculated on this computer: the server listens only on <code>127.0.0.1</code> and nothing goes to the internet.": "Для принтеров со сменой инструмента. Программа берёт цветную модель и подбирает к ней 2–4 катушки. Недостающие оттенки получаются из смесей: рецептов, в которых соседние слои печатаются разными катушками. Результат: проект 3MF для Snapmaker Orca или готовый G-code; профиль экспорта пока сделан для Snapmaker U1. Всё считается на этом компьютере: сервер слушает только <code>127.0.0.1</code>, в интернет ничего не уходит.",
-"Preparing the geometry for printing…": "Подготовка геометрии к печати…"
+"Preparing the geometry for printing…": "Подготовка геометрии к печати…",
+"Something went wrong on the local server, see its log": "На локальном сервере произошла ошибка, посмотрите его журнал",
+"The local server is not responding. Start the app again.": "Локальный сервер не отвечает. Запустите приложение снова.",
+"Could not read the file: it is damaged or holds no 3D model": "Не удалось прочитать файл: он повреждён или не содержит 3D-модели",
+"Colors changed by you": "Цвета изменены вами",
+"When I change a spool color:": "Когда я меняю цвет катушки:",
+"Repaint the model": "Перекрасить модель",
+"Keep the model's colors": "Сохранить цвета модели",
+"TD must be between 0 and 100 mm.": "TD должно быть от 0 до 100 мм.",
+"This file is not an image.": "Этот файл не является изображением."
 }

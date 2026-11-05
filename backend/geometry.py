@@ -5,13 +5,12 @@ import numpy as np
 import trimesh
 from scipy.spatial import cKDTree
 
-from types import SimpleNamespace
 
 from color import linear_to_srgb, srgb_to_linear
 from source import SourceModel
 
 
-def solidify(mesh: trimesh.Trimesh, src: SourceModel, target_faces: int = 1_000_000,
+def solidify(mesh: trimesh.Trimesh, target_faces: int = 1_000_000,
              max_cells: int = 400, min_pitch: float = 0.3) -> trimesh.Trimesh:
     """Rebuild an open / multi-shell mesh as one watertight solid.
 
@@ -36,11 +35,17 @@ def solidify(mesh: trimesh.Trimesh, src: SourceModel, target_faces: int = 1_000_
                                  np.ascontiguousarray(mesh.faces, dtype=np.int64), grid)
     field = np.clip(np.abs(wn), 0, 1)
     # thicken thin shells: everything within ~0.8 voxel of the surface is solid
-    tree = cKDTree(src.sample_points)
+    # (the true distance to the triangles: random surface samples left pits and bumps on flat faces)
+    dense, _ = trimesh.sample.sample_surface(mesh, int(min(4e6, 6 * mesh.area / pitch ** 2)) + 1, seed=0)
+    tree = cKDTree(dense)
     near = np.zeros(len(grid), dtype=bool)
-    cand = field < 0.5
-    d, _ = tree.query(grid[cand], k=1, distance_upper_bound=0.85 * pitch, workers=-1)
-    near[np.nonzero(cand)[0][np.isfinite(d)]] = True
+    cand = np.nonzero(field < 0.5)[0]
+    d, _ = tree.query(grid[cand], k=1, distance_upper_bound=2 * pitch, workers=-1)
+    cand = cand[np.isfinite(d)]
+    if len(cand):
+        d2 = igl.point_mesh_squared_distance(grid[cand], np.ascontiguousarray(mesh.vertices, dtype=np.float64),
+                                             np.ascontiguousarray(mesh.faces, dtype=np.int64))[0]
+        near[cand[d2 <= (0.85 * pitch) ** 2]] = True
     field = gaussian_filter(np.where(near, 1.0, field).reshape(dims), 0.6)
     verts, faces, _, _ = marching_cubes(field, level=0.5, spacing=(pitch, pitch, pitch))
     verts += lo
@@ -50,6 +55,7 @@ def solidify(mesh: trimesh.Trimesh, src: SourceModel, target_faces: int = 1_000_
     if len(bodies):
         vols = np.array([b.volume for b in bodies])
         keep = [b for b, v in zip(bodies, vols) if v > max(vols.max() * 1e-4, pitch ** 3 * 8)]
+        keep = keep or [bodies[int(np.argmax(vols))]]      # a coarse grid can leave only small bodies
         out = trimesh.util.concatenate(keep) if len(keep) > 1 else keep[0]
     if out.volume < 0:
         out.invert()
@@ -73,7 +79,7 @@ def mend_bodies(mesh: trimesh.Trimesh, rgb: np.ndarray, part: np.ndarray | None,
         if progress:
             progress(f"Repairing leaky solids {k + 1}/{len(ids)}…")
         try:
-            solid = solidify(piece, SimpleNamespace(sample_points=piece.vertices), target_faces=40_000, min_pitch=0.12)
+            solid = solidify(piece, target_faces=40_000, min_pitch=0.12)
             trimesh.smoothing.filter_taubin(solid, iterations=40)
         except (IndexError, ValueError):     # nothing solid left: keep the body as it was
             solid = piece
@@ -109,10 +115,10 @@ def build_print_mesh(src: SourceModel, max_triangles: int = 1_000_000, repair: s
     if repaired:
         if progress:
             progress("Repairing the geometry (watertight solid for printing)…")
-        solid = solidify(mesh, src, max_triangles)
+        solid = solidify(mesh, max_triangles)
         if len(solid.faces) > max_triangles:
             # coarser voxels instead of decimation, which would break watertightness
-            solid = solidify(mesh, src, int(max_triangles * max_triangles / len(solid.faces) * 0.97))
+            solid = solidify(mesh, int(max_triangles * max_triangles / len(solid.faces) * 0.97))
         mesh = solid
     if len(mesh.faces) > max_triangles:
         import fast_simplification

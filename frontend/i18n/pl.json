@@ -342,7 +342,7 @@
 "\"Highest\" searches sets across the whole library and picks mixes by how the eye sees color difference; analysis takes 2–4× longer. \"Fast\" skips that.": "„Najwyższa” szuka zestawów w całej bibliotece i dobiera mieszanki według tego, jak oko widzi różnicę kolorów; analiza trwa 2–4× dłużej. „Szybka” to pomija.",
 "substitutes for the white or black spool in CMY sets": "zamienniki białej lub czarnej szpuli w zestawach CMY",
 "◎ and ↺": "◎ i ↺",
-"change a spool color to your own (the result is recalculated) and return to the suggested one": "zmiana koloru szpuli na swój (wynik liczy się od nowa) i powrót do zaproponowanego",
+"change a spool color (the switch above the results sets how the model follows) and return to the suggested one": "zmień kolor szpuli (przełącznik nad wynikami decyduje, jak zmieni się model) i wróć do sugerowanego",
 "fill in by themselves from the spools in T1–T4 (\"My filaments\"); change any color and the result recalculates by itself": "same wypełniają się szpulami z T1–T4 („Moje filamenty”); zmień dowolny kolor, a wynik przeliczy się sam",
 "The dot next to a setting tells when it applies: <span class=\"dot re\"></span> a change requires recalculating, <span class=\"dot ex\"></span> it applies to the next download.": "Kropka przy ustawieniu mówi, kiedy działa: <span class=\"dot re\"></span> zmiana wymaga przeliczenia, <span class=\"dot ex\"></span> działa przy następnym pobraniu.",
 "\"as many as needed\" stops adding mixes when the next ones improve almost nothing; \"spools only\" does not mix": "„ile trzeba” zatrzymuje dobieranie mieszanek, gdy kolejne prawie nic nie poprawiają; „tylko szpule” nie miesza",
@@ -397,5 +397,14 @@
 "Export works for 2–4 toolheads: a 3MF project can be saved for 2–4 filaments": "Eksport działa dla 2–4 głowic: projekt 3MF da się zapisać dla 2–4 filamentów",
 "\"Loaded in the printer\" works for 2–4 toolheads": "„Założone w drukarce” działa dla 2–4 głowic",
 "For toolchanger printers. It takes a colored model and picks 2–4 spools for it. Missing shades come from mixes: recipes in which consecutive layers print with different spools. The result is a 3MF project for Snapmaker Orca or ready G-code; the export profile is currently made for the Snapmaker U1. Everything is calculated on this computer: the server listens only on <code>127.0.0.1</code> and nothing goes to the internet.": "Do drukarek z wymiennymi głowicami. Bierze kolorowy model i dobiera do niego 2–4 szpule. Brakujące odcienie robi z mieszanek, czyli receptur, w których kolejne warstwy drukują się różnymi szpulami. Wynik to projekt 3MF dla Snapmaker Orca albo gotowy G-code; profil eksportu powstał na razie dla Snapmaker U1. Wszystko liczy się na tym komputerze: serwer słucha tylko na <code>127.0.0.1</code>, nic nie wychodzi do internetu.",
-"Preparing the geometry for printing…": "Przygotowanie geometrii do druku…"
+"Preparing the geometry for printing…": "Przygotowanie geometrii do druku…",
+"Something went wrong on the local server, see its log": "Coś poszło nie tak na lokalnym serwerze, sprawdź jego log",
+"The local server is not responding. Start the app again.": "Lokalny serwer nie odpowiada. Uruchom aplikację ponownie.",
+"Could not read the file: it is damaged or holds no 3D model": "Nie udało się odczytać pliku: jest uszkodzony albo nie zawiera modelu 3D",
+"Colors changed by you": "Kolory zmienione przez Ciebie",
+"When I change a spool color:": "Gdy zmieniam kolor szpuli:",
+"Repaint the model": "Przemaluj model",
+"Keep the model's colors": "Zachowaj kolory modelu",
+"TD must be between 0 and 100 mm.": "TD musi mieścić się między 0 a 100 mm.",
+"This file is not an image.": "Ten plik nie jest obrazem."
 }

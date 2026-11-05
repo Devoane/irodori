@@ -12,7 +12,7 @@ from scipy.cluster.vq import kmeans2
 
 from assign import apply_color_threshold
 from color import delta_e2000, hex_to_rgb, mixer_lerp, oklab_to_rgb, rgb_to_hex, rgb_to_lab, rgb_to_oklab
-from recipes import Recipe, build_candidates, slicer_colors
+from recipes import Recipe, build_candidates, recipe_colors, slicer_colors
 
 DATA = Path(__file__).resolve().parent.parent / "data"
 INVENTORY = DATA / "inventory.json"
@@ -114,6 +114,7 @@ class Row:
     grouped: int = 0                     # similar ranked sets folded into this row
     alternatives: dict = field(default_factory=dict)   # slot index -> interchangeable library ids
     cmy_brand: str = ""                  # CMY family of a preset row, for the brand filter
+    origin: "Row | None" = None          # the row as suggested, while the user has edited its colors
 
     def to_json(self):
         n = len(self.filaments)
@@ -123,6 +124,7 @@ class Row:
             "grouped": self.grouped,
             "alternatives": self.alternatives,
             "cmy_brand": self.cmy_brand,
+            "edited": self.origin is not None,
             "filaments": [{k: f.get(k) for k in ("id", "brand", "name", "hex", "td", "profile")} for f in self.filaments],
             "entries": [{"hex": rgb_to_hex(c), "slicer": rgb_to_hex(sc), "pattern": r.pattern(), "physical": i < n}
                         for i, (r, c, sc) in enumerate(zip(self.recipes, self.entry_rgb, self.entry_slicer))],
@@ -311,9 +313,17 @@ def build_row(title: str, filaments: list[dict], targets: Targets, settings: Set
     keep = np.nonzero(used)[0]
     row = Row(title=title, filaments=filaments, recipes=[recipes[idx[i]] for i in keep],
               entry_rgb=cand_rgb[idx][keep], labels=remap[labels], family=family)
+    row.metrics["candidates"] = int(len(recipes) - n)
+    return _finish_row(row, phys, targets, settings, correction, face_area)
+
+
+def _finish_row(row: Row, phys: np.ndarray, targets: Targets, settings: Settings, correction, face_area) -> Row:
+    """Slicer swatches and metrics of a row whose recipes, colours and labels are set."""
+    n = len(phys)
+    keep_candidates = row.metrics.get("candidates", 0)
     row.entry_slicer = slicer_colors(row.recipes, phys, settings.colored_walls)
     row.metrics = score(targets.face_lab, rgb_to_lab(row.entry_rgb), row.labels, targets.score_weights)
-    row.metrics["virtual_used"] = int(len(keep) - n)
+    row.metrics["virtual_used"] = int(len(row.recipes) - n)
     frac = np.zeros((len(row.recipes), n))
     for i, r in enumerate(row.recipes):
         for slot, c in r.counts.items():
@@ -321,7 +331,7 @@ def build_row(title: str, filaments: list[dict], targets: Targets, settings: Set
     use = np.bincount(row.labels, weights=targets.weights, minlength=len(row.recipes)) @ frac
     row.metrics["usage"] = [round(float(u), 1) for u in 100 * use / max(use.sum(), 1e-12)]
     row.metrics["capacity"] = int(settings.capacity)
-    row.metrics["candidates"] = int(len(recipes) - n)
+    row.metrics["candidates"] = keep_candidates
     row.metrics["dual"] = settings.dual
     row.metrics["calibrated"] = correction is not None
     # print-time proxy: every filament of a recipe costs its own paths on each layer
@@ -333,6 +343,16 @@ def build_row(title: str, filaments: list[dict], targets: Targets, settings: Set
                            "mixed": round(float((area * n_fil)[~single].sum()), 3),
                            "mixed_share": round(float(100 * area[~single].sum() / max(area.sum(), 1e-12)), 1)}
     return row
+
+
+def repaint_row(base: Row, filaments: list[dict], targets: Targets, settings: Settings, correction=None, face_area=None) -> Row:
+    """Same mixes on the same faces, with other spools: what was printed with a spool takes its new color."""
+    phys = np.array([hex_to_rgb(f["hex"]) for f in filaments])
+    row = Row(title=base.title, filaments=filaments, recipes=base.recipes,
+              entry_rgb=recipe_colors(base.recipes, phys, correction, settings.backing), labels=base.labels,
+              metrics={"candidates": base.metrics.get("candidates", 0)}, family=base.family, grouped=base.grouped,
+              alternatives=base.alternatives, cmy_brand=base.cmy_brand)
+    return _finish_row(row, phys, targets, settings, correction, face_area)
 
 
 def preset_rows(settings: Settings):

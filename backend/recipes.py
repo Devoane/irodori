@@ -142,6 +142,17 @@ def _word_colors(words, phys_rgb, correction):
     return rgb
 
 
+def recipe_colors(recipes: list[Recipe], phys_rgb: np.ndarray, correction=None, backing: float = 0.3) -> np.ndarray:
+    """Predicted sRGB of fixed recipes for another set of spools (same model as build_candidates)."""
+    phys_rgb = np.asarray(phys_rgb, dtype=np.float64)
+    rgb = _word_colors([r.word for r in recipes], phys_rgb, correction)
+    dual = [i for i, r in enumerate(recipes) if r.inner is not None]
+    if dual:
+        inner = _word_colors([recipes[i].inner for i in dual], phys_rgb, correction)
+        rgb[dual] = mixer_lerp(rgb[dual], inner, backing)
+    return rgb
+
+
 SLICER_CYCLE = 48      # Orca caps the colour-preview cycle at this many layers
 SLICER_TOL = 0.035     # OKLab: largest gap between the printed look and Orca's swatch for a dual-wall recipe
 

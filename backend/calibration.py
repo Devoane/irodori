@@ -17,10 +17,12 @@ from recipes import predict_many
 
 CAL_DIR = Path(__file__).resolve().parent.parent / "data" / "calibration"
 MAX_HELDOUT_DE = 8.0    # a worse fit means a bad photo or misplaced corners, not a difficult filament
+MAX_SPOOL_DE = 25.0     # further from the catalog than any real spool: the photo is not of this card
 
 
 def acceptable(info: dict) -> bool:
-    return info["heldout_de"] < min(info["model_de"], MAX_HELDOUT_DE)
+    spools = [d for d in info.get("spool_de", []) if d is not None]
+    return info["heldout_de"] < min(info["model_de"], MAX_HELDOUT_DE) and all(d < MAX_SPOOL_DE for d in spools)
 
 
 def set_key(filament_ids: list[str]) -> str:

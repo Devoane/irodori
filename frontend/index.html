@@ -95,7 +95,7 @@
           <input id="s_longest_side" type="number" min="1" max="1000" step="1" placeholder="auto: from file">
           <small>Empty = size from the file; 50 mm if it does not fit on the bed.</small></div>
         <div class="opt re"><label for="s_max_triangles">Max triangles</label>
-          <input id="s_max_triangles" type="number" min="16" max="1000000" step="1000" value="1000000"></div>
+          <input id="s_max_triangles" type="number" min="1000" max="1000000" step="1000" value="1000000"></div>
         <div class="opt re"><label for="s_repair">Thicken thin walls</label>
           <select id="s_repair"><option value="auto" selected>When needed</option><option value="on">Always</option><option value="off">Never</option></select>
           <small>Rebuilds a leaky mesh into a printable solid; colors stay from the original.</small></div>
@@ -152,8 +152,8 @@
 
       <details class="grp"><summary>Position on the bed <span class="ja" lang="ja">位置</span></summary>
         <div class="opt ex"><label>Rotation X · Y · Z (°) <button id="rotAuto" class="mini" type="button">as in file</button></label>
-          <div class="trio"><input id="s_rot_x" type="number" step="1" placeholder="X"><input id="s_rot_y" type="number" step="1" placeholder="Y">
-            <input id="s_rot_z" type="number" step="1" placeholder="Z"></div>
+          <div class="trio"><input id="s_rot_x" type="number" step="1" min="-360" max="360" placeholder="X"><input id="s_rot_y" type="number" step="1" min="-360" max="360" placeholder="Y">
+            <input id="s_rot_z" type="number" step="1" min="-360" max="360" placeholder="Z"></div>
           <small id="rotState">Orientation from the file</small></div>
         <div class="opt ex"><label for="s_z_offset">Sink into the bed (mm) <button id="zAuto" class="mini" type="button">0</button></label>
           <input id="s_z_offset" type="number" max="0" step="0.5" placeholder="0">
@@ -208,6 +208,8 @@
     <div class="rhead"><h2><i>3</i> <span id="resultsTitle">Working…</span></h2>
       <button id="btnReanalyze" class="go-btn small" type="button" hidden>Recalculate</button></div>
     <div id="brands" class="brands" hidden><span>CMY families:</span><div id="brandList"></div></div>
+    <div class="editmode"><span>When I change a spool color:</span>
+      <div id="editMode" class="seg small"><button type="button" data-e="repaint">Repaint the model</button><button type="button" data-e="match">Keep the model's colors</button></div></div>
     <div class="panel mine" id="mineCard">
       <div class="mhead"><b>My colors</b><span class="muted small">enter the colors of the spools you own</span>
         <button class="collapse" data-col="mineCard" type="button">−</button></div>

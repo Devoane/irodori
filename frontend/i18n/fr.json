@@ -342,7 +342,7 @@
 "\"Highest\" searches sets across the whole library and picks mixes by how the eye sees color difference; analysis takes 2–4× longer. \"Fast\" skips that.": "« Maximale » cherche des jeux dans toute la bibliothèque et choisit les mélanges selon la perception des couleurs ; l'analyse est 2 à 4 fois plus longue. « Rapide » s'en passe.",
 "substitutes for the white or black spool in CMY sets": "substituts de la bobine blanche ou noire dans les jeux CMY",
 "◎ and ↺": "◎ et ↺",
-"change a spool color to your own (the result is recalculated) and return to the suggested one": "remplace la couleur d'une bobine par la vôtre (le résultat est recalculé) et revient à la suggestion",
+"change a spool color (the switch above the results sets how the model follows) and return to the suggested one": "changer la couleur d'une bobine (l'interrupteur au-dessus des résultats décide comment le modèle suit) et revenir à la couleur suggérée",
 "fill in by themselves from the spools in T1–T4 (\"My filaments\"); change any color and the result recalculates by itself": "se remplissent seules avec les bobines de T1–T4 (« Mes filaments ») ; changez une couleur et le résultat se recalcule",
 "The dot next to a setting tells when it applies: <span class=\"dot re\"></span> a change requires recalculating, <span class=\"dot ex\"></span> it applies to the next download.": "Le point à côté d'un réglage indique quand il s'applique : <span class=\"dot re\"></span> le changement nécessite un recalcul, <span class=\"dot ex\"></span> il s'applique au prochain téléchargement.",
 "\"as many as needed\" stops adding mixes when the next ones improve almost nothing; \"spools only\" does not mix": "« autant que nécessaire » s'arrête quand les mélanges suivants n'améliorent presque rien ; « bobines seulement » ne mélange pas",
@@ -387,5 +387,14 @@
 "Export works for 2–4 toolheads: a 3MF project can be saved for 2–4 filaments": "L'export fonctionne pour 2–4 têtes : le projet 3MF peut être enregistré pour 2–4 filaments",
 "\"Loaded in the printer\" works for 2–4 toolheads": "« Chargé dans l'imprimante » fonctionne avec 2–4 têtes",
 "For toolchanger printers. It takes a colored model and picks 2–4 spools for it. Missing shades come from mixes: recipes in which consecutive layers print with different spools. The result is a 3MF project for Snapmaker Orca or ready G-code; the export profile is currently made for the Snapmaker U1. Everything is calculated on this computer: the server listens only on <code>127.0.0.1</code> and nothing goes to the internet.": "Pour les imprimantes à changeur d'outils. Il prend un modèle en couleur et choisit 2 à 4 bobines. Les teintes manquantes viennent de mélanges : des recettes où les couches successives s'impriment avec des bobines différentes. Le résultat est un projet 3MF pour Snapmaker Orca ou du G-code prêt ; le profil d'export est pour l'instant fait pour la Snapmaker U1. Tout est calculé sur cet ordinateur : le serveur écoute uniquement sur <code>127.0.0.1</code> et rien ne part sur Internet.",
-"Preparing the geometry for printing…": "Préparation de la géométrie pour l'impression…"
+"Preparing the geometry for printing…": "Préparation de la géométrie pour l'impression…",
+"Something went wrong on the local server, see its log": "Un problème est survenu sur le serveur local, consultez son journal",
+"The local server is not responding. Start the app again.": "Le serveur local ne répond pas. Relancez l'application.",
+"Could not read the file: it is damaged or holds no 3D model": "Impossible de lire le fichier : il est endommagé ou ne contient pas de modèle 3D",
+"Colors changed by you": "Couleurs modifiées par vous",
+"When I change a spool color:": "Quand je change la couleur d'une bobine :",
+"Repaint the model": "Repeindre le modèle",
+"Keep the model's colors": "Garder les couleurs du modèle",
+"TD must be between 0 and 100 mm.": "TD doit être compris entre 0 et 100 mm.",
+"This file is not an image.": "Ce fichier n'est pas une image."
 }

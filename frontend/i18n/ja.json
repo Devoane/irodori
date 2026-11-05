@@ -342,7 +342,7 @@
 "\"Highest\" searches sets across the whole library and picks mixes by how the eye sees color difference; analysis takes 2–4× longer. \"Fast\" skips that.": "「最高」はライブラリ全体からセットを探し、目に見える色差でミックスを選びます。解析時間は2〜4倍です。「高速」はこれを省略します。",
 "substitutes for the white or black spool in CMY sets": "CMYセットの白または黒スプールの代替",
 "◎ and ↺": "◎ と ↺",
-"change a spool color to your own (the result is recalculated) and return to the suggested one": "スプールの色を自分の色に変更(結果を再計算)、提案の色に戻す",
+"change a spool color (the switch above the results sets how the model follows) and return to the suggested one": "スプールの色を変更し(結果の上のスイッチでモデルの変わり方を選べます)、提案された色に戻します",
 "fill in by themselves from the spools in T1–T4 (\"My filaments\"); change any color and the result recalculates by itself": "T1〜T4 のスプール(「マイフィラメント」)から自動入力されます。色を変えると結果も自動で再計算されます",
 "The dot next to a setting tells when it applies: <span class=\"dot re\"></span> a change requires recalculating, <span class=\"dot ex\"></span> it applies to the next download.": "設定の横の点は適用のタイミングを示します:<span class=\"dot re\"></span> 変更には再計算が必要、<span class=\"dot ex\"></span> 次回のダウンロードで適用。",
 "\"as many as needed\" stops adding mixes when the next ones improve almost nothing; \"spools only\" does not mix": "「必要な分だけ」は、ほとんど改善しなくなるとミックスの追加を止めます。「スプールのみ」はミックスしません",
@@ -382,5 +382,14 @@
 "Export works for 2–4 toolheads: a 3MF project can be saved for 2–4 filaments": "エクスポートは2〜4ヘッドに対応します。3MF プロジェクトは2〜4フィラメントで保存できます",
 "\"Loaded in the printer\" works for 2–4 toolheads": "「プリンターに装着中」は2〜4ヘッドで使えます",
 "For toolchanger printers. It takes a colored model and picks 2–4 spools for it. Missing shades come from mixes: recipes in which consecutive layers print with different spools. The result is a 3MF project for Snapmaker Orca or ready G-code; the export profile is currently made for the Snapmaker U1. Everything is calculated on this computer: the server listens only on <code>127.0.0.1</code> and nothing goes to the internet.": "ツールチェンジャー搭載プリンター向けです。カラーモデルに合わせて2〜4本のスプールを選びます。足りない色はミックス、つまり連続するレイヤーを別々のスプールで印刷するレシピで作ります。結果は Snapmaker Orca 用の3MFプロジェクト、または G-code です。エクスポートプロファイルは現在 Snapmaker U1 用です。計算はすべてこのPCで行われます。サーバーは <code>127.0.0.1</code> のみで待ち受け、インターネットには何も送信しません。",
-"Preparing the geometry for printing…": "印刷用のジオメトリを準備中…"
+"Preparing the geometry for printing…": "印刷用のジオメトリを準備中…",
+"Something went wrong on the local server, see its log": "ローカルサーバーで問題が発生しました。ログを確認してください",
+"The local server is not responding. Start the app again.": "ローカルサーバーが応答しません。アプリを再起動してください。",
+"Could not read the file: it is damaged or holds no 3D model": "ファイルを読み込めません。破損しているか、3D モデルが含まれていません",
+"Colors changed by you": "変更した色",
+"When I change a spool color:": "スプールの色を変更したとき:",
+"Repaint the model": "モデルを塗り替える",
+"Keep the model's colors": "モデルの色を保つ",
+"TD must be between 0 and 100 mm.": "TD は 0〜100 mm にしてください。",
+"This file is not an image.": "このファイルは画像ではありません。"
 }
