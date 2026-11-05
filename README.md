@@ -47,10 +47,12 @@ The pictures below follow one model through the program: a 120 mm avocado, with 
 
 ### Compare the print with your model
 
-| Model | Print | In slicer |
-|---|---|---|
-| ![The original model](docs/screenshots/view-model.png) | ![The predicted print](docs/screenshots/view-print.png) | ![The colors Snapmaker Orca will show](docs/screenshots/view-slicer.png) |
-| Your file | What the finished print should look like | The colors Snapmaker Orca shows when you open the project |
+| Model | Print |
+|---|---|
+| ![The original model](docs/screenshots/view-model.png) | ![The predicted print](docs/screenshots/view-print.png) |
+| Your file | What the finished print should look like |
+
+A third view, **In slicer**, shows the colors Snapmaker Orca will display for the project. On the default settings it matches **Print**. It can differ when **Two wall recipes** is on.
 
 ### Choose your spools
 
