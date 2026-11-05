@@ -58,8 +58,10 @@ every locale has the same keys and placeholders.
   Two recipes: `outer,inner`.
 - Several 3MF parts (for example a layered lithophane) stay separate parts with their own spool.
 - `paint_color` state 0 = the object's spool (background behind the colored band: CMY+W → Magenta, CMY+K → Yellow).
-- Wipe tower (`export_3mf.tower_spot`): a bed corner clear of the model, computed for a 60×90 mm tower, because Orca anchors
-  it at the front-left corner and grows it with the number of mixes. The default (15, 220) gave "G-code path goes beyond plate boundaries" in the GUI.
+- Wipe tower (`export_3mf.tower_settings`, `tower_spot`): about 10×10 mm plus a 5 mm brim, in a bed corner clear of the model. On the U1 (not `single_extruder_multi_material`) Orca ignores `flush_volumes_matrix` and purges `max(prime_volume, filament_minimal_purge_on_wipe_tower)` on every change, plus ramming. The export sets ramming off, the minimal purge to 0 and `prime_volume` to what fits (`tower_purge`, 1.61 mm³ for 4 spools at 0.08 mm; Orca's lower limit is 1, so 4 spools at 0.04 mm reach 11.4 mm deep). The U1 primes each new tool itself (`SM_PRINT_PREEXTRUDE_FILAMENT`). Enough purge for clean colors and the stability of a tall tower have not been checked on a real print.
+- Measured with the CLI at 0.08 mm, 4 spools, sample models, tower g before → after: Duck 49.1 → 4.5 (total 72.9 → 25.3 g, 8 h 26 → 5 h 12), GradientBox 21.4 → 2.0 (64.4 → 43.8 g), DamagedHelmet 51.8 → 4.9 (99.7 → 49.8 g, 16 h 55 → 14 h 00). Tower footprint with brim: 20 × 19.5 mm.
+- `different_settings_to_system` (`profiles.mark_changes`): Orca's GUI keeps only the listed keys from a project and takes the rest from the named system preset. Without the list, the GUI silently used 0.10 mm layers, no supports and the preset's tower. The CLI crashes after slicing when the list is filled in, so it gets a copy without it (`orca_cli._without_change_list`).
+- Tree supports always use the model's layer height: Orca's `normalize_fdm` forces `independent_support_layer_height` off whenever the prime tower is on.
 - Painted 3MF: solids already leaky in the source (an edge not shared by exactly 2 triangles, counted on the original indices in
   `source._broken_bodies`, before painting splits triangles) are rebuilt (`geometry.mend_bodies`: winding number + marching cubes 0.12 mm + Taubin),
   with the color of the nearest triangle. Vertices are written with 9 digits.

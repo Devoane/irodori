@@ -17,7 +17,7 @@ from scipy.sparse import coo_matrix
 from scipy.sparse.csgraph import connected_components
 
 from paint import encode_state, encode_tree, subdivide_states
-from profiles import project_settings
+from profiles import mark_changes, project_settings
 from color import hex_to_rgb, linear_to_srgb, rgb_to_oklab, srgb_to_linear
 from recipes import Recipe, _interleave, predict_many
 
@@ -162,8 +162,36 @@ def place_mesh(mesh: trimesh.Trimesh, settings) -> tuple[trimesh.Trimesh, float]
     return mesh, dz
 
 
-TOWER_SIZE = (60.0, 90.0)   # mm incl. brim: generous, the tower grows with the number of mixes
-TOWER_OFFSET = 10.0         # the tower's brim starts this far before wipe_tower_x / _y
+TOWER_SIZE = (20.0, 25.0)   # mm incl. brim: a 10 mm tower, slightly deeper on very thin layers
+TOWER_OFFSET = 5.0          # the tower's brim starts this far before wipe_tower_x / _y
+TOWER_WIDTH = 10.0
+TOWER_BRIM = 5.0
+TOWER_LINE = 0.42           # Orca's wipe line, its spacing with wipe_tower_extra_spacing 120 % and the usable length,
+TOWER_SPACING = 0.6         # measured on the U1 profile
+TOWER_LINE_LENGTH = 10.2
+TOWER_FILAMENT = ("filament_minimal_purge_on_wipe_tower", "filament_multitool_ramming")
+
+
+def tower_purge(tools: int, layer: float, depth: float = TOWER_WIDTH + 0.3) -> float:
+    """mm3 per tool change that keeps the tower about TOWER_WIDTH deep. Orca wipes whole lines, each toolchange takes
+    int(length / line length) + 1 of them, and every layer needs up to tools - 1 changes. Its lower limit is 1."""
+    lines = max(1, int((depth - TOWER_SPACING) / (TOWER_SPACING * max(1, tools - 1))))
+    area = layer * (TOWER_LINE - layer * (1 - np.pi / 4))
+    return round(max(1.0, 0.98 * lines * TOWER_LINE_LENGTH * area), 2)
+
+
+def tower_settings(tools: int, layer: float) -> dict:
+    """The smallest wipe tower Orca makes. Without single_extruder_multi_material each change purges
+    max(prime_volume, minimal purge) and ignores flush_volumes_matrix. The U1 primes the new tool itself
+    (SM_PRINT_PREEXTRUDE_FILAMENT), so the tower only has to wipe the nozzle and steady the pressure."""
+    return {
+        "prime_tower_width": f"{TOWER_WIDTH:g}",
+        "prime_tower_brim_width": f"{TOWER_BRIM:g}",
+        "prime_volume": f"{tower_purge(tools, layer):g}",
+        "wipe_tower_wall_type": "rectangle",            # ribs reach past the footprint
+        "filament_minimal_purge_on_wipe_tower": ["0"] * tools,
+        "filament_multitool_ramming": ["0"] * tools,    # 5 mm3 per change, more than a whole layer holds
+    }
 
 
 def tower_spot(mesh: trimesh.Trimesh, bed: float = 270.0, margin: float = 5.0) -> tuple[float, float]:
@@ -337,6 +365,7 @@ def write_project(mesh: trimesh.Trimesh, face_state: np.ndarray, filaments: list
 
     cfg = project_settings([f.get("profile") or "Generic PLA" for f in filaments],
                            [f["hex"] for f in filaments], settings.layer_height, walls)
+    preset = dict(cfg)
     tx, ty = tower_spot(mesh)
     cfg["wipe_tower_x"], cfg["wipe_tower_y"] = [f"{tx:g}"], [f"{ty:g}"]
     first = first_layer(settings.layer_height)
@@ -353,6 +382,7 @@ def write_project(mesh: trimesh.Trimesh, face_state: np.ndarray, filaments: list
     lowest = min([settings.layer_height] + [h for _, h in (prof or [])[1:]])
     if lowest < 0.08 - 1e-9:
         cfg["min_layer_height"] = [f"{MIN_LAYER:g}"] * len(cfg["min_layer_height"])
+    cfg.update(tower_settings(n, lowest))
     cfg["mixed_filament_definitions"] = ";".join(mixed_definition_row(r, 1000 + i) for i, r in enumerate(recipes[n:]))
     cfg["dithering_step_painted_zones_only"] = "1"
     cfg["enable_support"] = "1" if settings.supports else "0"
@@ -375,6 +405,8 @@ def write_project(mesh: trimesh.Trimesh, face_state: np.ndarray, filaments: list
         cfg["dithering_local_z_mode"] = "1"
         cfg["dithering_local_z_whole_objects"] = "1"
         cfg["dithering_local_z_infill"] = "0"
+
+    mark_changes(cfg, {k for k, v in cfg.items() if v != preset.get(k)}, TOWER_FILAMENT)
 
     safe = "".join(ch for ch in name if ch.isalnum() or ch in "-_ ") or "model"
     obj_path = f"3D/Objects/{safe.replace(' ', '_')}_1.model"

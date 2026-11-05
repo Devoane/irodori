@@ -68,7 +68,7 @@ class Settings:
     rainbow_offset: float = 0.0      # degrees
     rainbow_white: float = 0.0       # percent
     # export only
-    layer_height: float = 0.10
+    layer_height: float = 0.08
     variable_layer: float = 0.0      # thicker layers where nothing is mixed (0 = off)
     detailed_top: float = 0.0        # finer layers on top surfaces (0 = off)
     colored_walls: int = 5

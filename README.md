@@ -88,15 +88,16 @@ The printer never blends filament. It prints thin layers of pure spool color and
 
 ### Finish in the slicer
 
-Click **3MF** and open the file in Snapmaker Orca. The printer, spools and color mixes are already set. The tall block on the left is the wipe tower.
+Click **3MF** and open the file in Snapmaker Orca. The printer, spools, color mixes and layer settings are already set. The small block in the bed corner is the wipe tower.
 
 ![The exported project open in Snapmaker Orca](docs/screenshots/orca-project.png)
 
-Check the cost before you print. The sliced G-code for this avocado gives:
+Check the cost before you print. Sliced at 0.08 mm with 4 spools, these sample models give:
 
-| Print time | Filament | Filament changes |
-|---|---|---|
-| 43 h 31 min | 351 g, of which about 165 g is the wipe tower | 3461 |
+| Model | Print time | Filament | Of which wipe tower |
+|---|---|---|---|
+| Duck, 47 mm tall | 5 h 12 min | 25.3 g | 4.5 g |
+| Damaged Helmet, 46 mm tall | 14 h 00 min | 49.8 g | 4.9 g |
 
 ### Other tools
 
@@ -187,7 +188,7 @@ The export format, algorithms and tests are described in [docs/technical.md](doc
 
 - **Export is ready for the Snapmaker U1.** Projects are currently made for this printer and Snapmaker Orca 2.4, and they should not be sent to another printer without its own profile. Export works for 2–4 toolheads; the 5–8 toolhead mode is preview only.
 - **The preview is a prediction.** The real color depends on the filament batch and the light. Card calibration is meant to improve this, but it has not yet been checked on a real print.
-- **Waste can be high.** Mixes need a wipe tower. In one test the tower used 58 g and the model itself 13.5 g.
+- **The small wipe tower is untested on real prints.** Each model gets a tower of about 1×1 cm, which is about ten times lighter than before in slicer tests. Whether it stays clean and stable on tall models still needs checking on a printer.
 - **Very large models are simplified.** The default limit is 1 million triangles.
 - **Tested on Linux.** The Windows launcher is included but has not been tried on that system. If something fails, please report it. macOS is not supported.
 - **Translations are unreviewed.** They were written with an AI assistant, and native speakers have not checked them. Filament names stay as the catalog gives them.

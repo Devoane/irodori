@@ -338,7 +338,7 @@ const pick = (s, keys) => Object.fromEntries(keys.concat(['rotate', 'opaque']).f
 function saveSettings() {
   const raw = Object.fromEntries(Object.keys(SETTINGS).filter((k) => !UNSAVED.includes(k)).map((k) => [k, $('s_' + k).value]));
   raw._opaque = state.opaque;
-  raw._v = 3;
+  raw._v = 4;
   try { localStorage.setItem(STORE, JSON.stringify(raw)); } catch { /* storage unavailable */ }
 }
 function loadSaved() {
@@ -348,6 +348,8 @@ function loadSaved() {
     if (!(raw._v >= 2)) delete raw.cmyk_optimized;
     // v3: the old default weave level 1 painted 1.8 mm confetti
     if (!(raw._v >= 3) && raw.interweave === '1') delete raw.interweave;
+    // v4: 0.08 mm became the default, and thin layers under flat tops no longer apply to it
+    if (!(raw._v >= 4)) { delete raw.layer_height; delete raw.detailed_top; }
     for (const [k, v] of Object.entries(raw)) if ($('s_' + k) && !UNSAVED.includes(k)) $('s_' + k).value = v;
     if (raw._opaque) { state.opaque = true; for (const b of $('matMode').children) b.classList.toggle('on', b.dataset.m === 'opaque'); }
   } catch { /* storage unavailable */ }

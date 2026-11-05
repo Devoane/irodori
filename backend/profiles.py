@@ -87,3 +87,17 @@ def project_settings(filament_profiles: list[str], filament_colours: list[str], 
         "wall_loops": str(int(wall_loops)),
     })
     return cfg
+
+
+def mark_changes(cfg: dict, written: set[str], filament_keys: tuple[str, ...]) -> None:
+    """Fill different_settings_to_system. Orca's GUI keeps only the listed keys from a project and takes every
+    other setting from the named system preset, so an empty list silently drops layer height, supports and tower.
+    The CLI ignores the list, which is why it hides this. `written` holds the keys the export changed itself."""
+    process, machine = resolve("process", PROCESS), resolve("machine", MACHINE)
+    plain = lambda v: [str(x) for x in v] if isinstance(v, list) else str(v)   # noqa: E731
+    skip = META_KEYS | set(machine) | {"wipe_tower_x", "wipe_tower_y", "mixed_filament_definitions"}
+    keys = {k for k in process if k in cfg and plain(cfg[k]) != plain(process[k])} | written
+    print_keys = sorted(k for k in keys - skip if not k.startswith("filament_"))
+    printer_keys = ["min_layer_height"] if plain(cfg["min_layer_height"]) != plain(machine.get("min_layer_height")) else []
+    cfg["different_settings_to_system"] = [";".join(print_keys), *[";".join(filament_keys)] * len(cfg["filament_settings_id"]),
+                                           ";".join(printer_keys)]

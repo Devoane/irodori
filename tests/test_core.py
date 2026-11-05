@@ -185,6 +185,44 @@ def test_pipeline_duck():
     assert len(row.recipes) <= 255 and row.labels.max() < len(row.recipes)
 
 
+def test_new_project_defaults():
+    from export_3mf import first_layer
+    assert Settings().layer_height == 0.08 and Settings().supports
+    assert first_layer(Settings().layer_height) == 0.2
+
+
+@pytest.mark.parametrize("tools, layer, purge", [(4, 0.08, 1.61), (3, 0.08, 2.58), (2, 0.08, 5.16), (4, 0.2, 3.77), (4, 0.04, 1.0)])
+def test_tower_purge_fits_the_measured_depth(tools, layer, purge):
+    from export_3mf import tower_purge
+    assert tower_purge(tools, layer) == pytest.approx(purge, abs=0.01)
+
+
+def test_export_uses_the_small_tower():
+    fil = [{"hex": h, "profile": "Snapmaker PLA Full Spectrum @U1 0.4 nozzle"} for h in CMYW]
+    m = trimesh.creation.box(extents=(10, 10, 5))
+    data = write_project(m, np.ones(len(m.faces), int), fil, [Recipe((i,)) for i in range(1, 5)], "t", Settings())
+    cfg = json.loads(zipfile.ZipFile(io.BytesIO(data)).read("Metadata/project_settings.config"))
+    assert cfg["prime_tower_width"] == "10" and cfg["wipe_tower_wall_type"] == "rectangle"
+    assert float(cfg["prime_volume"]) < 2 and cfg["filament_multitool_ramming"] == ["0"] * 4
+    # the GUI drops every setting missing from this list
+    process, *filaments, printer = cfg["different_settings_to_system"]
+    assert {"layer_height", "initial_layer_print_height", "enable_support", "prime_tower_width", "prime_volume"} <= set(process.split(";"))
+    assert len(filaments) == 4 and all("filament_multitool_ramming" in f for f in filaments) and printer == ""
+
+
+def test_slicing_does_not_change_cached_presets(tmp_path):
+    from orca_cli import _flat, _without_change_list
+    from profiles import PROCESS, resolve
+    before = dict(resolve("process", PROCESS))
+    _flat("process", PROCESS, {"layer_height": "0.33"})
+    assert resolve("process", PROCESS) == before
+    project = tmp_path / "p.3mf"
+    with zipfile.ZipFile(project, "w") as z:
+        z.writestr("Metadata/project_settings.config", json.dumps({"different_settings_to_system": ["a;b", "c"]}))
+    cfg = json.loads(zipfile.ZipFile(_without_change_list(project, tmp_path)).read("Metadata/project_settings.config"))
+    assert cfg["different_settings_to_system"] == ["", ""]
+
+
 def test_write_project_keeps_overlapping_parts():
     # layered lithophane: a white slab with a coloured slab inside must stay two parts
     a = trimesh.creation.box(extents=(10, 10, 2.5))
