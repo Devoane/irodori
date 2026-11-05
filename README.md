@@ -1,21 +1,21 @@
 <p align="center"><img src="frontend/logo.svg" width="90" alt=""></p>
-<h1 align="center">Irodori 彩り</h1>
+<h1 align="center">Kaichō 階調</h1>
 
 <p align="center"><b>Turn a colored 3D model into a multicolor print on a toolchanger 3D printer.</b><br>
 Runs on your own computer. No account, and your models are never uploaded.</p>
 
-![The Irodori window with an avocado model and suggested spool sets](docs/screenshots/main.png)
+![The Kaichō window with an avocado model and suggested spool sets](docs/screenshots/main.png)
 
 <sub>Sample model in all pictures: "Avocado" by Microsoft, CC0 1.0, from the Khronos glTF Sample Assets. It is not included in this repository.</sub>
 
 ## Who it is for
 
-Irodori is made for **toolchanger printers**, where each color has its own toolhead. Mixing colors layer by layer means changing filament very often, and a toolchanger can do that without unloading and reloading a single nozzle. Printers with one nozzle and a filament changer (AMS, MMU) are not the target.
+Kaichō is made for **toolchanger printers**, where each color has its own toolhead. Mixing colors layer by layer means changing filament very often, and a toolchanger can do that without unloading and reloading a single nozzle. Printers with one nozzle and a filament changer (AMS, MMU) are not the target.
 
 | Printer | Status |
 |---|---|
 | Snapmaker U1 | ready-made export, tested in Snapmaker Orca |
-| Other toolchangers | the color analysis and preview work, but the export needs a profile for your printer. [Tell us which one you have](https://github.com/Devoane/irodori/issues) |
+| Other toolchangers | the color analysis and preview work, but the export needs a profile for your printer. [Tell us which one you have](https://github.com/Devoane/kaicho/issues) |
 
 ## Languages
 
@@ -33,7 +33,7 @@ English is the main language and what the app starts in. Change it in the top ri
 
 ## What it does
 
-You drop in a colored model. Irodori then:
+You drop in a colored model. Kaichō then:
 
 1. looks at which colors the model has,
 2. picks 2–4 spools that can produce them,
@@ -88,7 +88,7 @@ The printer never blends filament. It prints thin layers of pure spool color and
 
 ### Finish in the slicer
 
-Click **3MF** and open the file in Snapmaker Orca. The printer, spools, color mixes and layer settings are already set. The small block in the bed corner is the wipe tower.
+Click **3MF** and open the file in Snapmaker Orca. The printer, spools, color mixes and layer settings are already set. The narrow block in the bed corner is the wipe tower, about 1×1 cm and as tall as the model.
 
 ![The exported project open in Snapmaker Orca](docs/screenshots/orca-project.png)
 
@@ -96,6 +96,7 @@ Check the cost before you print. Sliced at 0.08 mm with 4 spools, these sample m
 
 | Model | Print time | Filament | Of which wipe tower |
 |---|---|---|---|
+| Avocado, 120 mm tall | 35 h 13 min | 183.3 g | 12.3 g |
 | Duck, 47 mm tall | 5 h 12 min | 25.3 g | 4.5 g |
 | Damaged Helmet, 46 mm tall | 14 h 00 min | 49.8 g | 4.9 g |
 
@@ -135,11 +136,11 @@ Download it from [python.org](https://www.python.org/downloads/) and install it.
 
 Linux usually has Python already. Check with `python3 --version`.
 
-### 3. Start Irodori
+### 3. Start Kaichō
 
 | System | What to do |
 |---|---|
-| **Windows** | double-click `Irodori.bat` |
+| **Windows** | double-click `Kaicho.bat` |
 | **Linux** | open a terminal in the program folder and type `./run.sh` |
 
 The first start takes a few minutes because it downloads the libraries. Do not close the window, even if nothing seems to happen for a while. The program then opens in its own browser window, apart from your tabs, cookies and extensions. This needs a Chrome-type browser (Chrome, Edge, Chromium, Brave, Vivaldi) or Firefox. If no window appears, go to **http://127.0.0.1:8765/**.
@@ -168,19 +169,19 @@ Close the terminal window or press `Ctrl+C` in it. On Linux you can also run `./
 | `python` is not recognized, or the window closes at once | Reinstall Python and tick **Add python.exe to PATH** |
 | The first start seems stuck | Wait. The libraries are about 400 MB. Check your internet |
 | The browser does not open | Go to http://127.0.0.1:8765/ yourself |
-| `Permission denied` on Linux | Type `python3 irodori.py` |
-| `Program Snapmaker Orca not found` | Install Orca, or download the 3MF and open it by hand. You can also set the path in the `IRODORI_ORCA` variable |
+| `Permission denied` on Linux | Type `python3 kaicho.py` |
+| `Program Snapmaker Orca not found` | Install Orca, or download the 3MF and open it by hand. You can also set the path in the `KAICHO_ORCA` variable |
 | `Program Blender (needed for FBX) not found` | Install Blender, or save the model as GLB |
-| Port 8765 is taken | Set another one in the `IRODORI_PORT` variable |
+| Port 8765 is taken | Set another one in the `KAICHO_PORT` variable |
 | The model is white or has wrong colors | Add the missing textures when the program asks for them |
 
-Your problem is not here? [Report it](https://github.com/Devoane/irodori/issues) and include your system, the file type and the error text.
+Your problem is not here? [Report it](https://github.com/Devoane/kaicho/issues) and include your system, the file type and the error text.
 
 ## How it works
 
 A toolchanger only holds a few spools, but the layers are very thin. When blue and yellow layers alternate, from a distance your eye sees green. A screen or a printed newspaper works in a similar way.
 
-Irodori looks for the 2–4 spools that together cover the model's colors best and builds up to 251 mixes from them. Each part of the model gets the closest mix. It scores results with ΔE2000, a measure of color difference designed around human vision.
+Kaichō looks for the 2–4 spools that together cover the model's colors best and builds up to 251 mixes from them. Each part of the model gets the closest mix. It scores results with ΔE2000, a measure of color difference designed around human vision.
 
 The export format, algorithms and tests are described in [docs/technical.md](docs/technical.md).
 
@@ -212,7 +213,7 @@ The code is available under the [GNU AGPL-3.0](LICENSE). Some of the color logic
 | Antykwa Toruńska | GUST Font License |
 | M PLUS 1, M PLUS 1p, Shippori Mincho | SIL OFL 1.1 |
 
-Irodori is an independent project, not affiliated with any printer or filament maker. Their names are used only to describe compatibility.
+Kaichō is an independent project, not affiliated with any printer or filament maker. Their names are used only to describe compatibility.
 
 ## Contact
 

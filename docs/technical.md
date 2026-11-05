@@ -1,4 +1,4 @@
-# Irodori: technical details
+# Kaichō: technical details
 
 Colored prints from a few spools on toolchanger printers. From a textured or painted model it picks 2–4 spools (preview
 up to 8), builds up to 251 layer mixes from them, shows the predicted print and saves a project for Snapmaker Orca 2.4 or
@@ -7,7 +7,7 @@ template and profile mapping. It works locally, without internet. User guide: [R
 
 ## Environment variables
 
-`IRODORI_PORT`, `IRODORI_NO_BROWSER`, `IRODORI_ORCA`, `IRODORI_BLENDER`, `IRODORI_ORCA_CONFIG`, `IRODORI_CONTAINER`
+`KAICHO_PORT`, `KAICHO_NO_BROWSER`, `KAICHO_ORCA`, `KAICHO_BLENDER`, `KAICHO_ORCA_CONFIG`, `KAICHO_CONTAINER`
 (a distrobox with the tools, when the server runs outside it). Tool and folder lookup: `backend/tools.py`.
 
 ## Security
@@ -92,4 +92,4 @@ Test models (`tests/samples`) are not in the repository because they have their 
 Fonts in `frontend/fonts`, licenses beside them: Antykwa Toruńska (GUST Font License, headings and numbers), M PLUS 1, M PLUS 1p and
 Shippori Mincho (SIL OFL 1.1, text and Japanese, subset to the characters in use by `tools/subset_fonts.py`).
 
-Look: the red and white shared by the flags of Poland and Japan, cobalt like Bolesławiec pottery and Japanese indigo. `logo.svg` joins the white and red bands with a rising disc, `fala.svg` is seigaiha built from Bolesławiec peacock eyes, `herb.svg` is a kamon cut like a Polish paper cutout. The preview background is neutral gray so it does not change how colors read.
+Name: Kaichō 階調 means tonal gradation; the app was called Irodori before. Look: the red and white shared by the flags of Poland and Japan, cobalt like Bolesławiec pottery and Japanese indigo. `logo.svg` joins the white and red bands with a rising disc, `fala.svg` is seigaiha built from Bolesławiec peacock eyes, `herb.svg` is a kamon cut like a Polish paper cutout. The preview background is neutral gray so it does not change how colors read.

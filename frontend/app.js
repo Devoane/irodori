@@ -319,7 +319,7 @@ const ANALYSIS = ['toolheads', 'capacity', 'samples', 'source', 'front_only', 'l
   'color_threshold', 'texture_optimization', 'lock_colors', 'cmyk_optimized', 'precise', 'dual_wall', 'max_recipe_len', 'max_run', 'backing',
   'base', 'base_size', 'brightness', 'saturation', 'rainbow', 'rainbow_v', 'rainbow_h', 'rainbow_ccw', 'rainbow_offset', 'rainbow_white'];
 const EXPORT = Object.keys(SETTINGS).filter((k) => !ANALYSIS.includes(k));
-const STORE = 'irodori.settings';
+const STORE = 'kaicho.settings';
 // per model: a base chosen once must not land on the next project
 const UNSAVED = ['base', 'base_size'];
 
@@ -817,7 +817,7 @@ function renderDiag() {
 }
 
 // ---------------------------------------------------------------- use my colours
-const MINE = 'irodori.mine';
+const MINE = 'kaicho.mine';
 let mine = [], mineIdx = null, mineTimer = 0, mineRunning = false, mineAgain = false;
 try { mine = JSON.parse(localStorage.getItem(MINE) || '[]').filter((h) => typeof h === 'string'); } catch { /* storage unavailable */ }
 const loadedHexes = (n) => {

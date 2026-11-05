@@ -321,7 +321,7 @@
 "Repairing the geometry (watertight solid for printing)…": "Geometrie wird repariert (dichter Körper für den Druck)…",
 "Language": "Sprache",
 "Back": "Zurück",
-"What Irodori does": "Was Irodori macht",
+"What Kaichō does": "Was Kaichō macht",
 "Getting started": "Erste Schritte",
 "Preview": "Vorschau",
 "Results": "Ergebnisse",
@@ -358,9 +358,9 @@
 "replaces the model colors with a rainbow spiral": "ersetzt die Modellfarben durch eine Regenbogenspirale",
 "Calibration → choose a set → download the 3MF card, print it, photograph it head-on in diffuse light, upload the photo and click the 4 corners. Print at the layer height you usually use. After recalculating, \"Print\" colors come from your photo instead of the mixing model.": "Kalibrierung → Set wählen → 3MF-Karte herunterladen, drucken, frontal bei diffusem Licht fotografieren, Foto hochladen und die 4 Ecken anklicken. Drucke mit deiner üblichen Schichthöhe. Nach der Neuberechnung stammen die Farben in „Druck“ aus deinem Foto statt aus dem Mischmodell.",
 "The program reports the error on check tiles, which it left out of the fit, and compares it with the model alone. A calibration that improves nothing or has an error of ΔE 8 or more is not saved. Measurements belong to spools and their pairs, so another set of the same spools needs no new card.": "Das Programm meldet den Fehler auf Prüffeldern, die es bei der Anpassung auslässt, und vergleicht ihn mit dem Modell allein. Eine Kalibrierung, die nichts verbessert oder einen Fehler ab ΔE 8 hat, wird nicht gespeichert. Messungen gehören zu Spulen und ihren Paaren, daher braucht ein anderes Set aus denselben Spulen keine neue Karte.",
-"install Python 3.11+ from python.org, then double-click <code>Irodori.bat</code>": "installiere Python 3.11+ von python.org und doppelklicke <code>Irodori.bat</code>",
-"The first run creates a <code>.venv</code> folder and installs the dependencies. Snapmaker Orca (for G-code) and Blender (for FBX) are found automatically; set another path in <code>IRODORI_ORCA</code> and <code>IRODORI_BLENDER</code>.": "Der erste Start erstellt den Ordner <code>.venv</code> und installiert die Abhängigkeiten. Snapmaker Orca (für G-code) und Blender (für FBX) werden automatisch gefunden; einen anderen Pfad gibst du in <code>IRODORI_ORCA</code> und <code>IRODORI_BLENDER</code> an.",
-"Irodori · Help": "Irodori · Hilfe",
+"install Python 3.11+ from python.org, then double-click <code>Kaicho.bat</code>": "installiere Python 3.11+ von python.org und doppelklicke <code>Kaicho.bat</code>",
+"The first run creates a <code>.venv</code> folder and installs the dependencies. Snapmaker Orca (for G-code) and Blender (for FBX) are found automatically; set another path in <code>KAICHO_ORCA</code> and <code>KAICHO_BLENDER</code>.": "Der erste Start erstellt den Ordner <code>.venv</code> und installiert die Abhängigkeiten. Snapmaker Orca (für G-code) und Blender (für FBX) werden automatisch gefunden; einen anderen Pfad gibst du in <code>KAICHO_ORCA</code> und <code>KAICHO_BLENDER</code> an.",
+"Kaichō · Help": "Kaichō · Hilfe",
 "{n} similar": {
 "one": "{n} ähnlicher",
 "other": "{n} ähnliche"

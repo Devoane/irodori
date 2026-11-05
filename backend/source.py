@@ -369,7 +369,7 @@ bpy.ops.export_scene.gltf(filepath=out, export_format='GLB')
 def fbx_to_glb(files: dict[str, bytes], main: str) -> tuple[bytes, list[str]]:
     """Convert an FBX (plus any texture files sent with it) to GLB with Blender.
     Returns (glb, texture paths Blender could not resolve)."""
-    with tempfile.TemporaryDirectory(prefix="irodori_fbx_") as tmp:
+    with tempfile.TemporaryDirectory(prefix="kaicho_fbx_") as tmp:
         for name, data in files.items():
             (Path(tmp) / Path(name).name).write_bytes(data)
         script = Path(tmp) / "convert.py"
@@ -395,7 +395,7 @@ def obj_to_glb(files: dict[str, bytes], main: str) -> tuple[bytes, list[str]]:
     """OBJ with its MTL libraries and textures -> GLB. Returns (glb, missing files).
     Files are matched by name, so textures may come from any folder."""
     missing = []
-    with tempfile.TemporaryDirectory(prefix="irodori_obj_") as tmp:
+    with tempfile.TemporaryDirectory(prefix="kaicho_obj_") as tmp:
         for name, data in files.items():
             (Path(tmp) / Path(name).name).write_bytes(data)
         text = files[main].decode("utf-8", "ignore")

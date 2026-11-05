@@ -618,7 +618,7 @@ def test_settings_are_kept_in_range():
     assert (s.max_recipe_len, s.max_run, s.variable_layer, s.z_offset) == (40, 4, 0.0, -1000.0)
 
 
-@pytest.mark.parametrize("name", ["smok_żółć.glb", "彩り.glb", 'a"; x=y\r\nX-Evil: 1.glb'])
+@pytest.mark.parametrize("name", ["smok_żółć.glb", "階調.glb", 'a"; x=y\r\nX-Evil: 1.glb'])
 def test_downloads_accept_any_file_name(name):
     from server import _download
     value = _download(b"", name, "model/gltf-binary").headers["content-disposition"]

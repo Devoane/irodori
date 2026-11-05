@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en" data-title="Irodori · Help">
+<html lang="en" data-title="Kaichō · Help">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Irodori · Help</title>
+<title>Kaichō · Help</title>
 <link rel="icon" href="logo.svg" type="image/svg+xml">
 <link rel="stylesheet" href="style.css">
 <style>
@@ -19,13 +19,13 @@
 </head>
 <body>
 <header class="bar">
-  <a class="brand" href="./"><img src="logo.svg" alt="" width="38" height="38"><b>Irodori</b><span class="kanji" lang="ja">彩り</span></a>
+  <a class="brand" href="./"><img src="logo.svg" alt="" width="38" height="38"><b>Kaichō</b><span class="kanji" lang="ja">階調</span></a>
   <div class="fala"></div>
   <nav><a class="nav" href="./">Back</a>
     <label class="nav lang" title="Language"><select id="lang" aria-label="Language"></select></label></nav>
 </header>
 <main class="doc">
-  <section class="panel"><h2>What Irodori does</h2>
+  <section class="panel"><h2>What Kaichō does</h2>
     <p data-i18n-html>For toolchanger printers. It takes a colored model and picks 2–4 spools for it. Missing shades come from mixes: recipes in which consecutive layers print with different spools. The result is a 3MF project for Snapmaker Orca or ready G-code; the export profile is currently made for the Snapmaker U1. Everything is calculated on this computer: the server listens only on <code>127.0.0.1</code> and nothing goes to the internet.</p></section>
 
   <section class="panel"><h2>Getting started</h2>
@@ -67,9 +67,9 @@
     <p data-i18n-html>The program reports the error on check tiles, which it left out of the fit, and compares it with the model alone. A calibration that improves nothing or has an error of ΔE 8 or more is not saved. Measurements belong to spools and their pairs, so another set of the same spools needs no new card.</p></section>
 
   <section class="panel"><h2>Running on other systems</h2>
-    <dl><dt>Windows</dt><dd data-i18n-html>install Python 3.11+ from python.org, then double-click <code>Irodori.bat</code></dd>
+    <dl><dt>Windows</dt><dd data-i18n-html>install Python 3.11+ from python.org, then double-click <code>Kaicho.bat</code></dd>
       <dt>Linux</dt><dd><code>./run.sh</code></dd></dl>
-    <p data-i18n-html>The first run creates a <code>.venv</code> folder and installs the dependencies. Snapmaker Orca (for G-code) and Blender (for FBX) are found automatically; set another path in <code>IRODORI_ORCA</code> and <code>IRODORI_BLENDER</code>.</p></section>
+    <p data-i18n-html>The first run creates a <code>.venv</code> folder and installs the dependencies. Snapmaker Orca (for G-code) and Blender (for FBX) are found automatically; set another path in <code>KAICHO_ORCA</code> and <code>KAICHO_BLENDER</code>.</p></section>
 </main>
 <script type="module" src="help.js"></script>
 </body>

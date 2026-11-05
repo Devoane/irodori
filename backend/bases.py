@@ -278,5 +278,5 @@ def preview_with_base(preview_glb: bytes, mesh: trimesh.Trimesh, face_rgb: np.nd
     scene.apply_translation([0, 0, lift])
     base = mesh.submesh([np.nonzero(is_base)[0]], append=True)
     base.visual.face_colors = np.c_[face_rgb[is_base], np.full(int(is_base.sum()), 255)].astype(np.uint8)
-    scene.add_geometry(base, geom_name="irodori_base")
+    scene.add_geometry(base, geom_name="kaicho_base")
     return scene.export(file_type="glb")

@@ -1,4 +1,4 @@
-"""Irodori: local web server (127.0.0.1 only)."""
+"""Kaichō: local web server (127.0.0.1 only)."""
 from __future__ import annotations
 
 import base64
@@ -25,7 +25,7 @@ from palette import Settings, load_inventory, load_library, save_inventory
 
 ROOT = Path(__file__).resolve().parent.parent
 MODEL_EXT = (".glb", ".3mf", ".fbx", ".obj")
-app = FastAPI(title="Irodori", docs_url=None, redoc_url=None, openapi_url=None)
+app = FastAPI(title="Kaichō", docs_url=None, redoc_url=None, openapi_url=None)
 app.add_middleware(LocalOnly, policy=csp(ROOT / "frontend" / "index.html"))
 
 
@@ -106,7 +106,7 @@ def _download(data: bytes, name: str, media: str) -> Response:
 
 @app.get("/api/health")
 def api_health():
-    return {"app": "irodori"}
+    return {"app": "kaicho"}
 
 
 @app.post("/api/analyze")
@@ -203,7 +203,7 @@ def api_export(sid: str, idx: int, settings: str = ""):
     s = _session(sid)
     r = _row(s, idx)
     data = analysis.project_bytes(s, r, _settings(settings, s.analysed_settings or s.settings))
-    return _download(data, f"{Path(s.main).stem}_irodori_{len(r.recipes)}colors.3mf",
+    return _download(data, f"{Path(s.main).stem}_kaicho_{len(r.recipes)}colors.3mf",
                      "application/vnd.ms-package.3dmanufacturing-3dmodel+xml")
 
 
@@ -239,9 +239,9 @@ def api_gcode_file(sid: str, jid: str, kind: str):
         raise HTTPException(404, "The G-code is not ready")
     stem = Path(s.main).stem
     if kind == "gcode":
-        return FileResponse(job.dir / "out" / "plate_1.gcode", filename=f"{stem}_irodori.gcode")
+        return FileResponse(job.dir / "out" / "plate_1.gcode", filename=f"{stem}_kaicho.gcode")
     if kind == "3mf":
-        return FileResponse(job.dir / "out" / "sliced.3mf", filename=f"{stem}_irodori.gcode.3mf")
+        return FileResponse(job.dir / "out" / "sliced.3mf", filename=f"{stem}_kaicho.gcode.3mf")
     raise HTTPException(404, "Unknown file")
 
 
@@ -322,7 +322,7 @@ def api_card(filaments: str, layer_height: float = 0.10):
     if not 0.04 <= layer_height <= 0.28:
         raise ValueError("Invalid data")
     data = calibration_card.card_3mf(_library_filaments(filaments.split(",")), layer_height)
-    return _download(data, "irodori_calibration_card.3mf", "application/vnd.ms-package.3dmanufacturing-3dmodel+xml")
+    return _download(data, "kaicho_calibration_card.3mf", "application/vnd.ms-package.3dmanufacturing-3dmodel+xml")
 
 
 @app.get("/api/calibration/layout")

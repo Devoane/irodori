@@ -15,7 +15,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 FONTS = ROOT / "frontend" / "fonts"
 BASE = [*range(0x20, 0x7F), *range(0xA0, 0x180)]
-KEEP = "彩り色形壁層位置効果✓✗◎↺⟲ⓘ→←×·–—„”…°≥≤−+"
+KEEP = "階調色形壁層位置効果✓✗◎↺⟲ⓘ→←×·–—„”…°≥≤−+"
 CYRILLIC = [*range(0x400, 0x460), 0x394, *map(ord, "✓✗◎↺ⓘ→←")]
 
 

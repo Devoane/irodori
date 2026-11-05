@@ -296,7 +296,7 @@ def start_gcode(s: Session, row: Row, settings: Settings) -> Job:
 
     def run():
         try:
-            job.dir = Path(tempfile.mkdtemp(prefix="irodori_gcode_"))
+            job.dir = Path(tempfile.mkdtemp(prefix="kaicho_gcode_"))
             project = job.dir / "project.3mf"
             project.write_bytes(project_bytes(s, row, settings))
             job.message = "Slicing in Snapmaker Orca (this can take a few minutes)…"

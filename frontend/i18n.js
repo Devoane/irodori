@@ -1,7 +1,15 @@
 // UI translation. English is the source text: a string is its own key, and frontend/i18n/<lang>.json
 // holds the other languages. Keys with {name} placeholders also translate messages from the server.
 export const LANGUAGES = { en: 'English', pl: 'Polski', es: 'Español', de: 'Deutsch', fr: 'Français', ru: 'Русский', ja: '日本語' };
-const STORE = 'irodori.lang';
+// the app was called Irodori: carry saved settings over once
+for (const key of ['settings', 'mine', 'lang']) {
+  try {
+    const old = localStorage.getItem(`irodori.${key}`);
+    if (old !== null && localStorage.getItem(`kaicho.${key}`) === null) localStorage.setItem(`kaicho.${key}`, old);
+    localStorage.removeItem(`irodori.${key}`);
+  } catch { /* storage unavailable */ }
+}
+const STORE = 'kaicho.lang';
 const SKIP = 'script,style,.kanji,.ja';
 const ATTRS = ['title', 'placeholder', 'aria-label'];
 let lang = 'en', dict = {}, patterns = [], rules = new Intl.PluralRules('en');

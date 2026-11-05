@@ -1,9 +1,9 @@
-"""Irodori launcher for Linux and Windows.
+"""Kaicho launcher for Linux and Windows.
 
-    python irodori.py          start (first run creates .venv and installs requirements.txt)
-    python irodori.py --stop   stop a running server
+    python kaicho.py          start (first run creates .venv and installs requirements.txt)
+    python kaicho.py --stop   stop a running server
 
-Settings: IRODORI_PORT (default 8765), IRODORI_NO_BROWSER=1. The server only
+Settings: KAICHO_PORT (default 8765), KAICHO_NO_BROWSER=1. The server only
 listens on 127.0.0.1. Tool paths: see backend/tools.py.
 """
 from __future__ import annotations
@@ -23,9 +23,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 VENV = ROOT / ".venv"
-PORT = int(os.environ.get("IRODORI_PORT", "8765"))
+PORT = int(os.environ.get("KAICHO_PORT", "8765"))
 URL = f"http://127.0.0.1:{PORT}/"
-PIDFILE = ROOT / "data" / f".irodori-{PORT}.pid"
+PIDFILE = ROOT / "data" / f".kaicho-{PORT}.pid"
 
 
 def venv_python() -> Path:
@@ -45,13 +45,13 @@ def ensure_venv():
         venv.create(VENV, with_pip=True, upgrade_deps=True)
         subprocess.check_call([str(venv_python()), "-m", "pip", "install", "--disable-pip-version-check", "-q",
                                "-r", str(ROOT / "requirements.txt")])
-    sys.exit(subprocess.call([str(venv_python()), str(ROOT / "irodori.py"), *sys.argv[1:]]))
+    sys.exit(subprocess.call([str(venv_python()), str(ROOT / "kaicho.py"), *sys.argv[1:]]))
 
 
 def running() -> bool:
     try:
         with urllib.request.urlopen(URL + "api/health", timeout=1) as r:
-            return json.load(r).get("app") == "irodori"
+            return json.load(r).get("app") == "kaicho"
     except OSError:
         return False
 
@@ -96,16 +96,16 @@ def browser_command() -> list[str] | None:
             return [*on_host(), name, *chromium_args(native)]
     for app in CHROMIUM_FLATPAK:
         if host_ok("flatpak", "info", app):
-            return [*on_host(), "flatpak", "run", app, *chromium_args(flatpak / app / "data" / "irodori")]
+            return [*on_host(), "flatpak", "run", app, *chromium_args(flatpak / app / "data" / "kaicho")]
     if host_ok("which", "firefox"):
         return [*on_host(), "firefox", *firefox_args(native)]
     if host_ok("flatpak", "info", "org.mozilla.firefox"):
-        return [*on_host(), "flatpak", "run", "org.mozilla.firefox", *firefox_args(flatpak / "org.mozilla.firefox" / "data" / "irodori")]
+        return [*on_host(), "flatpak", "run", "org.mozilla.firefox", *firefox_args(flatpak / "org.mozilla.firefox" / "data" / "kaicho")]
     return None
 
 
 def open_browser():
-    if os.environ.get("IRODORI_NO_BROWSER"):
+    if os.environ.get("KAICHO_NO_BROWSER"):
         return
     cmd = browser_command()
     if cmd:
@@ -120,19 +120,19 @@ def open_browser():
 
 def stop():
     if not running():                   # an old PID could belong to another program by now
-        print("Irodori is not running.")
+        print("Kaicho is not running.")
         PIDFILE.unlink(missing_ok=True)
         return
     try:
         pid = int(PIDFILE.read_text(encoding="utf-8"))
     except (OSError, ValueError):
-        print("Irodori is not running.")
+        print("Kaicho is not running.")
         return
     try:
         os.kill(pid, signal.SIGTERM)
         print("Stopped.")
     except OSError:
-        print("Irodori is not running.")
+        print("Kaicho is not running.")
     PIDFILE.unlink(missing_ok=True)
 
 

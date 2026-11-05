@@ -433,7 +433,7 @@ def write_project(mesh: trimesh.Trimesh, face_state: np.ndarray, filaments: list
             '<model unit="millimeter" xml:lang="en-US" xmlns="http://schemas.microsoft.com/3dmanufacturing/core/2015/02" '
             'xmlns:BambuStudio="http://schemas.bambulab.com/package/2021" '
             'xmlns:p="http://schemas.microsoft.com/3dmanufacturing/production/2015/06" requiredextensions="p">\n'
-            ' <metadata name="Application">Irodori</metadata>\n'
+            ' <metadata name="Application">Kaicho</metadata>\n'
             ' <metadata name="BambuStudio:3mfVersion">1</metadata>\n'
             f' <metadata name="Title">{safe}</metadata>\n'
             ' <metadata name="slic3rpe:MmPaintingVersion">1</metadata>\n'

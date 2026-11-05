@@ -1,10 +1,10 @@
 @font-face { font-family: "Antykwa"; src: url(fonts/AntykwaTorunska-Regular.otf) format("opentype"); font-weight: 400; font-display: swap; }
 @font-face { font-family: "Antykwa"; src: url(fonts/AntykwaTorunska-Bold.otf) format("opentype"); font-weight: 700; font-display: swap; }
-@font-face { font-family: "Irodori Sans"; src: url(fonts/MPLUS1.woff2) format("woff2"); font-weight: 100 900; font-display: swap; }
-@font-face { font-family: "Irodori Sans"; src: url(fonts/MPLUS1p-Regular.woff2) format("woff2"); font-weight: 100 400; unicode-range: U+0394, U+0400-045F, U+2190, U+2192, U+21BA, U+24D8, U+25CE, U+2713, U+2717; font-display: swap; }
-@font-face { font-family: "Irodori Sans"; src: url(fonts/MPLUS1p-Medium.woff2) format("woff2"); font-weight: 500 600; unicode-range: U+0394, U+0400-045F, U+2190, U+2192, U+21BA, U+24D8, U+25CE, U+2713, U+2717; font-display: swap; }
-@font-face { font-family: "Irodori Sans"; src: url(fonts/MPLUS1p-Bold.woff2) format("woff2"); font-weight: 700 900; unicode-range: U+0394, U+0400-045F, U+2190, U+2192, U+21BA, U+24D8, U+25CE, U+2713, U+2717; font-display: swap; }
-@font-face { font-family: "Irodori Mincho"; src: url(fonts/ShipporiMincho-Bold.woff2) format("woff2"); font-weight: 700; font-display: swap; }
+@font-face { font-family: "Kaicho Sans"; src: url(fonts/MPLUS1.woff2) format("woff2"); font-weight: 100 900; font-display: swap; }
+@font-face { font-family: "Kaicho Sans"; src: url(fonts/MPLUS1p-Regular.woff2) format("woff2"); font-weight: 100 400; unicode-range: U+0394, U+0400-045F, U+2190, U+2192, U+21BA, U+24D8, U+25CE, U+2713, U+2717; font-display: swap; }
+@font-face { font-family: "Kaicho Sans"; src: url(fonts/MPLUS1p-Medium.woff2) format("woff2"); font-weight: 500 600; unicode-range: U+0394, U+0400-045F, U+2190, U+2192, U+21BA, U+24D8, U+25CE, U+2713, U+2717; font-display: swap; }
+@font-face { font-family: "Kaicho Sans"; src: url(fonts/MPLUS1p-Bold.woff2) format("woff2"); font-weight: 700 900; unicode-range: U+0394, U+0400-045F, U+2190, U+2192, U+21BA, U+24D8, U+25CE, U+2713, U+2717; font-display: swap; }
+@font-face { font-family: "Kaicho Mincho"; src: url(fonts/ShipporiMincho-Bold.woff2) format("woff2"); font-weight: 700; font-display: swap; }
 
 :root {
   color-scheme: light;
@@ -20,13 +20,13 @@
   --good: #3b6629;
   --mid: #8c5b06;
   --bad: #bc002d;
-  --head: "Antykwa", "Irodori Mincho", Georgia, serif;
-  --ja: "Irodori Mincho", serif;
+  --head: "Antykwa", "Kaicho Mincho", Georgia, serif;
+  --ja: "Kaicho Mincho", serif;
 }
 * { box-sizing: border-box; border-radius: 0; }
 [hidden] { display: none !important; }
 html, body { margin: 0; }
-body { background: var(--paper); color: var(--ink); font: 14px/1.5 "Irodori Sans", system-ui, sans-serif; min-height: 100vh; }
+body { background: var(--paper); color: var(--ink); font: 14px/1.5 "Kaicho Sans", system-ui, sans-serif; min-height: 100vh; }
 button, input, select { font: inherit; color: inherit; }
 button { cursor: pointer; }
 a { color: var(--cobalt); }
@@ -95,7 +95,7 @@ label.chk { display: flex; gap: 8px; align-items: flex-start; font-size: 12.5px;
 .grp > summary { cursor: pointer; list-style: none; padding: 10px 2px; font: 700 17px/1.2 var(--head); display: flex; align-items: baseline; gap: 8px; }
 .grp > summary::-webkit-details-marker { display: none; }
 .ja { font: 700 15px/1 var(--ja); color: var(--red); margin-right: auto; }
-.grp > summary::after { content: "+"; font-family: "Irodori Sans", sans-serif; color: var(--muted); }
+.grp > summary::after { content: "+"; font-family: "Kaicho Sans", sans-serif; color: var(--muted); }
 .grp[open] > summary::after { content: "−"; color: var(--red); }
 .opt { display: grid; gap: 4px; padding: 0 0 12px 14px; position: relative; }
 .opt::before { content: ""; position: absolute; left: 0; top: 7px; width: 8px; height: 8px; border-radius: 50%; }
@@ -185,7 +185,7 @@ button:disabled { opacity: .45; cursor: not-allowed; }
 .swc .alts button { flex: 1; border: 1px solid var(--line2); background: transparent; font-size: 11px; color: var(--muted); padding: 1px 0; }
 .swc .alts button.on { border-color: var(--ink); background: var(--ink); color: var(--white); }
 .chip { height: 46px; border: 1px solid var(--ink); position: relative; }
-.chip.empty { position: relative; inset: auto; z-index: auto; display: grid; place-items: center; font: 400 11.5px/1.3 "Irodori Sans", sans-serif; color: var(--muted); background: var(--paper); border: 1px dashed var(--line2); }
+.chip.empty { position: relative; inset: auto; z-index: auto; display: grid; place-items: center; font: 400 11.5px/1.3 "Kaicho Sans", sans-serif; color: var(--muted); background: var(--paper); border: 1px dashed var(--line2); }
 .chip input[type=color] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
 .swc b { margin-top: 5px; font-weight: 500; line-height: 1.25; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }
 .hexl { display: flex; align-items: center; gap: 3px; color: var(--muted); margin-top: 2px; }
