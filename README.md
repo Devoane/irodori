@@ -4,9 +4,9 @@
 <p align="center"><b>Turn a colored 3D model into a multicolor print on a toolchanger 3D printer.</b><br>
 Runs on your own computer. No account, and your models are never uploaded.</p>
 
-![The Irodori window with a helmet model and suggested spool sets](docs/screenshot.png)
+![The Irodori window with an avocado model and suggested spool sets](docs/screenshots/main.png)
 
-<sub>Model: "Damaged Helmet" by theblueturtle_, CC BY 4.0. It is not included in this repository.</sub>
+<sub>Sample model in all pictures: "Avocado" by Microsoft, CC0 1.0, from the Khronos glTF Sample Assets. It is not included in this repository.</sub>
 
 ## Who it is for
 
@@ -40,6 +40,71 @@ You drop in a colored model. Irodori then:
 3. arranges thin layers of different spools so that from a distance they look like a new color,
 4. shows you what the print should look like,
 5. saves a ready project for Snapmaker Orca, or G-code for the printer.
+
+## See how it works
+
+The pictures below follow one model through the program: a 120 mm avocado, with the other settings left at their defaults. They are screenshots and renders from real files. **This avocado has not been printed, so none of them is a photo of a print.**
+
+### Compare the print with your model
+
+| Model | Print | In slicer |
+|---|---|---|
+| ![The original model](docs/screenshots/view-model.png) | ![The predicted print](docs/screenshots/view-print.png) | ![The colors Snapmaker Orca will show](docs/screenshots/view-slicer.png) |
+| Your file | What the finished print should look like | The colors Snapmaker Orca shows when you open the project |
+
+### Choose your spools
+
+<img src="docs/screenshots/card.png" width="480" alt="A suggested set of four spools with a 94% match">
+
+Each result card shows:
+
+- **The match**, here 94%. It says how close the result is to the model's colors.
+- **The spools**, with the name, the color, and how much of the colored surface each one covers. F1 goes in toolhead 1, and so on.
+- **The color strip**, with every mix this set uses. This one has 53.
+- **The relative time.** 1× is the fastest result of the analysis.
+- **The downloads:** GLB (the model with the predicted colors), 3MF (a project for Snapmaker Orca) and G-code. After slicing, the card shows the exact time, weight and number of filament changes.
+
+The **Set ranking** estimates many more spool combinations. Click **Calculate** to build the full result for any of them.
+
+<img src="docs/screenshots/ranking.png" width="480" alt="A ranking of spool sets with estimated matches">
+
+### More toolheads, closer colors
+
+The same model with the best set for each number of toolheads:
+
+| 2 toolheads: 79.4% | 3 toolheads: 91.6% | 4 toolheads: 94% |
+|---|---|---|
+| ![The avocado with two spools](docs/screenshots/heads-2.png) | ![The avocado with three spools](docs/screenshots/heads-3.png) | ![The avocado with four spools](docs/screenshots/view-print.png) |
+
+### What the printer really does
+
+The printer never blends filament. It prints thin layers of pure spool color and changes tools between them, and even a single layer can use several spools. These pictures are drawn from the sliced G-code. They show the outer walls from the front, using only the four spool colors, with one row of pixels for each 0.1 mm of height.
+
+| The whole model | The red box, enlarged 8× (about 11 × 11 mm) |
+|---|---|
+| ![Outer walls of the avocado, drawn from the G-code in four spool colors](docs/screenshots/layers-whole.png) | ![A close-up of single layers in brown, yellow, white and green](docs/screenshots/layers-closeup.png) |
+
+### Finish in the slicer
+
+Click **3MF** and open the file in Snapmaker Orca. The printer, spools and color mixes are already set. The tall block on the left is the wipe tower.
+
+![The exported project open in Snapmaker Orca](docs/screenshots/orca-project.png)
+
+Check the cost before you print. The sliced G-code for this avocado gives:
+
+| Print time | Filament | Filament changes |
+|---|---|---|
+| 43 h 31 min | 351 g, of which about 165 g is the wipe tower | 3461 |
+
+### Other tools
+
+| | |
+|---|---|
+| ![The My filaments window](docs/screenshots/my-filaments.png) | **My filaments.** Mark the spools you own and what is loaded in the printer. The program then adds a separate result for those spools, and it can search only among the ones you own. |
+| ![Painting on the model with the Priority brush](docs/screenshots/priority-brush.png) | **Priority brush.** Paint over an important part, such as a face or a logo, and recalculate. Sets are then chosen for that part, and the whole model is still exported. |
+| ![The avocado on a printable base](docs/screenshots/base.png) | **Bases.** Add one of 15 display bases. It is printed as part of the same object. |
+| ![The avocado with rainbow colors](docs/screenshots/rainbow.png) | **Rainbow.** Replace the model's colors with a rainbow spiral. |
+| ![The card calibration window](docs/screenshots/calibration.png) | **Card calibration.** Print a card of color tiles and upload a photo of it, so that predictions can use your real filaments. This has not yet been checked on a real print. |
 
 ## What you need
 
