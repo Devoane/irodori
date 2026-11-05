@@ -125,3 +125,7 @@ The code is available under the [GNU AGPL-3.0](LICENSE). Some of the color logic
 | M PLUS 1, M PLUS 1p, Shippori Mincho | SIL OFL 1.1 |
 
 Irodori is an independent project, not affiliated with Snapmaker or any filament maker. Their names are used only to describe compatibility.
+
+## Contact
+
+devoane911@protonmail.com
