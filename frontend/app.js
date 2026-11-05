@@ -2,6 +2,9 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { computeBoundsTree, disposeBoundsTree, acceleratedRaycast } from 'three-mesh-bvh';
+import { initLanguage, num as fmt, onLanguage, t, tn } from './i18n.js';
+
+await initLanguage();
 
 THREE.BufferGeometry.prototype.computeBoundsTree = computeBoundsTree;
 THREE.BufferGeometry.prototype.disposeBoundsTree = disposeBoundsTree;
@@ -10,8 +13,6 @@ THREE.Mesh.prototype.raycast = acceleratedRaycast;
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const hexRgb = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
-const fmt = (x, d = 1) => Number(x).toLocaleString('pl', { maximumFractionDigits: d });
-const plural = (n, one, few, many) => (n === 1 ? one : [2, 3, 4].includes(n % 10) && ![12, 13, 14].includes(n % 100) ? few : many);
 
 // colour math, mirrors backend/adjust.py
 const SRGB2LIN = new Float32Array(256).map((_, i) => { const c = i / 255; return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; });
@@ -302,7 +303,7 @@ renderer.domElement.addEventListener('pointermove', (ev) => {
 renderer.domElement.addEventListener('pointerup', () => { if (painting) { painting = false; updateFocusInfo(); } });
 function updateFocusInfo() {
   const n = state.focus ? state.focus.reduce((a, b) => a + b, 0) : 0;
-  $('focusInfo').textContent = n ? `priorytet: ${n.toLocaleString('pl')} trójkątów` : 'cały model';
+  $('focusInfo').textContent = n ? tn('priority: {n} triangles', n) : t('whole model');
   updateDirty();
 }
 
@@ -363,9 +364,9 @@ function syncLabels() {
   $('rvVal').textContent = s.rainbow_v; $('rhVal').textContent = s.rainbow_h;
   $('roVal').textContent = s.rainbow_offset; $('rwVal').textContent = s.rainbow_white;
   $('rainbowBox').hidden = !s.rainbow;
-  $('capNoDither').textContent = `tylko ${s.toolheads} szpule`;
-  $('rotState').textContent = s.rotate ? `X ${s.rot_x}° · Y ${s.rot_y}° · Z ${s.rot_z}°` : 'Orientacja z pliku';
-  $('zState').textContent = s.z_offset < 0 ? `${fmt(-s.z_offset, 2)} mm pod stołem (odcięte)` : 'Spód na stole';
+  $('capNoDither').textContent = tn('only {n} spools', s.toolheads);
+  $('rotState').textContent = s.rotate ? `X ${s.rot_x}° · Y ${s.rot_y}° · Z ${s.rot_z}°` : t('Orientation from the file');
+  $('zState').textContent = s.z_offset < 0 ? t('{n} mm below the bed (cut off)', { n: fmt(-s.z_offset, 2) }) : t('Bottom on the bed');
   renderBases();
   // Orca cannot combine these layer schedules
   const locked = s.vol || s.subdivide_mix;
@@ -410,8 +411,8 @@ function updateDirty() {
   $('btnReanalyze').hidden = !dirty;
   const btn = $('btnAnalyze');
   if (state.busy) { btn.disabled = true; return; }
-  if (state.sid && !state.newFiles) { btn.textContent = 'Przelicz'; btn.disabled = !dirty; }
-  else { btn.textContent = 'Analizuj'; btn.disabled = !state.files.length || !depsReady(); }
+  if (state.sid && !state.newFiles) { btn.textContent = t('Recalculate'); btn.disabled = !dirty; }
+  else { btn.textContent = t('Analyze'); btn.disabled = !state.files.length || !depsReady(); }
 }
 
 // display base: a style chip adds it, clicking it again cycles the size
@@ -419,7 +420,7 @@ function renderBases() {
   const lib = state.library; if (!lib) return;
   const cur = $('s_base').value, size = Number($('s_base_size').value);
   $('baseList').innerHTML = lib.bases.map((b) => `<button type="button" data-base="${b.id}" class="${b.id === cur ? 'on' : ''}"
-    title="${b.id === cur ? 'Kliknij, żeby zmienić rozmiar' : `Podstawka „${esc(b.name)}”`}">${esc(b.name)}${b.id === cur ? ` · ${esc(lib.base_sizes[size])}` : ''}</button>`).join('');
+    title="${b.id === cur ? t('Click to change the size') : esc(t('Base "{name}"', { name: t(b.name) }))}">${esc(t(b.name))}${b.id === cur ? ` · ${esc(t(lib.base_sizes[size]))}` : ''}</button>`).join('');
   $('baseRemove').hidden = !cur;
 }
 $('baseList').addEventListener('click', (e) => {
@@ -446,14 +447,14 @@ $('depAllow').addEventListener('change', () => { renderDeps(); updateDirty(); })
 
 async function setFiles(files) {
   const main = files.find((f) => MODEL_RE.test(f.name));
-  if (!main) { setStatus('Wybierz plik GLB, FBX, OBJ albo 3MF', false, true); return; }
+  if (!main) { setStatus('Choose a GLB, FBX, OBJ or 3MF file', false, true); return; }
   state.files = [main, ...files.filter((f) => f !== main)];
   state.newFiles = true;
   $('depAllow').checked = false;
   $('s_base').value = ''; $('s_base_size').value = 0; renderBases();
   await scanDeps();
   showFile();
-  setStatus('Model gotowy.');
+  setStatus('Model ready.');
   updateDirty();
 }
 async function addFiles(more) {
@@ -498,14 +499,16 @@ function showFile() {
   const mb = state.files.reduce((a, f) => a + f.size, 0) / 1048576;
   drop.classList.add('has');
   $('dropTitle').textContent = main.name;
-  $('dropSub').textContent = `${fmt(mb)} MB${state.files.length > 1 ? ` · ${state.files.length - 1} plików dodatkowych` : ''} · kliknij, żeby wybrać inny`;
+  $('dropSub').textContent = `${fmt(mb)} MB${state.files.length > 1 ? ` · ${tn('{n} extra files', state.files.length - 1)}` : ''} · ${t('click to choose another')}`;
   $('fileInfo').textContent = `${main.name} · ${fmt(mb)} MiB`;
 }
 
+let lastStatus = ['', false, false];
 function setStatus(msg, busy = false, err = false) {
+  lastStatus = [msg, busy, err];
   const el = $('status');
   el.classList.toggle('err', err);
-  el.innerHTML = (busy ? '<span class="spin"></span>' : '') + esc(msg);
+  el.innerHTML = (busy ? '<span class="spin"></span>' : '') + esc(t(msg));
 }
 function setProgress(p) {
   $('progBar').style.width = `${Math.round(100 * p)}%`;
@@ -513,13 +516,18 @@ function setProgress(p) {
 }
 
 // ---------------------------------------------------------------- analysis
+let resultsTitle = ['Working…'];
+function setResultsTitle(...args) {
+  resultsTitle = args;
+  $('resultsTitle').textContent = t(...args);
+}
 async function analyze() {
   if (state.sid && !state.newFiles) return reanalyze();
   if (!state.files.length) return;
   const fd = new FormData();
   for (const f of state.files) fd.append('files', f);
   fd.append('settings', JSON.stringify(readSettings()));
-  setStatus('Wysyłanie modelu do lokalnego serwera…', true);
+  setStatus('Sending the model to the local server…', true);
   state.busy = true; updateDirty();
   try {
     const r = await fetch('/api/analyze', { method: 'POST', body: fd });
@@ -528,7 +536,7 @@ async function analyze() {
     Object.assign(state, { sid: session, version: -1, selected: -1, newFiles: false, rows: [], orig: {} });
     $('results').hidden = false;
     $('rows').innerHTML = '';
-    $('resultsTitle').textContent = 'Liczę…';
+    setResultsTitle('Working…');
     poll();
   } catch (e) { setStatus(e.message, false, true); state.busy = false; updateDirty(); }
 }
@@ -545,7 +553,7 @@ async function reanalyze() {
   const r = await fetch(`/api/reanalyze/${state.sid}`, { method: 'POST', body: fd });
   if (!r.ok) { setStatus((await r.json()).detail, false, true); state.busy = false; updateDirty(); return; }
   state.focusDirty = false; state.calDirty = false; state.orig = {};
-  $('resultsTitle').textContent = 'Przeliczam…';
+  setResultsTitle('Recalculating…');
   poll();
 }
 $('btnAnalyze').addEventListener('click', analyze);
@@ -557,7 +565,7 @@ async function poll() {
   const st = await r.json();
   setStatus(st.message, st.busy, !!st.error);
   setProgress(st.progress || 0);
-  $('warnings').textContent = (st.warnings || []).join(' · ');
+  $('warnings').textContent = (state.warnings = st.warnings || []).map((w) => t(w)).join(' · ');
   if (st.version !== state.version && st.version > 0 && ['targets', 'search', 'rows', 'done'].includes(st.stage)) {
     state.version = st.version;
     const keep = state.focus;
@@ -567,12 +575,12 @@ async function poll() {
   }
   if (st.busy) { setTimeout(poll, 400); return; }
   state.busy = false;
-  if (st.error) { $('resultsTitle').textContent = 'Nie wyszło'; updateDirty(); return; }
+  if (st.error) { setResultsTitle('That did not work'); updateDirty(); return; }
   if (st.stage === 'done') {
     state.rows = st.rows;
     state.analysed = st.settings;
     state.diag = st.diag;
-    $('resultsTitle').textContent = `Wyniki · ${state.rows.length}`;
+    setResultsTitle('Results · {n}', { n: state.rows.length });
     renderBrands();
     mineIdx = null;
     renderMine();
@@ -586,8 +594,8 @@ async function poll() {
 
 // ---------------------------------------------------------------- result rows
 const FAMILY_NOTE = {
-  loaded: 'Szpule z T1–T4',
-  custom: 'Twoje kolory',
+  loaded: 'Spools from T1–T4',
+  custom: 'Your colors',
 };
 function matchClass(m) { return m >= 80 ? 'good' : m >= 70 ? 'mid' : 'bad'; }
 function timeCost(row, s) {
@@ -596,10 +604,10 @@ function timeCost(row, s) {
   return t.single * k + t.mixed;
 }
 function timeNote(row, s) {
-  const t = row.metrics.time, vlh = s.variable_layer > s.layer_height;
-  return `Mieszanka na ${fmt(t.mixed_share)}% powierzchni. Liczone z pola × liczby szpul w recepturze` +
-    (vlh ? `, miejsca bez mieszania przy ${s.variable_layer} mm` : '') +
-    '. 1× = najszybszy wynik tej analizy. Dokładny czas: przycisk G-code.';
+  const share = row.metrics.time, vlh = s.variable_layer > s.layer_height;
+  return [t('Mix on {n}% of the surface. Calculated from area × number of spools in the recipe.', { n: fmt(share.mixed_share) }),
+    vlh ? t('Areas without mixing at {n} mm.', { n: s.variable_layer }) : '',
+    t('1× = the fastest result of this analysis. Exact time: the G-code button.')].filter(Boolean).join(' ');
 }
 // virtual colours sorted from F1 toward Fn (mean slot of the recipe)
 function stripOrder(entries) {
@@ -610,17 +618,17 @@ function recipeText(pattern) {
   return pattern.split(',').map((g, gi) => {
     const c = {}; for (const d of g) c[d] = (c[d] || 0) + 1;
     const txt = Object.keys(c).sort().map((d) => `F${d} ${Math.round(100 * c[d] / g.length)}%`).join(' + ');
-    return (pattern.includes(',') ? (gi ? 'wewn.: ' : 'zewn.: ') : '') + `${txt} (cykl ${g.length})`;
+    return (pattern.includes(',') ? t(gi ? 'inner: ' : 'outer: ') : '') + t('{txt} (cycle {n})', { txt, n: g.length });
   }).join(' | ');
 }
 function capText(m) {
-  return m.capacity === 0 ? 'ile trzeba' : m.capacity <= 8 ? 'tylko szpule' : `do ${m.capacity}`;
+  return m.capacity === 0 ? t('as many as needed') : m.capacity <= 8 ? t('spools only') : t('up to {n}', { n: m.capacity });
 }
 function rowSub(row) {
-  if (FAMILY_NOTE[row.family]) return FAMILY_NOTE[row.family];
+  if (FAMILY_NOTE[row.family]) return t(FAMILY_NOTE[row.family]);
   if (row.family === 'search') return '';
   const m = row.metrics;
-  return `CMY${m.calibrated ? ' · z Twojej kalibracji' : ''}${m.dual ? ' · dwie receptury ścian' : ''}`;
+  return `CMY${m.calibrated ? ` · ${t('from your calibration')}` : ''}${m.dual ? ` · ${t('two wall recipes')}` : ''}`;
 }
 
 function renderRows() {
@@ -645,32 +653,32 @@ function renderRows() {
       }).join('')}</div>` : hasAlts ? '<div class="alts"></div>' : '';
       return `<div class="swc" title="${esc(`${f.brand} ${f.name}${f.td ? ` · TD ${f.td} mm` : ''}`)}">${altHtml}
         <div class="chip" style="background:${f.hex}"></div>
-        <b>F${k + 1} · ${esc(f.name)}</b>
+        <b>F${k + 1} · ${esc(t(f.name))}</b>
         <div class="hexl"><span>${f.hex}</span>
-          <label class="ico" title="Edytuj ${f.hex}">◎<input type="color" value="${f.hex.toLowerCase()}" data-k="${k}"></label>
-          ${orig ? `<button type="button" class="ico" data-reset-row="${i}" title="Wróć do zaproponowanych">↺</button>` : ''}
+          <label class="ico" title="${t('Edit {hex}', { hex: f.hex })}">◎<input type="color" value="${f.hex.toLowerCase()}" data-k="${k}"></label>
+          ${orig ? `<button type="button" class="ico" data-reset-row="${i}" title="${t('Back to the suggested ones')}">↺</button>` : ''}
 </div>
-        ${m.usage ? `<span class="use" title="Udział szpuli w kolorowej powierzchni">${fmt(m.usage[k])}%</span>` : ''}</div>`;
+        ${m.usage ? `<span class="use" title="${t('Share of the spool in the colored surface')}">${fmt(m.usage[k])}%</span>` : ''}</div>`;
     }).join('');
-    const adv = [['ΔE2000 średni · mediana', `${m.mean_de} · ${m.median}`], ['ΔE p95 · najgorszy', `${m.p95} · ${m.worst}`],
-      ['Mieszanki', `${m.virtual_used} (${capText(m)}) z ${m.candidates?.toLocaleString('pl')} możliwych`],
-      ['Ściany', m.dual ? 'dwie receptury' : 'jedna receptura'], ['Kolory przewidziane', m.calibrated ? 'z kalibracji kartą' : 'modelem mieszania Orca'],
-      ...(state.diag?.exact_colors ? [['Kolory w pliku', state.diag.exact_colors]] : [])]
-      .map(([a, b]) => `<dt>${a}</dt><dd>${b ?? '—'}</dd>`).join('');
-    const no3mf = heads > 4 ? ' disabled title="Snapmaker U1 ma 4 głowice: projekt i G-code tylko dla 2–4 filamentów"' : '';
+    const adv = [['Mean ΔE2000 · median', `${m.mean_de} · ${m.median}`], ['ΔE p95 · worst', `${m.p95} · ${m.worst}`],
+      ['Mixes', t('{used} ({cap}) of {total} possible', { used: m.virtual_used, cap: capText(m), total: fmt(m.candidates ?? 0, 0) })],
+      ['Walls', t(m.dual ? 'two wall recipes' : 'one recipe')], ['Predicted colors', t(m.calibrated ? 'from card calibration' : 'Orca mixing model')],
+      ...(state.diag?.exact_colors ? [['Colors in the file', state.diag.exact_colors]] : [])]
+      .map(([a, b]) => `<dt>${t(a)}</dt><dd>${b ?? '—'}</dd>`).join('');
+    const no3mf = heads > 4 ? ` disabled title="${t('The Snapmaker U1 has 4 toolheads: project and G-code only for 2–4 filaments')}"` : '';
     return `<article class="rowcard${i === state.selected ? ' sel' : ''}" data-i="${i}" ${row.cmy_brand && state.brandsOff.has(row.cmy_brand) ? 'hidden' : ''}>
-      <div class="rc-head"><div class="t"><h3>${esc(row.title)}</h3>${rowSub(row) ? `<p>${esc(rowSub(row))}</p>` : ''}</div>
-        <div class="score"><span class="m ${matchClass(m.match)}" title="Zgodność kolorów z modelem">${fmt(m.match)}%</span>
-          ${row.grouped ? `<small>+${row.grouped} ${plural(row.grouped, 'podobny', 'podobne', 'podobnych')}</small>` : ''}
-          ${m.time ? `<span class="time" title="${esc(timeNote(row, s))}">czas ≈${fmt(rel, 1)}× <i>ⓘ</i></span>` : ''}</div>
-        <button class="collapse" type="button" data-col-row="${i}" title="Zwiń">−</button></div>
+      <div class="rc-head"><div class="t"><h3>${esc(t(row.title))}</h3>${rowSub(row) ? `<p>${esc(rowSub(row))}</p>` : ''}</div>
+        <div class="score"><span class="m ${matchClass(m.match)}" title="${t('Color match with the model')}">${fmt(m.match)}%</span>
+          ${row.grouped ? `<small>+${tn('{n} similar', row.grouped)}</small>` : ''}
+          ${m.time ? `<span class="time" title="${esc(timeNote(row, s))}">${t('time ≈{n}×', { n: fmt(rel, 1) })} <i>ⓘ</i></span>` : ''}</div>
+        <button class="collapse" type="button" data-col-row="${i}" title="${t('Collapse')}">−</button></div>
       <div class="body">
         <div class="sw4" style="--n:${n}">${sw}</div>
-        <div class="strip" title="${virt.length} ${plural(virt.length, 'mieszanka', 'mieszanki', 'mieszanek')}, od F1 do F${n}">${virt.map((e) => `<i style="background:${e.hex}" title="${e.hex} ${esc(recipeText(e.pattern))}"></i>`).join('')}</div>
-        <div class="rc-foot"><details><summary>Zaawansowane</summary><dl class="dl">${adv}</dl></details>
-          <div class="dlbtns"><button class="btn" type="button" data-act="glb" title="Model z przewidzianymi kolorami">GLB</button>
-            <button class="btn" type="button" data-act="3mf" title="Projekt dla Snapmaker Orca"${no3mf}>3MF</button>
-            <button class="btn" type="button" data-act="gcode" title="Potnij w Snapmaker Orca na tym komputerze"${no3mf}>G-code</button></div></div>
+        <div class="strip" title="${tn('{n} mixes', virt.length)}${t(', from F1 to F{n}', { n })}">${virt.map((e) => `<i style="background:${e.hex}" title="${e.hex} ${esc(recipeText(e.pattern))}"></i>`).join('')}</div>
+        <div class="rc-foot"><details><summary>${t('Advanced')}</summary><dl class="dl">${adv}</dl></details>
+          <div class="dlbtns"><button class="btn" type="button" data-act="glb" title="${t('Model with the predicted colors')}">GLB</button>
+            <button class="btn" type="button" data-act="3mf" title="${t('Project for Snapmaker Orca')}"${no3mf}>3MF</button>
+            <button class="btn" type="button" data-act="gcode" title="${t('Slice in Snapmaker Orca on this computer')}"${no3mf}>G-code</button></div></div>
         <div class="gstat" id="gstat${i}">${state.gjobs[i] || ''}</div>
       </div></article>`;
   }).join('');
@@ -704,14 +712,14 @@ async function selectRow(i) {
   refreshColors();
 }
 async function recolor(i, hexes, replace, keepOrig = true, select = true) {
-  setStatus('Liczę dla Twoich kolorów…', true);
+  setStatus('Calculating for your colors…', true);
   const fd = new FormData(); fd.append('colors', JSON.stringify(hexes)); fd.append('replace', replace ? '1' : '0');
   const r = await fetch(`/api/recolor/${state.sid}/${i}`, { method: 'POST', body: fd });
   if (!r.ok) { setStatus((await r.json()).detail, false, true); return null; }
   const j = await r.json();
   if (replace) { if (keepOrig && !state.orig[i]) state.orig[i] = state.rows[i]; state.rows[i] = j.row; }
   else state.rows.push(j.row);
-  setStatus('Gotowe');
+  setStatus('Done');
   if (select) await selectRow(j.index); else renderRows();
   return j.index;
 }
@@ -724,12 +732,12 @@ async function resetRow(i) {
 async function swapAlt(i, slot, id) {
   const row = state.rows[i];
   const ids = row.filaments.map((f) => f.id); ids[slot] = id;
-  setStatus('Liczę z inną szpulą…', true);
+  setStatus('Calculating with another spool…', true);
   const fd = new FormData(); fd.append('ids', ids.join(',')); fd.append('replace', String(i));
   const r = await fetch(`/api/set/${state.sid}`, { method: 'POST', body: fd });
   if (!r.ok) { setStatus((await r.json()).detail, false, true); return; }
   state.rows[i] = (await r.json()).row;
-  setStatus('Gotowe');
+  setStatus('Done');
   await selectRow(i);
 }
 
@@ -741,16 +749,16 @@ async function exportRow(i, kind, btn) {
   btn.disabled = true;
   const fd = new FormData(); fd.append('settings', exportSettings());
   const r = await fetch(`/api/gcode/${state.sid}/${i}`, { method: 'POST', body: fd });
-  if (!r.ok) { show(esc((await r.json()).detail), true); btn.disabled = false; return; }
+  if (!r.ok) { show(esc(t((await r.json()).detail)), true); btn.disabled = false; return; }
   const { job } = await r.json();
   const url = `/api/gcode/${state.sid}/job/${job}`;
   for (;;) {
     const j = await fetch(url).then((x) => x.json());
-    if (j.busy) { show(`<span class="spin"></span>${esc(j.message)}`); await new Promise((ok) => setTimeout(ok, 1500)); continue; }
-    if (j.error) show(esc(j.message), true);
+    if (j.busy) { show(`<span class="spin"></span>${esc(t(j.message))}`); await new Promise((ok) => setTimeout(ok, 1500)); continue; }
+    if (j.error) show(esc(t(j.message)), true);
     else {
-      const t = j.result, tools = Object.entries(t.tools).map(([k, v]) => `T${k}: ${v}`).join(', ');
-      show(`Czas druku ${esc(t.time)}, ${esc(t.grams)} g, zmian filamentu ${esc(t.changes)} (${tools}). <a href="${url}/gcode">Pobierz G-code</a> · <a href="${url}/3mf">Pobierz pocięty 3MF</a>`);
+      const res = j.result, tools = Object.entries(res.tools).map(([k, v]) => `T${k}: ${v}`).join(', ');
+      show(`${esc(t('Print time {time}, {grams} g, filament changes {changes} ({tools}).', { time: res.time, grams: res.grams, changes: res.changes, tools }))} <a href="${url}/gcode">${t('Download G-code')}</a> · <a href="${url}/3mf">${t('Download sliced 3MF')}</a>`);
     }
     break;
   }
@@ -772,23 +780,24 @@ $('brandList').addEventListener('change', (e) => {
 function renderDiag() {
   const d = state.diag, s = state.analysed; if (!d) return;
   const row = state.rows[state.selected];
+  const plate = d.plate.join(' × ');
   const items = [
-    ['Wymiary', `${d.dimensions.map((x) => fmt(x)).join(' × ')} mm`],
-    ['Stół', d.fits ? `Mieści się w ${d.plate.join(' × ')} mm` : `Nie mieści się w ${d.plate.join(' × ')} mm – zmniejsz najdłuższy bok`],
-    ['Trójkąty', `${d.triangles.toLocaleString('pl')} (z ${d.source_triangles.toLocaleString('pl')})`],
-    ['Naprawa siatki', `${d.repaired ? 'Przebudowana' : 'Bez zmian'} · ${d.watertight ? 'szczelna' : 'nieszczelna'}`],
-    ['Próbki koloru', d.samples.toLocaleString('pl')],
-    ['Format', d.source_kind.toUpperCase() + (d.exact_colors ? ` · ${d.exact_colors} dokładnych kolorów` : '')],
-    ['Pogrubianie ścianek', { auto: 'gdy potrzeba', on: 'zawsze', off: 'nigdy' }[s.repair]],
-    ['Podstawka', d.base || 'brak'],
-    ['Wtapianie nakładek', s.bake_overlays ? 'wł.' : 'wył.'],
-    ['Kolory źródła', s.rainbow ? 'tęcza' : (s.brightness || s.saturation) ? `jasność ${s.brightness}%, nasycenie ${s.saturation}%` : 'bez zmian'],
-    ['Filamenty', s.opaque ? 'kryjące' : 'przezierne'],
-    ['Zestawy w rankingu', d.ranked_sets],
-    ['Czas analizy', `${fmt(d.seconds)} s`],
+    ['Dimensions', `${d.dimensions.map((x) => fmt(x)).join(' × ')} mm`],
+    ['Bed', d.fits ? t('Fits in {size} mm', { size: plate }) : t('Does not fit in {size} mm: reduce the longest side', { size: plate })],
+    ['Triangles', t('{a} (of {b})', { a: fmt(d.triangles, 0), b: fmt(d.source_triangles, 0) })],
+    ['Mesh repair', `${t(d.repaired ? 'Rebuilt' : 'Unchanged')} · ${t(d.watertight ? 'watertight' : 'not watertight')}`],
+    ['Color samples', fmt(d.samples, 0)],
+    ['Format', d.source_kind.toUpperCase() + (d.exact_colors ? ` · ${t('{n} exact colors', { n: d.exact_colors })}` : '')],
+    ['Thicken thin walls', t({ auto: 'When needed', on: 'Always', off: 'Never' }[s.repair])],
+    ['Base', d.base ? d.base.split(' · ').map((x) => t(x)).join(' · ') : t('none')],
+    ['Blend overlays', t(s.bake_overlays ? 'On' : 'Off')],
+    ['Source colors', s.rainbow ? t('rainbow') : (s.brightness || s.saturation) ? t('brightness {a}%, saturation {b}%', { a: s.brightness, b: s.saturation }) : t('unchanged')],
+    ['Filaments', t(s.opaque ? 'opaque' : 'translucent')],
+    ['Sets in the ranking', d.ranked_sets],
+    ['Analysis time', `${fmt(d.seconds)} s`],
   ];
-  if (row) items.push(['Wybrany wynik', `${row.title}: ${row.metrics.virtual_used} ${plural(row.metrics.virtual_used, 'mieszanka', 'mieszanki', 'mieszanek')} · ${capText(row.metrics)}`]);
-  $('diag').innerHTML = items.map(([a, b]) => `<dt>${a}</dt><dd>${esc(b)}</dd>`).join('');
+  if (row) items.push(['Selected result', `${t(row.title)}: ${tn('{n} mixes', row.metrics.virtual_used)} · ${capText(row.metrics)}`]);
+  $('diag').innerHTML = items.map(([a, b]) => `<dt>${t(a)}</dt><dd>${esc(b)}</dd>`).join('');
 }
 
 // ---------------------------------------------------------------- use my colours
@@ -805,7 +814,7 @@ function renderMine() {
   if (!mine.some(validHex)) mine = loadedHexes(n) || mine;
   $('mineSlots').style.setProperty('--n', n);
   $('mineSlots').innerHTML = mine.map((h, k) => `<div class="swc">
-    <div class="chip empty" data-chip="${k}">+ kolor<input type="color" data-k="${k}" value="${validHex(h) ? h.toLowerCase() : '#808080'}"></div>
+    <div class="chip empty" data-chip="${k}">${t('+ color')}<input type="color" data-k="${k}" value="${validHex(h) ? h.toLowerCase() : '#808080'}"></div>
     <b>F${k + 1}</b><input class="hex" data-k="${k}" list="libList" placeholder="#RRGGBB" value="${h}"></div>`).join('');
   mine.forEach((_, k) => mineSlot(k));
 }
@@ -814,11 +823,11 @@ function mineSlot(k) {
   const chip = document.querySelector(`[data-chip="${k}"]`), h = mine[k];
   chip.classList.toggle('empty', !validHex(h));
   chip.style.background = validHex(h) ? h : '';
-  chip.firstChild.textContent = validHex(h) ? '' : '+ kolor';
-  $('mineMsg').textContent = mine.every(validHex) ? 'Przelicza się samo po każdej zmianie.' : 'Uzupełnij wszystkie szpule.';
+  chip.firstChild.textContent = validHex(h) ? '' : t('+ color');
+  $('mineMsg').textContent = t(mine.every(validHex) ? 'Recalculates by itself after every change.' : 'Fill in all the spools.');
 }
-// recompute the "Moje kolory" row shortly after the last change, replacing it instead of piling up rows
-// after an analysis the row is added quietly; colours equal to T1–T4 are already the "Założone w drukarce" row
+// recompute the "My colors" row shortly after the last change, replacing it instead of piling up rows
+// after an analysis the row is added quietly; colours equal to T1–T4 are already the "Loaded in the printer" row
 function scheduleMine(delay = 700) {
   clearTimeout(mineTimer);
   if (!state.sid || state.busy || !mine.every(validHex)) return;
@@ -864,19 +873,19 @@ async function loadRanking() {
     return `<div class="rk" title="${esc(title)}"><span class="n">${i + 1}.</span>
       <span class="chips">${r.filaments.map((f) => `<i style="background:${f.hex}"></i>`).join('')}</span>
       <b>${fmt(r.match)}%</b>
-      ${built.has(key) ? '<span class="muted">✓</span>' : `<button class="mini" type="button" data-ids="${key}">Policz</button>`}</div>`;
+      ${built.has(key) ? '<span class="muted">✓</span>' : `<button class="mini" type="button" data-ids="${key}">${t('Calculate')}</button>`}</div>`;
   }).join('');
 }
 $('ranking').addEventListener('click', async (e) => {
   const ids = e.target.dataset.ids; if (!ids) return;
   e.target.disabled = true;
-  setStatus('Liczenie pełnej palety dla zestawu…', true);
+  setStatus('Calculating the full palette for the set…', true);
   const fd = new FormData(); fd.append('ids', ids);
   const r = await fetch(`/api/set/${state.sid}`, { method: 'POST', body: fd });
   if (!r.ok) { setStatus((await r.json()).detail, false, true); e.target.disabled = false; return; }
   const j = await r.json();
   state.rows.push(j.row);
-  setStatus('Gotowe');
+  setStatus('Done');
   await selectRow(j.index);
   loadRanking();
   document.querySelector(`.rowcard[data-i="${j.index}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -893,13 +902,13 @@ loadLibrary();
 updateDirty();
 
 const inv = { data: { owned: [], custom: [], loaded: [] }, owned: null, custom: [] };
-const libById = () => new Map([...state.library.filaments.filter((f) => f.brand !== 'Własny'), ...inv.custom].map((f) => [f.id, f]));
+const libById = () => new Map([...state.library.filaments.filter((f) => f.brand !== 'Custom'), ...inv.custom].map((f) => [f.id, f]));
 $('btnInventory').addEventListener('click', () => {
   if (!state.library) return;
   inv.owned = new Set(inv.data.owned);
   inv.custom = inv.data.custom.map((c) => ({ ...c }));
-  const brands = [...new Set(state.library.filaments.filter((f) => f.brand !== 'Własny').map((f) => f.brand))].sort();
-  $('invBrand').innerHTML = '<option value="">Wszystkie marki</option>' + brands.map((b) => `<option>${esc(b)}</option>`).join('');
+  const brands = [...new Set(state.library.filaments.filter((f) => f.brand !== 'Custom').map((f) => f.brand))].sort();
+  $('invBrand').innerHTML = `<option value="">${t('All brands')}</option>` + brands.map((b) => `<option>${esc(b)}</option>`).join('');
   $('invOnly').checked = inv.owned.size > 0;
   renderLoaded(inv.data.loaded);
   renderInv();
@@ -909,8 +918,8 @@ function filamentOptions(sel) {
   const all = [...libById().values()];
   const opt = (f) => `<option value="${f.id}"${f.id === sel ? ' selected' : ''}>${esc(`${f.name} · ${f.brand} ${f.hex}`)}</option>`;
   const mineF = all.filter((f) => inv.owned.has(f.id));
-  return '<option value="">—</option>' + (mineF.length ? `<optgroup label="Moje">${mineF.map(opt).join('')}</optgroup>` : '') +
-    `<optgroup label="Biblioteka">${all.filter((f) => !inv.owned.has(f.id)).map(opt).join('')}</optgroup>`;
+  return '<option value="">—</option>' + (mineF.length ? `<optgroup label="${t('Mine')}">${mineF.map(opt).join('')}</optgroup>` : '') +
+    `<optgroup label="${t('Library')}">${all.filter((f) => !inv.owned.has(f.id)).map(opt).join('')}</optgroup>`;
 }
 function renderLoaded(loaded) {
   const by = libById();
@@ -936,8 +945,8 @@ function renderInv() {
   $('invList').innerHTML = [...groups].map(([b, fs]) => `<h4>${esc(b)}</h4>` + fs.map((f) => `
     <label><input type="checkbox" data-id="${f.id}"${inv.owned.has(f.id) ? ' checked' : ''}><span class="dot" style="background:${f.hex}"></span>
       <span>${esc(f.name)}</span><span class="muted">${f.hex}${f.td ? ` · TD ${f.td}` : ''}</span>
-      ${f.brand === 'Własny' ? `<button type="button" class="ghost x" data-del="${f.id}">usuń</button>` : '<span></span>'}</label>`).join('')).join('')
-    || '<p class="muted" style="padding:8px 10px">Brak filamentów. Odznacz „tylko moje” albo zmień wyszukiwanie.</p>';
+      ${f.brand === 'Custom' ? `<button type="button" class="ghost x" data-del="${f.id}">${t('remove')}</button>` : '<span></span>'}</label>`).join('')).join('')
+    || `<p class="muted" style="padding:8px 10px">${esc(t('No filaments. Untick "only mine" or change the search.'))}</p>`;
   $('invCount').textContent = `(${inv.owned.size})`;
 }
 $('invSearch').addEventListener('input', renderInv);
@@ -960,7 +969,7 @@ $('invAdd').addEventListener('click', () => {
   const hex = $('invHex').value.toUpperCase(), id = `custom-${hex.slice(1)}`;
   const td = $('invTd').value;
   inv.custom = inv.custom.filter((c) => c.id !== id);
-  inv.custom.push({ id, brand: 'Własny', name: $('invName').value.trim() || hex, hex, td: td === '' ? null : Number(td) });
+  inv.custom.push({ id, brand: 'Custom', name: $('invName').value.trim() || hex, hex, td: td === '' ? null : Number(td) });
   inv.owned.add(id);
   $('invName').value = ''; $('invTd').value = '';
   renderLoaded(loadedNow());
@@ -970,10 +979,10 @@ $('invSave').addEventListener('click', async (e) => {
   e.preventDefault();
   const loaded = loadedNow(), n = Math.min(4, readSettings().toolheads);
   const set = loaded.slice(0, n);
-  if (set.some((x) => x) && set.some((x) => !x)) { alert(`Ustaw wszystkie T1–T${n} albo zostaw je puste.`); return; }
+  if (set.some((x) => x) && set.some((x) => !x)) { alert(t('Set all of T1–T{n} or leave them empty.', { n })); return; }
   const body = { owned: [...inv.owned], custom: inv.custom, loaded: set.every((x) => x) ? loaded.filter((x) => x) : [] };
   const r = await fetch('/api/inventory', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-  if (!r.ok) { alert((await r.json()).detail); return; }
+  if (!r.ok) { alert(t((await r.json()).detail)); return; }
   const before = loadedHexes(analysedHeads());
   await loadLibrary();
   $('dlgInventory').close();
@@ -988,17 +997,17 @@ $('invSave').addEventListener('click', async (e) => {
     if (now) await loadedRow();
   }
 });
-// the "Założone w drukarce" row follows T1–T4 without a new analysis
+// the "Loaded in the printer" row follows T1–T4 without a new analysis
 async function loadedRow() {
   const ids = inv.data.loaded.slice(0, analysedHeads()), at = state.rows.findIndex((r) => r.family === 'loaded');
   if (at >= 0 && state.rows[at].filaments.map((f) => f.id).join() === ids.join()) return;
-  setStatus('Liczę dla szpul z T1–T4…', true);
+  setStatus('Calculating for the spools in T1–T4…', true);
   const fd = new FormData(); fd.append('ids', ids.join(',')); fd.append('loaded', '1'); fd.append('replace', String(at));
   const r = await fetch(`/api/set/${state.sid}`, { method: 'POST', body: fd });
   if (!r.ok) { setStatus((await r.json()).detail, false, true); return; }
   const j = await r.json();
   state.rows[j.index] = j.row;
-  setStatus('Gotowe');
+  setStatus('Done');
   await selectRow(j.index);
 }
 
@@ -1008,8 +1017,8 @@ $('btnCalib').addEventListener('click', () => {
   const sel = $('calSet'); sel.innerHTML = '';
   const opts = (state.library?.presets || []).map((p) => ({ name: p.name, ids: p.filaments }));
   const row = state.rows[state.selected];
-  if (inv.data.loaded.length) opts.unshift({ name: 'Założone w drukarce', ids: inv.data.loaded });
-  if (row && row.filaments.length <= 4) opts.unshift({ name: `Wybrana paleta: ${row.filaments.map((f) => f.name).join(' + ')}`, ids: row.filaments.map((f) => f.id) });
+  if (inv.data.loaded.length) opts.unshift({ name: t('Loaded in the printer'), ids: inv.data.loaded });
+  if (row && row.filaments.length <= 4) opts.unshift({ name: t('Selected palette: {names}', { names: row.filaments.map((f) => f.name).join(' + ') }), ids: row.filaments.map((f) => f.id) });
   opts.forEach((o) => { const op = document.createElement('option'); op.value = o.ids.join(','); op.textContent = o.name; sel.appendChild(op); });
   cal.pts = []; cal.img = null; drawCal(); $('calStatus').textContent = ''; $('calFit').disabled = true;
   $('dlgCalib').showModal();
@@ -1024,16 +1033,16 @@ $('calPhoto').addEventListener('change', async (e) => {
   cal.ids = $('calSet').value;
   cal.layout = await fetch(`/api/calibration/layout?filaments=${encodeURIComponent(cal.ids)}`).then((r) => r.json());
   drawCal();
-  $('calStatus').textContent = 'Kliknij lewy górny róg przedniej ściany karty.';
+  $('calStatus').textContent = t(CORNERS[0]);
 });
-const CORNERS = ['lewy górny', 'prawy górny', 'prawy dolny', 'lewy dolny'];
+const CORNERS = ['Click the top-left corner of the card front.', 'Click the top-right corner.', 'Click the bottom-right corner.', 'Click the bottom-left corner.'];
 $('calCanvas').addEventListener('click', (e) => {
   if (!cal.img || cal.pts.length >= 4) return;
   const cv = $('calCanvas'), r = cv.getBoundingClientRect();
   cal.pts.push([(e.clientX - r.left) * cv.width / r.width, (e.clientY - r.top) * cv.height / r.height]);
   drawCal();
-  if (cal.pts.length < 4) $('calStatus').textContent = `Kliknij ${CORNERS[cal.pts.length]} róg.`;
-  else { $('calStatus').textContent = 'Sprawdź, czy kropki leżą w środkach pól, i zapisz kalibrację.'; $('calFit').disabled = false; }
+  if (cal.pts.length < 4) $('calStatus').textContent = t(CORNERS[cal.pts.length]);
+  else { $('calStatus').textContent = t('Check that the dots sit in the middle of the tiles, then save the calibration.'); $('calFit').disabled = false; }
 });
 // projective map from unit card coordinates to image pixels (4 point pairs)
 function homography(src, dst) {
@@ -1098,11 +1107,24 @@ $('calFit').addEventListener('click', async () => {
   const fd = new FormData(); fd.append('filaments', cal.ids); fd.append('samples', JSON.stringify(samples));
   const r = await fetch('/api/calibration/fit', { method: 'POST', body: fd });
   const j = await r.json();
-  if (!r.ok) { $('calStatus').textContent = j.detail; return; }
+  if (!r.ok) { $('calStatus').textContent = t(j.detail); return; }
   const spools = j.names.map((n, i) => `${n} ${j.spool_de[i] ?? '–'}`).join(', ');
-  const result = `Błąd na polach sprawdzających: ΔE ${j.heldout_de} (sam model: ΔE ${j.model_de}). Szpule względem katalogu: ${spools}.`;
-  if (!j.saved) { $('calStatus').textContent = `Nie zapisano, bo pomiar jest niewiarygodny. ${result} Zrób zdjęcie w lepszym świetle albo sprawdź rogi.`; return; }
-  $('calStatus').textContent = `Zapisano. ${result} Użyj „Analizuj ponownie”, żeby ją zastosować.`;
+  const result = t('Error on check tiles: ΔE {a} (model alone: ΔE {b}). Spools against the catalog: {c}.', { a: j.heldout_de, b: j.model_de, c: spools });
+  if (!j.saved) { $('calStatus').textContent = t('Not saved because the measurement is unreliable. {r} Take the photo in better light or check the corners.', { r: result }); return; }
+  $('calStatus').textContent = t('Saved. {r} Use "Recalculate" to apply it.', { r: result });
   await loadLibrary();
   state.calDirty = true; updateDirty();
+});
+
+// ---------------------------------------------------------------- language
+onLanguage(() => {
+  setStatus(...lastStatus);
+  $('warnings').textContent = (state.warnings || []).map((w) => t(w)).join(' · ');
+  setResultsTitle(...resultsTitle);
+  syncLabels();
+  updateFocusInfo();
+  if (state.files.length) showFile();
+  renderRows();
+  renderDiag();
+  if (state.sid) { renderMine(); loadRanking(); }
 });

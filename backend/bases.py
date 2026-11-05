@@ -10,7 +10,7 @@ from __future__ import annotations
 import numpy as np
 import trimesh
 
-SIZES = [("Kompaktowa", 2.0, 3.0), ("Standardowa", 6.0, 4.0), ("Duża", 12.0, 5.0)]   # name, margin mm, thickness mm
+SIZES = [("Compact", 2.0, 3.0), ("Standard", 6.0, 4.0), ("Large", 12.0, 5.0)]   # name, margin mm, thickness mm
 EMBED = 0.6          # the model sinks this far into the base so the two parts overlap
 
 
@@ -181,21 +181,21 @@ def _c_spiked(x, y, r, th, side):
 
 
 STYLES = {
-    "pebble": ("Kamyk", _wobble, _dome, _c_pebble),
-    "cracked": ("Spękana", _round_outline, _chamfer, _c_cracked),
-    "round": ("Okrągła", _round_outline, _chamfer, _c_round),
-    "temple": ("Świątynia", lambda th: _square(th, 8), _steps, _c_temple),
-    "rune": ("Runy", _round_outline, _chamfer, _c_rune),
-    "paved": ("Bruk", _round_outline, _chamfer, _c_paved),
-    "stone": ("Głaz", _stone_outline, _dome, _c_stone),
+    "pebble": ("Pebble", _wobble, _dome, _c_pebble),
+    "cracked": ("Cracked", _round_outline, _chamfer, _c_cracked),
+    "round": ("Round", _round_outline, _chamfer, _c_round),
+    "temple": ("Temple", lambda th: _square(th, 8), _steps, _c_temple),
+    "rune": ("Runes", _round_outline, _chamfer, _c_rune),
+    "paved": ("Paving", _round_outline, _chamfer, _c_paved),
+    "stone": ("Boulder", _stone_outline, _dome, _c_stone),
     "arena": ("Arena", _round_outline, _rim, _c_arena),
-    "concrete": ("Beton", lambda th: _square(th, 10), _chamfer, _c_concrete),
-    "gridstone": ("Płyty", lambda th: _square(th, 10), _chamfer, _c_gridstone),
-    "column": ("Kolumna", _flutes, _chamfer, _c_column),
-    "ionic": ("Jońska", _flutes, _rim, _c_ionic),
-    "grassy": ("Trawa", _wobble, _dome, _c_grassy),
-    "magic": ("Magiczna", _round_outline, _chamfer, _c_magic),
-    "spiked": ("Kolce", _star, _chamfer, _c_spiked),
+    "concrete": ("Concrete", lambda th: _square(th, 10), _chamfer, _c_concrete),
+    "gridstone": ("Slabs", lambda th: _square(th, 10), _chamfer, _c_gridstone),
+    "column": ("Column", _flutes, _chamfer, _c_column),
+    "ionic": ("Ionic", _flutes, _rim, _c_ionic),
+    "grassy": ("Grass", _wobble, _dome, _c_grassy),
+    "magic": ("Magic", _round_outline, _chamfer, _c_magic),
+    "spiked": ("Spikes", _star, _chamfer, _c_spiked),
 }
 
 
@@ -214,7 +214,7 @@ def make_base(vertices: np.ndarray, style: str, size: int = 0, rings: int = 70,
               segments: int = 360) -> tuple[trimesh.Trimesh, np.ndarray]:
     """(base mesh with its top at z = 0, sRGB per face) for a model with these vertices."""
     if style not in STYLES:
-        raise ValueError(f"Nieznana podstawka: {style}")
+        raise ValueError(f"Unknown base: {style}")
     _, outline, profile, colour = STYLES[style]
     _, margin, T = SIZES[int(np.clip(size, 0, len(SIZES) - 1))]
     c, ax = footprint(vertices)

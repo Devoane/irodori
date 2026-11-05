@@ -42,7 +42,7 @@ def _find(env: str, names: list[str], candidates: list[str], what: str) -> list[
     box = os.environ.get("IRODORI_CONTAINER")
     if box and shutil.which("distrobox"):
         return ["distrobox", "enter", box, "--", names[0]]
-    raise RuntimeError(f"Nie znaleziono programu {what}. Zainstaluj go albo podaj ścieżkę w zmiennej {env}.")
+    raise RuntimeError(f"Program {what} not found. Install it or set its path in {env}.")
 
 
 def orca_cmd() -> list[str]:
@@ -56,4 +56,4 @@ def blender_cmd() -> list[str]:
     return _find("IRODORI_BLENDER", ["blender"],
                  _program_files("Blender Foundation", "Blender*", "blender.exe")
                  + ["/Applications/Blender.app/Contents/MacOS/Blender"],
-                 "Blender (potrzebny do FBX)")
+                 "Blender (needed for FBX)")

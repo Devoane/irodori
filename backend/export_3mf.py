@@ -158,7 +158,7 @@ def place_mesh(mesh: trimesh.Trimesh, settings) -> tuple[trimesh.Trimesh, float]
     mesh.apply_translation([-(lo[0] + hi[0]) / 2, -(lo[1] + hi[1]) / 2, -lo[2]])
     dz = min(0.0, float(settings.z_offset))
     if dz <= -mesh.bounds[1][2]:
-        raise ValueError("Przesunięcie Z chowa cały model pod stołem")
+        raise ValueError("The Z shift puts the whole model below the bed")
     return mesh, dz
 
 
@@ -200,7 +200,7 @@ def cut_at_plate(mesh: trimesh.Trimesh, dz: float, face_state: np.ndarray, face_
         mf = manifold3d.Manifold(manifold3d.Mesh(vert_properties=np.asarray(sub.vertices, np.float32),
                                                  tri_verts=np.asarray(sub.faces, np.uint32)))
         if mf.status() != manifold3d.Error.NoError or mf.is_empty():
-            raise ValueError("Przesunięcie Z potrzebuje szczelnej siatki: włącz pogrubianie cienkich elementów")
+            raise ValueError("The Z shift needs a watertight mesh: turn on thin wall thickening")
         cut = mf.trim_by_plane([0, 0, 1], 0.0).to_mesh()
         pieces.append(trimesh.Trimesh(np.asarray(cut.vert_properties)[:, :3].astype(np.float64), cut.tri_verts, process=False))
         part_of.append(np.full(len(cut.tri_verts), p))
@@ -327,9 +327,9 @@ def write_project(mesh: trimesh.Trimesh, face_state: np.ndarray, filaments: list
         mesh, face_state, face_part = cut_at_plate(mesh, dz, face_state, face_part)
     n = len(filaments)
     if n > 4:
-        raise ValueError("Snapmaker U1 ma 4 głowice: projekt 3MF da się zapisać dla 2–4 filamentów")
+        raise ValueError("The Snapmaker U1 has 4 toolheads: a 3MF project can be saved for 2–4 filaments")
     if len(recipes) > 255:
-        raise ValueError("za dużo kolorów (limit Orca: 255)")
+        raise ValueError("Too many colors (Orca limit: 255)")
     face_state = np.asarray(face_state)
     phys_rgb = np.array([hex_to_rgb(f["hex"]) for f in filaments], dtype=np.float64)
     dual = any(r.inner is not None for r in recipes[n:])

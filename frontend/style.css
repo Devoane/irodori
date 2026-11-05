@@ -1,6 +1,9 @@
 @font-face { font-family: "Antykwa"; src: url(fonts/AntykwaTorunska-Regular.otf) format("opentype"); font-weight: 400; font-display: swap; }
 @font-face { font-family: "Antykwa"; src: url(fonts/AntykwaTorunska-Bold.otf) format("opentype"); font-weight: 700; font-display: swap; }
 @font-face { font-family: "Irodori Sans"; src: url(fonts/MPLUS1.woff2) format("woff2"); font-weight: 100 900; font-display: swap; }
+@font-face { font-family: "Irodori Sans"; src: url(fonts/MPLUS1p-Regular.woff2) format("woff2"); font-weight: 100 400; unicode-range: U+0394, U+0400-045F, U+2190, U+2192, U+21BA, U+24D8, U+25CE, U+2713, U+2717; font-display: swap; }
+@font-face { font-family: "Irodori Sans"; src: url(fonts/MPLUS1p-Medium.woff2) format("woff2"); font-weight: 500 600; unicode-range: U+0394, U+0400-045F, U+2190, U+2192, U+21BA, U+24D8, U+25CE, U+2713, U+2717; font-display: swap; }
+@font-face { font-family: "Irodori Sans"; src: url(fonts/MPLUS1p-Bold.woff2) format("woff2"); font-weight: 700 900; unicode-range: U+0394, U+0400-045F, U+2190, U+2192, U+21BA, U+24D8, U+25CE, U+2713, U+2717; font-display: swap; }
 @font-face { font-family: "Irodori Mincho"; src: url(fonts/ShipporiMincho-Bold.woff2) format("woff2"); font-weight: 700; font-display: swap; }
 
 :root {
@@ -41,6 +44,11 @@ nav { display: flex; }
 .nav { display: flex; align-items: center; border: 0; border-left: 1px solid var(--line); background: transparent; padding: 0 18px; font-weight: 500; color: var(--ink); text-decoration: none; font-size: 14px; }
 .nav:first-child { border-left: 0; }
 .nav:hover { background: var(--ink); color: var(--white); }
+
+.nav.lang { padding: 0 8px; }
+.nav.lang:hover { background: transparent; color: inherit; }
+.lang select { border: 1px solid var(--line2); background: var(--white); padding: 4px 6px; max-width: 110px; }
+html[lang="ja"] .ja { display: none; }
 
 .work { display: grid; grid-template-columns: 340px minmax(0, 1fr) 460px; align-items: start; }
 .side, .stage, .results { display: grid; min-width: 0; }

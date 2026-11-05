@@ -1,122 +1,127 @@
 <p align="center"><img src="frontend/logo.svg" width="90" alt=""></p>
 <h1 align="center">Irodori 彩り</h1>
 
-<p align="center"><b>Kolorowy model 3D na wielokolorowy wydruk z 4 szpul na drukarce Snapmaker U1.</b><br>
-Działa na Twoim komputerze. Bez konta i bez wysyłania modeli do internetu.</p>
+<p align="center"><b>Turn a colored 3D model into a multicolor print from 4 spools on the Snapmaker U1.</b><br>
+Runs on your own computer. No account, and your models are never uploaded.</p>
 
-![Okno Irodori z modelem hełmu i proponowanymi zestawami szpul](docs/podglad.png)
+![The Irodori window with a helmet model and suggested spool sets](docs/screenshot.png)
 
-<sub>Model: „Damaged Helmet”, theblueturtle_, CC BY 4.0. Nie ma go w tym repozytorium.</sub>
+<sub>Model: "Damaged Helmet" by theblueturtle_, CC BY 4.0. It is not included in this repository.</sub>
 
-*English: Irodori turns a coloured 3D model into a multi-colour print project for the Snapmaker U1. The interface and documentation are in Polish. To run it, install Python 3.11+ and start `irodori.py`.*
+The app speaks **English, Polski, Español, Deutsch, Français, Русский and 日本語**. It follows your browser language, and you can change it in the top right corner.
 
-## Co to robi
+## What it does
 
-Wrzucasz kolorowy model. Irodori:
+You drop in a colored model. Irodori then:
 
-1. sprawdza, jakie kolory ma model,
-2. dobiera 2–4 szpule, z których da się je uzyskać,
-3. układa cienkie warstwy różnych szpul tak, żeby z daleka wyglądały jak nowy kolor,
-4. pokazuje, jak powinien wyglądać wydruk,
-5. zapisuje gotowy projekt dla Snapmaker Orca albo G-code dla drukarki.
+1. looks at which colors the model has,
+2. picks 2–4 spools that can produce them,
+3. arranges thin layers of different spools so that from a distance they look like a new color,
+4. shows you what the print should look like,
+5. saves a ready project for Snapmaker Orca, or G-code for the printer.
 
-## Czego potrzebujesz
+## What you need
 
-| Co | Po co | Czy trzeba? |
+| What | Why | Required? |
 |---|---|---|
-| [Python 3.11 lub nowszy](https://www.python.org/downloads/) | uruchamia program | **tak** |
-| Internet przy pierwszym starcie | jednorazowe pobranie około 400 MB bibliotek | **tak**, potem już nie |
-| Przeglądarka | w niej działa okno programu | **tak** |
-| Snapmaker Orca 2.4 | otwarcie projektu 3MF albo przygotowanie G-code | **tak**, żeby wydrukować |
-| Drukarka Snapmaker U1 | na nią powstaje projekt | **tak**, żeby wydrukować |
-| [Blender](https://www.blender.org/download/) | tylko do plików FBX | nie |
+| [Python 3.11 or newer](https://www.python.org/downloads/) | runs the program | **yes** |
+| Internet on the first start | one download of about 400 MB of libraries | **yes**, only once |
+| A web browser | the program's window opens in it | **yes** |
+| Snapmaker Orca 2.4 | opens the 3MF project or prepares the G-code | **yes**, to print |
+| Snapmaker U1 printer | the project is made for it | **yes**, to print |
+| [Blender](https://www.blender.org/download/) | only for FBX files | no |
 
-## Instalacja krok po kroku
+## Install it step by step
 
-### 1. Pobierz program
+### 1. Download the program
 
-Na górze tej strony kliknij zielony przycisk **Code**, a potem **Download ZIP**. Rozpakuj plik, na przykład na Pulpit.
+At the top of this page click the green **Code** button, then **Download ZIP**. Unpack the file, for example to your Desktop.
 
-### 2. Zainstaluj Pythona
+### 2. Install Python
 
-Pobierz go ze strony [python.org](https://www.python.org/downloads/) i zainstaluj.
+Download it from [python.org](https://www.python.org/downloads/) and install it.
 
-> **Windows:** na pierwszym ekranie instalatora zaznacz **Add python.exe to PATH**. To najczęstsza przyczyna problemów.
+> **Windows:** on the first installer screen tick **Add python.exe to PATH**. Missing this is the most common cause of problems.
 
-Na Linuksie Python zwykle już jest. Sprawdzisz to poleceniem `python3 --version`.
+Linux usually has Python already. Check with `python3 --version`.
 
-### 3. Uruchom Irodori
+### 3. Start Irodori
 
-| System | Co zrobić |
+| System | What to do |
 |---|---|
-| **Windows** | kliknij dwa razy `Irodori.bat` |
-| **macOS** | kliknij prawym przyciskiem `Irodori.command`, wybierz **Otwórz** i potwierdź |
-| **Linux** | otwórz terminal w folderze programu i wpisz `./run.sh` |
+| **Windows** | double-click `Irodori.bat` |
+| **macOS** | right-click `Irodori.command`, choose **Open** and confirm |
+| **Linux** | open a terminal in the program folder and type `./run.sh` |
 
-Pierwszy start trwa kilka minut, bo program pobiera biblioteki. Nie zamykaj okna, nawet jeśli przez chwilę nic się w nim nie zmienia. Potem przeglądarka otworzy się sama. Jeśli tak się nie stanie, wejdź na **http://127.0.0.1:8765/**.
+The first start takes a few minutes because it downloads the libraries. Do not close the window, even if nothing seems to happen for a while. Your browser then opens by itself. If it does not, go to **http://127.0.0.1:8765/**.
 
-Okno terminala ma zostać otwarte przez cały czas pracy.
+Keep the terminal window open while you work.
 
-## Pierwszy wydruk
+## Your first print
 
-1. **Wczytaj model.** Przeciągnij plik na pole **Upuść model albo kliknij**. Działają: GLB, OBJ z MTL, FBX z teksturami i malowany 3MF. Jeśli model potrzebuje dodatkowych plików, program poprosi o nie.
-2. **Kliknij Analizuj.** Przy domyślnej dokładności duży model może liczyć się kilka minut.
-3. **Wybierz zestaw po prawej.** Procent mówi, jak blisko wynik jest kolorów modelu. Im wyżej, tym lepiej. Kliknięty zestaw zobaczysz w podglądzie.
-4. **Włóż pasujące szpule.** Nazwy i kolory są na karcie zestawu. F1 to głowica 1, F2 to głowica 2 i tak dalej.
-5. **Pobierz plik.** Kliknij **3MF** i otwórz go w Snapmaker Orca albo kliknij **G-code**, jeśli chcesz od razu plik dla drukarki.
-6. **Wydrukuj.** Zacznij od małego modelu.
+1. **Load a model.** Drag the file onto **Drop a model or click**. GLB, OBJ with MTL, FBX with textures and painted 3MF all work. If the model needs more files, the program asks for them.
+2. **Click Analyze.** At the default accuracy a large model can take a few minutes.
+3. **Choose a set on the right.** The percentage says how close the result is to the model's colors. Higher is better. The set you click appears in the preview.
+4. **Load the matching spools.** The names and colors are on the set's card. F1 is toolhead 1, F2 is toolhead 2, and so on.
+5. **Get the file.** Click **3MF** and open it in Snapmaker Orca, or click **G-code** to get a file for the printer right away.
+6. **Print.** Start with a small model.
 
-Masz własne szpule? Wpisz je w **Moje filamenty**. Program pokaże wtedy osobny wynik dla szpul założonych w drukarce. Opis wszystkich ustawień jest w programie pod **Pomoc**.
+Own some spools already? Enter them under **My filaments**, and the program adds a separate result for the spools in your printer. All the settings are explained in the program under **Help**.
 
-## Jak zamknąć program
+## How to close it
 
-Zamknij okno terminala albo wpisz w nim `Ctrl+C`. Na Linuksie możesz też użyć `./run.sh --stop`.
+Close the terminal window or press `Ctrl+C` in it. On Linux you can also run `./run.sh --stop`.
 
-## Gdy coś nie działa
+## When something does not work
 
-| Problem | Rozwiązanie |
+| Problem | Fix |
 |---|---|
-| `python` nie jest rozpoznany albo okno od razu znika | Zainstaluj Pythona ponownie i zaznacz **Add python.exe to PATH** |
-| Pierwszy start stoi w miejscu | Poczekaj. Biblioteki mają około 400 MB. Sprawdź internet |
-| Przeglądarka się nie otwiera | Wejdź ręcznie na http://127.0.0.1:8765/ |
-| macOS nie chce otworzyć pliku | Kliknij go prawym przyciskiem i wybierz **Otwórz** |
-| `Permission denied` na Linuksie | Wpisz `python3 irodori.py` |
-| `Nie znaleziono programu Snapmaker Orca` | Zainstaluj Orkę albo pobierz 3MF i otwórz go ręcznie. Możesz też podać ścieżkę w zmiennej `IRODORI_ORCA` |
-| `Blender (potrzebny do FBX)` | Zainstaluj Blendera albo zapisz model jako GLB |
-| Port 8765 jest zajęty | Ustaw inny w zmiennej `IRODORI_PORT` |
-| Model jest biały albo ma złe kolory | Dodaj brakujące tekstury, gdy program o nie poprosi |
+| `python` is not recognized, or the window closes at once | Reinstall Python and tick **Add python.exe to PATH** |
+| The first start seems stuck | Wait. The libraries are about 400 MB. Check your internet |
+| The browser does not open | Go to http://127.0.0.1:8765/ yourself |
+| macOS refuses to open the file | Right-click it and choose **Open** |
+| `Permission denied` on Linux | Type `python3 irodori.py` |
+| `Program Snapmaker Orca not found` | Install Orca, or download the 3MF and open it by hand. You can also set the path in the `IRODORI_ORCA` variable |
+| `Program Blender (needed for FBX) not found` | Install Blender, or save the model as GLB |
+| Port 8765 is taken | Set another one in the `IRODORI_PORT` variable |
+| The model is white or has wrong colors | Add the missing textures when the program asks for them |
 
-Nie ma tu Twojego problemu? [Zgłoś go](https://github.com/Devoane/irodori/issues) i dopisz system, typ pliku oraz treść błędu.
+Your problem is not here? [Report it](https://github.com/Devoane/irodori/issues) and include your system, the file type and the error text.
 
-## Jak to działa
+## How it works
 
-Drukarka ma tylko 4 szpule, ale warstwy są bardzo cienkie. Gdy na przemian drukują się warstwy niebieskie i żółte, z daleka oko widzi zieleń. Podobnie działa ekran albo druk w gazecie.
+The printer only has 4 spools, but the layers are very thin. When blue and yellow layers alternate, from a distance your eye sees green. A screen or a printed newspaper works in a similar way.
 
-Irodori szuka 2–4 szpul, które razem najlepiej pokrywają kolory modelu, i tworzy z nich do 251 mieszanek. Każdy fragment modelu dostaje najbliższą mieszankę. Do oceny służy ΔE2000, czyli miara różnicy kolorów dopasowana do ludzkiego wzroku.
+Irodori looks for the 2–4 spools that together cover the model's colors best and builds up to 251 mixes from them. Each part of the model gets the closest mix. It scores results with ΔE2000, a measure of color difference designed around human vision.
 
-Pełny opis formatu eksportu, algorytmów i testów jest w [docs/technika.md](docs/technika.md).
+The export format, algorithms and tests are described in [docs/technical.md](docs/technical.md).
 
-## Co warto wiedzieć przed drukiem
+## Good to know before printing
 
-- **Tylko Snapmaker U1.** Projekty powstają dla tej drukarki i Snapmaker Orca 2.4. Tryb 5–8 głowic służy tylko do podglądu.
-- **Podgląd to przewidywanie.** Prawdziwy kolor zależy od partii filamentu i światła. Kalibracja kartą ma to poprawiać, ale nie została jeszcze sprawdzona na prawdziwym wydruku.
-- **Odpad bywa duży.** Mieszanki wymagają wieży czyszczącej. W jednym z testów wieża zużyła 58 g, a sam model 13,5 g.
-- **Bardzo duże modele są upraszczane.** Domyślny limit to 1 milion trójkątów.
-- **Testowane na Linuksie.** Pliki startowe dla Windows i macOS są gotowe, ale nie były sprawdzane na tych systemach. Jeśli coś nie działa, zgłoś to.
+- **Snapmaker U1 only.** Projects are made for this printer and Snapmaker Orca 2.4. The 5–8 toolhead mode is preview only.
+- **The preview is a prediction.** The real color depends on the filament batch and the light. Card calibration is meant to improve this, but it has not yet been checked on a real print.
+- **Waste can be high.** Mixes need a wipe tower. In one test the tower used 58 g and the model itself 13.5 g.
+- **Very large models are simplified.** The default limit is 1 million triangles.
+- **Tested on Linux.** The Windows and macOS launchers are included but have not been tried on those systems. If something fails, please report it.
+- **Translations are unreviewed.** They were written with an AI assistant, and native speakers have not checked them. Filament names stay as the catalog gives them.
 
-## Prywatność
+## Help translate
 
-Program działa tylko na Twoim komputerze i nasłuchuje wyłącznie na adresie `127.0.0.1`. Modele nie są nigdzie wysyłane. Internet jest potrzebny tylko przy pierwszym pobraniu bibliotek.
+Spotted a bad translation, or want your language? Edit the file for your language in [`frontend/i18n`](frontend/i18n) and open a pull request. [docs/technical.md](docs/technical.md) explains how to add a language.
 
-## Licencja
+## Privacy
 
-Kod jest dostępny na licencji [GNU AGPL-3.0](LICENSE). Część danych i logiki koloru pochodzi z OrcaSlicer i Snapmaker Orca.
+The program runs only on your computer and listens only on `127.0.0.1`. Models are not sent anywhere. Internet is only needed for the first download of the libraries.
 
-| Składnik | Licencja |
+## License
+
+The code is available under the [GNU AGPL-3.0](LICENSE). Some of the color logic and data come from OrcaSlicer and Snapmaker Orca.
+
+| Part | License |
 |---|---|
-| Model mieszania FilamentMixer (z Orca) | MIT |
+| FilamentMixer mixing model (from Orca) | MIT |
 | three.js, three-mesh-bvh | MIT |
 | Antykwa Toruńska | GUST Font License |
-| M PLUS 1, Shippori Mincho | SIL OFL 1.1 |
+| M PLUS 1, M PLUS 1p, Shippori Mincho | SIL OFL 1.1 |
 
-Irodori to niezależny projekt, niezwiązany z firmą Snapmaker ani producentami filamentów. Ich nazwy służą tylko do opisania zgodności.
+Irodori is an independent project, not affiliated with Snapmaker or any filament maker. Their names are used only to describe compatibility.

@@ -102,4 +102,4 @@ def card_mesh(n: int):
 def card_3mf(filaments: list[dict], layer_height: float = 0.10) -> bytes:
     mesh, state, recipes, _ = card_mesh(len(filaments))
     settings = Settings(layer_height=layer_height, colored_walls=2, take_interior=True, supports=False)
-    return write_project(mesh, state, filaments, recipes, "karta_kalibracyjna", settings)
+    return write_project(mesh, state, filaments, recipes, "calibration_card", settings)

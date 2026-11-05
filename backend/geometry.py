@@ -71,7 +71,7 @@ def mend_bodies(mesh: trimesh.Trimesh, rgb: np.ndarray, part: np.ndarray | None,
         if piece.area < 0.05:
             continue
         if progress:
-            progress(f"Naprawa nieszczelnych brył {k + 1}/{len(ids)}…")
+            progress(f"Repairing leaky solids {k + 1}/{len(ids)}…")
         try:
             solid = solidify(piece, SimpleNamespace(sample_points=piece.vertices), target_faces=40_000, min_pitch=0.12)
             trimesh.smoothing.filter_taubin(solid, iterations=40)
@@ -108,7 +108,7 @@ def build_print_mesh(src: SourceModel, max_triangles: int = 1_000_000, repair: s
     repaired = repair == "on" or (repair == "auto" and not mesh.is_watertight)
     if repaired:
         if progress:
-            progress("Naprawa geometrii (bryła szczelna do druku)…")
+            progress("Repairing the geometry (watertight solid for printing)…")
         solid = solidify(mesh, src, max_triangles)
         if len(solid.faces) > max_triangles:
             # coarser voxels instead of decimation, which would break watertightness

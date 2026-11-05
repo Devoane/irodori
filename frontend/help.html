@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="pl">
+<html lang="en" data-title="Irodori · Help">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Irodori · Pomoc</title>
+<title>Irodori · Help</title>
 <link rel="icon" href="logo.svg" type="image/svg+xml">
 <link rel="stylesheet" href="style.css">
 <style>
@@ -21,62 +21,57 @@
 <header class="bar">
   <a class="brand" href="./"><img src="logo.svg" alt="" width="38" height="38"><b>Irodori</b><span class="kanji" lang="ja">彩り</span></a>
   <div class="fala"></div>
-  <nav><a class="nav" href="./">← wróć</a></nav>
+  <nav><a class="nav" href="./">Back</a>
+    <label class="nav lang" title="Language"><select id="lang" aria-label="Language"></select></label></nav>
 </header>
 <main class="doc">
-  <section class="panel"><h2>Co robi Irodori</h2>
-    <p>Bierze kolorowy model i dobiera do niego 2–4 szpule. Brakujące odcienie robi z mieszanek, czyli receptur, w których kolejne warstwy
-      drukują się różnymi szpulami. Wynik to projekt 3MF dla Snapmaker Orca albo gotowy G-code dla Snapmaker U1. Wszystko liczy się
-      na tym komputerze: serwer słucha tylko na <code>127.0.0.1</code>, nic nie wychodzi do internetu.</p></section>
+  <section class="panel"><h2>What Irodori does</h2>
+    <p data-i18n-html>It takes a colored model and picks 2–4 spools for it. Missing shades come from mixes: recipes in which consecutive layers print with different spools. The result is a 3MF project for Snapmaker Orca or ready G-code for the Snapmaker U1. Everything is calculated on this computer: the server listens only on <code>127.0.0.1</code> and nothing goes to the internet.</p></section>
 
-  <section class="panel"><h2>Jak zacząć</h2>
-    <ol><li>Upuść model: GLB, OBJ (z plikami .mtl i teksturami), FBX (z teksturami) albo malowany 3MF z Bambu/Orca/Prusa.</li>
-      <li>Wybierz liczbę głowic i kliknij <b>Analizuj</b>.</li>
-      <li>Po prawej porównaj wyniki: kolory szpul, zgodność z modelem (%) i względny czas druku. Kliknięty wynik pokazuje się w podglądzie.</li>
-      <li>Pobierz <b>3MF</b> albo kliknij <b>G-code</b>, żeby pociąć projekt w Orce od razu.</li></ol></section>
+  <section class="panel"><h2>Getting started</h2>
+    <ol><li data-i18n-html>Drop a model: GLB, OBJ (with .mtl files and textures), FBX (with textures) or a painted 3MF from Bambu/Orca/Prusa.</li>
+      <li data-i18n-html>Choose the number of toolheads and click <b>Analyze</b>.</li>
+      <li data-i18n-html>On the right, compare the results: spool colors, match with the model (%) and relative print time. The clicked result appears in the preview.</li>
+      <li data-i18n-html>Download the <b>3MF</b> or click <b>G-code</b> to slice the project in Orca right away.</li></ol></section>
 
-  <section class="panel"><h2>Podgląd</h2>
-    <dl><dt>Wydruk</dt><dd>przewidywany wygląd wydruku (z kalibracji kartą, jeśli ją zrobiłeś)</dd>
-      <dt>W slicerze</dt><dd>dokładnie te kolory, które Snapmaker Orca pokaże po otwarciu projektu. Przy jednej recepturze na ściany są takie same jak „Wydruk”.</dd>
-      <dt>Model</dt><dd>kolory z pliku, z jasnością, nasyceniem i tęczą, jeśli je włączyłeś</dd>
-      <dt>Pędzel priorytetu</dt><dd>zamaluj ważny fragment (twarz, logo) i przelicz: zestawy dobierają się pod ten fragment, a model eksportuje się cały</dd>
-      <dt>Podstawka</dt><dd>15 wzorów; drugie kliknięcie zmienia rozmiar. Drukuje się jako osobna część tego samego obiektu.</dd></dl></section>
+  <section class="panel"><h2>Preview</h2>
+    <dl><dt>Print</dt><dd data-i18n-html>the predicted look of the print (from card calibration, if you did one)</dd>
+      <dt>In slicer</dt><dd data-i18n-html>exactly the colors Snapmaker Orca shows after opening the project. With one wall recipe they match "Print".</dd>
+      <dt>Model</dt><dd data-i18n-html>the colors from the file, with brightness, saturation and rainbow if you turned them on</dd>
+      <dt>Priority brush</dt><dd data-i18n-html>paint over an important part (face, logo) and recalculate: sets are chosen for that part, and the whole model is still exported</dd>
+      <dt>Base</dt><dd data-i18n-html>15 patterns; a second click changes the size. It prints as a separate part of the same object.</dd></dl></section>
 
-  <section class="panel"><h2>Wyniki</h2>
-    <dl><dt>% zgodności</dt><dd>100 − 2,5 × średni błąd ΔE2000 ważony powierzchnią. Służy do porównania wyników tej samej analizy.</dd>
-      <dt>czas ≈1,3×</dt><dd>szacunek względem najszybszego wyniku: pole powierzchni × liczba szpul w recepturze. Dokładny czas daje G-code.</dd>
-      <dt>Dokładność</dt><dd>„Najwyższa” szuka zestawów w całej bibliotece i dobiera mieszanki według tego, jak oko widzi różnicę kolorów; analiza trwa 2–4× dłużej, „Szybka” liczy jak dawniej</dd>
-      <dt>A / B / C</dt><dd>zamienniki białej lub czarnej szpuli w zestawach CMY</dd>
-      <dt>◎ i ↺</dt><dd>zmiana koloru szpuli na swój (wynik liczy się od nowa) i powrót do zaproponowanego</dd>
-      <dt>Moje kolory</dt><dd>same wypełniają się szpulami z T1–T4 („Moje filamenty”); zmień dowolny kolor, a wynik przeliczy się sam</dd></dl></section>
+  <section class="panel"><h2>Results</h2>
+    <dl><dt>% match</dt><dd data-i18n-html>100 − 2.5 × mean ΔE2000 error weighted by area. Use it to compare results of the same analysis.</dd>
+      <dt>time ≈1.3×</dt><dd data-i18n-html>an estimate relative to the fastest result: surface area × number of spools in the recipe. G-code gives the exact time.</dd>
+      <dt>Accuracy</dt><dd data-i18n-html>"Highest" searches sets across the whole library and picks mixes by how the eye sees color difference; analysis takes 2–4× longer. "Fast" skips that.</dd>
+      <dt>A / B / C</dt><dd data-i18n-html>substitutes for the white or black spool in CMY sets</dd>
+      <dt>◎ and ↺</dt><dd data-i18n-html>change a spool color to your own (the result is recalculated) and return to the suggested one</dd>
+      <dt>My colors</dt><dd data-i18n-html>fill in by themselves from the spools in T1–T4 ("My filaments"); change any color and the result recalculates by itself</dd></dl></section>
 
-  <section class="panel"><h2>Ustawienia</h2>
-    <p>Kropka przy ustawieniu mówi, kiedy działa: <span class="dot re"></span> zmiana wymaga przeliczenia,
-      <span class="dot ex"></span> działa przy następnym pobraniu.</p>
-    <dl><dt>Liczba kolorów</dt><dd>„ile trzeba” zatrzymuje dobieranie mieszanek, gdy kolejne prawie nic nie poprawiają; „tylko szpule” nie miesza</dd>
-      <dt>Dwie receptury ścian</dt><dd>osobny wzór dla zewnętrznej ściany. Bierze tylko pary, które Orca pokaże w kolorze wydruku. Domyślnie wyłączone:
-        jedna receptura daje zgodność slicer = podgląd = wydruk i jest kilka razy szybsza.</dd>
-      <dt>Kolor w głąb</dt><dd>kolor przez cały przekrój zamiast samego pasa ścian; zwykle mniej szwów i krótszy druk</dd>
-      <dt>Splot na dachach</dt><dd>płaskie góry dostają wzór mieszanki zamiast jednego koloru</dd>
-      <dt>Scalanie drobinek</dt><dd>łączy małe plamy koloru z sąsiadami; mniej przejść szpul, mniej detalu</dd>
-      <dt>Grube warstwy bez mieszania</dt><dd>na wysokościach, gdzie nic się nie miesza, warstwa jest grubsza</dd>
-      <dt>Cienkie warstwy pod dachami</dt><dd>płaskie dachy o realnej powierzchni dostają cieńsze warstwy</dd>
-      <dt>Zatopienie w stole</dt><dd>obcina spód modelu na tyle milimetrów</dd>
-      <dt>Wtapianie nakładek</dt><dd>półprzezroczyste naklejki i oczy w GLB mieszają się z powierzchnią pod spodem</dd>
-      <dt>Tęcza</dt><dd>zastępuje kolory modelu spiralą tęczy</dd></dl></section>
+  <section class="panel"><h2>Settings</h2>
+    <p data-i18n-html>The dot next to a setting tells when it applies: <span class="dot re"></span> a change requires recalculating, <span class="dot ex"></span> it applies to the next download.</p>
+    <dl><dt>Number of colors</dt><dd data-i18n-html>"as many as needed" stops adding mixes when the next ones improve almost nothing; "spools only" does not mix</dd>
+      <dt>Two wall recipes</dt><dd data-i18n-html>a separate pattern for the outer wall. Only uses pairs that Orca shows in the print color. Off by default: one recipe gives slicer = preview = print and is several times faster.</dd>
+      <dt>Color all the way in</dt><dd data-i18n-html>color through the whole cross-section instead of only the wall band; usually fewer seams and a shorter print</dd>
+      <dt>Weave on flat tops</dt><dd data-i18n-html>flat tops get a mix pattern instead of a single color</dd>
+      <dt>Merge specks</dt><dd data-i18n-html>merges small color patches with their neighbors; fewer spool changes, less detail</dd>
+      <dt>Thick layers without mixing</dt><dd data-i18n-html>the layer is thicker at heights where nothing is mixed</dd>
+      <dt>Thin layers under flat tops</dt><dd data-i18n-html>flat tops with a real area get thinner layers</dd>
+      <dt>Sink into the bed</dt><dd data-i18n-html>cuts that many millimeters off the bottom of the model</dd>
+      <dt>Blend overlays</dt><dd data-i18n-html>semi-transparent decals and eyes in a GLB blend with the surface beneath</dd>
+      <dt>Rainbow</dt><dd data-i18n-html>replaces the model colors with a rainbow spiral</dd></dl></section>
 
-  <section class="panel"><h2>Kalibracja kartą</h2>
-    <p>Kalibracja → wybierz zestaw → pobierz kartę 3MF, wydrukuj, sfotografuj na wprost w rozproszonym świetle, wgraj zdjęcie i kliknij 4 rogi.
-      Drukuj przy wysokości warstwy, której zwykle używasz. Po przeliczeniu kolory „Wydruk” biorą się z Twojego zdjęcia zamiast z modelu mieszania.</p>
-    <p>Program podaje błąd na polach sprawdzających, czyli takich, które pominął przy dopasowaniu, i porównuje go z samym modelem. Kalibracja, która niczego nie poprawia albo ma błąd od ΔE 8 wzwyż, nie jest zapisywana.
-      Pomiary należą do szpul i ich par, więc inny zestaw z tych samych szpul nie wymaga nowej karty.</p></section>
+  <section class="panel"><h2>Card calibration</h2>
+    <p data-i18n-html>Calibration → choose a set → download the 3MF card, print it, photograph it head-on in diffuse light, upload the photo and click the 4 corners. Print at the layer height you usually use. After recalculating, "Print" colors come from your photo instead of the mixing model.</p>
+    <p data-i18n-html>The program reports the error on check tiles, which it left out of the fit, and compares it with the model alone. A calibration that improves nothing or has an error of ΔE 8 or more is not saved. Measurements belong to spools and their pairs, so another set of the same spools needs no new card.</p></section>
 
-  <section class="panel"><h2>Uruchamianie na innych systemach</h2>
-    <dl><dt>Windows</dt><dd>zainstaluj Pythona 3.11+ z python.org, potem dwuklik <code>Irodori.bat</code></dd>
-      <dt>macOS</dt><dd>dwuklik <code>Irodori.command</code> (Python 3.11+)</dd>
+  <section class="panel"><h2>Running on other systems</h2>
+    <dl><dt>Windows</dt><dd data-i18n-html>install Python 3.11+ from python.org, then double-click <code>Irodori.bat</code></dd>
+      <dt>macOS</dt><dd data-i18n-html>double-click <code>Irodori.command</code> (Python 3.11+)</dd>
       <dt>Linux</dt><dd><code>./run.sh</code></dd></dl>
-    <p>Pierwsze uruchomienie tworzy folder <code>.venv</code> i instaluje zależności. Snapmaker Orca (dla G-code) i Blender (dla FBX)
-      są wyszukiwane automatycznie; inną ścieżkę podasz w <code>IRODORI_ORCA</code> i <code>IRODORI_BLENDER</code>.</p></section>
+    <p data-i18n-html>The first run creates a <code>.venv</code> folder and installs the dependencies. Snapmaker Orca (for G-code) and Blender (for FBX) are found automatically; set another path in <code>IRODORI_ORCA</code> and <code>IRODORI_BLENDER</code>.</p></section>
 </main>
+<script type="module" src="help.js"></script>
 </body>
 </html>

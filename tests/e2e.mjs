@@ -10,7 +10,7 @@ page.on('pageerror', (e) => errors.push(String(e)));
 const log = (...a) => console.log(...a);
 const idle = () => page.waitForFunction(() => !document.querySelector('#status .spin'), null, { timeout: 900000 });
 const done = async () => {
-  await page.waitForFunction(() => document.querySelector('#resultsTitle').textContent.startsWith('Wyniki'), null, { timeout: 900000 });
+  await page.waitForFunction(() => document.querySelector('#resultsTitle').textContent.startsWith('Results'), null, { timeout: 900000 });
   await idle();
 };
 const rows = () => page.$$eval('.rowcard:not([hidden])', (els) => els.map((e) => `${e.querySelector('h3').textContent} | ${e.querySelector('.m').textContent} | ${e.querySelector('.time')?.textContent.trim() || '-'}`));

@@ -1,0 +1,22 @@
+{
+"{n} similar": {
+"one": "{n} similar",
+"other": "{n} similar"
+},
+"{n} mixes": {
+"one": "{n} mix",
+"other": "{n} mixes"
+},
+"{n} extra files": {
+"one": "{n} extra file",
+"other": "{n} extra files"
+},
+"priority: {n} triangles": {
+"one": "priority: {n} triangle",
+"other": "priority: {n} triangles"
+},
+"only {n} spools": {
+"one": "only {n} spool",
+"other": "only {n} spools"
+}
+}

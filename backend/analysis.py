@@ -106,7 +106,7 @@ def _run(s: Session):
             s.progress = 0.0
             src_key = (st.longest_side, st.bake_overlays)
             if s.src is None or s.src_key != src_key:
-                _status(s, "load", "Wczytywanie modelu i próbkowanie tekstury…", 0.03)
+                _status(s, "load", "Loading the model and sampling the texture…", 0.03)
                 s.src, s.warnings = load_source(s.files, s.main, st.longest_side, st.bake_overlays)
                 s.src_key = src_key
                 s.mesh = None
@@ -119,7 +119,7 @@ def _run(s: Session):
                 s.face_part = s.mesh.metadata.get("face_part") if s.src.is_exact else None
                 s.preview_glb = s.src.preview_glb
                 if st.base:
-                    _status(s, "geometry", f"Dodawanie podstawki „{STYLES[st.base][0]}”…")
+                    _status(s, "geometry", f'Adding base "{STYLES[st.base][0]}"…')
                     n_model = len(s.mesh.faces)
                     s.mesh, s.face_rgb, is_base, lift = attach_base(s.mesh, s.face_rgb, st.base, st.base_size)
                     part = s.face_part if s.face_part is not None else np.zeros(n_model, dtype=np.int64)
@@ -131,7 +131,7 @@ def _run(s: Session):
                 s.version += 1
                 if len(s.mesh.faces) != n_before:
                     s.focus = None
-            _status(s, "targets", "Analiza kolorów modelu…", 0.35)
+            _status(s, "targets", "Analyzing model colors…", 0.35)
             s.target_rgb = target_colors(s.mesh, s.face_rgb, st)
             targets = _targets(s)
             exact = None
@@ -142,7 +142,7 @@ def _run(s: Session):
             plans, s.ranking = _plans(s, st, targets)
             rows = []
             for i, (title, fil, fam, extra) in enumerate(plans):
-                _status(s, "rows", f"Budowanie palety {i + 1}/{len(plans)}: {title}", 0.6 + 0.38 * i / len(plans))
+                _status(s, "rows", f"Building palette {i + 1}/{len(plans)}: {title}", 0.6 + 0.38 * i / len(plans))
                 row = build_row(title, fil, targets, st, fam, correction=load_correction([f["id"] for f in fil]),
                                 exact_rgb=exact, adjacency=s.adj, face_area=s.area)
                 row.grouped = extra.get("grouped", 0)
@@ -158,11 +158,11 @@ def _run(s: Session):
             s.rows = rows
             s.analysed_settings = replace(st)
             s.diag = _diagnostics(s, st, time.time() - t0)
-            _status(s, "done", f"Gotowe w {time.time() - t0:.1f} s", 1.0)
+            _status(s, "done", f"Done in {time.time() - t0:.1f} s", 1.0)
         except Exception as e:
             traceback.print_exc()
             s.error = str(e)
-            _status(s, "error", f"Błąd: {e}")
+            _status(s, "error", f"Error: {e}")
         finally:
             s.busy = False
 
@@ -206,19 +206,19 @@ def _plans(s: Session, st: Settings, targets: Targets):
     ready = st.toolheads <= 4 and len(loaded) == st.toolheads and all(i in by_id for i in loaded)
     if st.source == "loaded":
         if st.toolheads > 4:
-            raise ValueError("„Założone w drukarce” działa dla 2–4 głowic (Snapmaker U1)")
+            raise ValueError('"Loaded in the printer" works for 2–4 toolheads (Snapmaker U1)')
         if not ready:
-            raise ValueError(f"Ustaw filamenty T1–T{st.toolheads} w oknie „Moje filamenty”")
+            raise ValueError(f'Set filaments T1–T{st.toolheads} in the "My filaments" window')
         owned = sorted(set(owned) | set(loaded))
     # the spools in the printer are always a row, next to the library proposals
     if ready:
-        plans.append(("Założone w drukarce", [by_id[i] for i in loaded], "loaded", {}))
+        plans.append(("Loaded in the printer", [by_id[i] for i in loaded], "loaded", {}))
     if st.toolheads == 4:
         plans += [p for p in preset_rows(st) if owned is None or set(f["id"] for f in p[1]) <= set(owned)]
     ranking = []
     if not (st.source == "library" and st.toolheads == 4 and st.cmyk_optimized) and \
             (owned is None or len(owned) >= st.toolheads):
-        _status(s, "search", "Szukanie najlepszych zestawów filamentów…", 0.4)
+        _status(s, "search", "Searching for the best filament sets…", 0.4)
 
         def prog(m):
             k = re.match(r".*?(\d+)/(\d+)", m)
@@ -229,10 +229,10 @@ def _plans(s: Session, st: Settings, targets: Targets):
         # the CMY families come on top of the requested samples; precise mode builds
         # twice as many full palettes and keeps the best (the estimate is only a guide)
         best = diverse(ranking, st.samples * (2 if st.precise else 1), st.toolheads, taken)
-        label = "Z moich szpul" if owned is not None else "Propozycja"
+        label = "From my spools" if owned is not None else "Suggestion"
         plans += [(label, [by_id[x] for x in r["ids"]], "search", {"grouped": r["grouped"]}) for r in best]
     if not plans:
-        raise ValueError("Brak zestawów do policzenia: zaznacz posiadane filamenty w oknie „Moje filamenty”")
+        raise ValueError('No sets to calculate: tick the filaments you own in the "My filaments" window')
     return plans, ranking
 
 
@@ -245,10 +245,10 @@ def set_row(s: Session, ids: list[str], like: Row | None = None, loaded: bool = 
     if like is not None:
         title, family = like.title, like.family
     elif loaded:
-        title, family = "Założone w drukarce", "loaded"
+        title, family = "Loaded in the printer", "loaded"
     else:
         est = next((r["match"] for r in s.ranking if r["ids"] == ids), None)
-        title, family = "Z rankingu" + (f" (szac. {est}%)" if est is not None else ""), "search"
+        title, family = "From the ranking" + (f" (est. {est}%)" if est is not None else ""), "search"
     row = build_row(title, fil, _targets(s), s.analysed_settings or s.settings, family,
                     correction=load_correction(ids), adjacency=s.adj, face_area=s.area)
     if like is not None:
@@ -271,9 +271,9 @@ def custom_row(s: Session, base: Row, hexes: list[str]) -> Row:
     for f, h in zip(base.filaments, hexes):
         nf = dict(f)
         if h.upper() != f["hex"].upper():
-            nf.update(hex=h.upper(), name=f"Własny {h.upper()}", brand="Własny", id=f"custom-{h.upper()}")
+            nf.update(hex=h.upper(), name=f"Custom {h.upper()}", brand="Custom", id=f"custom-{h.upper()}")
         fil.append(nf)
-    return build_row("Moje kolory", fil, _targets(s), s.analysed_settings or s.settings, "custom",
+    return build_row("My colors", fil, _targets(s), s.analysed_settings or s.settings, "custom",
                      correction=load_correction([f["id"] for f in fil]), adjacency=s.adj, face_area=s.area)
 
 
@@ -299,13 +299,13 @@ def start_gcode(s: Session, row: Row, settings: Settings) -> Job:
             job.dir = Path(tempfile.mkdtemp(prefix="irodori_gcode_"))
             project = job.dir / "project.3mf"
             project.write_bytes(project_bytes(s, row, settings))
-            job.message = "Cięcie w Snapmaker Orca (może potrwać kilka minut)…"
+            job.message = "Slicing in Snapmaker Orca (this can take a few minutes)…"
             job.result = slice_project(project, job.dir / "out")
-            job.message = "Gotowe"
+            job.message = "Done"
         except Exception as e:
             traceback.print_exc()
             job.error = str(e)
-            job.message = f"Błąd: {e}"
+            job.message = f"Error: {e}"
         finally:
             job.busy = False
 

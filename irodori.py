@@ -41,7 +41,7 @@ def ensure_venv():
     if in_venv():
         return
     if not venv_python().exists():
-        print("Pierwsze uruchomienie: tworzę środowisko w .venv i instaluję zależności…", flush=True)
+        print("First run: creating the .venv environment and installing dependencies…", flush=True)
         venv.create(VENV, with_pip=True)
         subprocess.check_call([str(venv_python()), "-m", "pip", "install", "--disable-pip-version-check", "-q",
                                "-r", str(ROOT / "requirements.txt")])
@@ -65,13 +65,13 @@ def stop():
     try:
         pid = int(PIDFILE.read_text(encoding="utf-8"))
     except (OSError, ValueError):
-        print("Irodori nie działa.")
+        print("Irodori is not running.")
         return
     try:
         os.kill(pid, signal.SIGTERM)
-        print("Zatrzymano.")
+        print("Stopped.")
     except OSError:
-        print("Irodori nie działa.")
+        print("Irodori is not running.")
     PIDFILE.unlink(missing_ok=True)
 
 

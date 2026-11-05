@@ -14,5 +14,5 @@ out = Path(sys.argv[2] if len(sys.argv) > 2 else tempfile.mkdtemp(prefix="irodor
 try:
     print("OK:", out, slice_project(src, out))
 except RuntimeError as e:
-    print("BŁĄD:", e, "| log:", out / "orca.log")
+    print("ERROR:", e, "| log:", out / "orca.log")
     sys.exit(1)

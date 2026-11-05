@@ -54,15 +54,15 @@ class LocalOnly(BaseHTTPMiddleware):
     async def dispatch(self, request, call_next):
         h = request.headers
         if _host(h.get("host", "")) not in LOOPBACK:
-            return PlainTextResponse("Zły nagłówek Host", status_code=421)
+            return PlainTextResponse("Bad Host header", status_code=421)
         origin = h.get("origin")
         if origin and origin != "null" and _host(urlsplit(origin).netloc) not in LOOPBACK:
-            return PlainTextResponse("Żądanie z innej strony", status_code=403)
+            return PlainTextResponse("Request from another site", status_code=403)
         if h.get("sec-fetch-site") == "cross-site" or (origin == "null" and request.method not in ("GET", "HEAD")):
-            return PlainTextResponse("Żądanie z innej strony", status_code=403)
+            return PlainTextResponse("Request from another site", status_code=403)
         length = h.get("content-length") or "0"
         if not length.isdigit() or int(length) > MAX_UPLOAD:
-            return PlainTextResponse("Plik jest za duży (limit 1 GiB)", status_code=413)
+            return PlainTextResponse("The file is too large (limit 1 GiB)", status_code=413)
         response = await call_next(request)
         for k, v in self.headers.items():
             response.headers.setdefault(k, v)
@@ -75,5 +75,5 @@ def safe_name(name: str | None) -> str:
     """A bare file name from an upload: no folders, no '..', no hidden files."""
     base = PurePath((name or "").replace("\\", "/")).name.strip()
     if base in ("", ".", "..") or base.startswith("."):
-        raise ValueError(f"Niedozwolona nazwa pliku: {name!r}")
+        raise ValueError(f"Forbidden file name: {name!r}")
     return base[:200]

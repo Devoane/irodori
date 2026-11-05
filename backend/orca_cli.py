@@ -57,7 +57,7 @@ def slice_project(project: Path, out: Path, timeout: int = 3600) -> dict:
         log = r.stdout + r.stderr
         detail = re.search(r"message=(It seems object .*? floating regions[^,]*)", log) or \
             re.search(r"got error when validate: (.+)", log)
-        raise RuntimeError(detail.group(1).strip() if detail else (msg or f"Orca zakończyła się kodem {r.returncode}"))
+        raise RuntimeError(detail.group(1).strip() if detail else (msg or f"Orca exited with code {r.returncode}"))
     text = g.read_text(encoding="utf-8", errors="ignore")
     info = dict(re.findall(r"^; (total filament change|estimated printing time \(normal mode\)|total filament used \[g\]) = (.*)$",
                            text, re.M))

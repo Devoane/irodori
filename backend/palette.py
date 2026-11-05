@@ -21,7 +21,8 @@ INVENTORY = DATA / "inventory.json"
 def load_inventory() -> dict:
     """owned: library/custom ids the user has, custom: own filaments, loaded: ids in T1..Tn."""
     inv = json.loads(INVENTORY.read_text(encoding="utf-8")) if INVENTORY.exists() else {}
-    return {"owned": inv.get("owned", []), "custom": inv.get("custom", []), "loaded": inv.get("loaded", [])}
+    custom = [{**c, "brand": "Custom"} for c in inv.get("custom", [])]
+    return {"owned": inv.get("owned", []), "custom": custom, "loaded": inv.get("loaded", [])}
 
 
 def save_inventory(inv: dict):
@@ -402,7 +403,7 @@ def rank_sets(targets: Targets, settings: Settings, owned: list[str] | None = No
     if owned is not None:
         pool = sorted({i for i, f in enumerate(fil) if f["id"] in set(owned)})
         if len(pool) < P:
-            raise ValueError(f"Masz zaznaczone {len(pool)} filamenty, a głowic jest {P}")
+            raise ValueError(f"You selected {len(pool)} filaments but there are {P} toolheads")
     else:
         rng = np.random.default_rng(0)
         pick = rng.choice(len(targets.ok), size=min(4000, len(targets.ok)), p=targets.w, replace=True)
@@ -420,7 +421,7 @@ def rank_sets(targets: Targets, settings: Settings, owned: list[str] | None = No
         near = _dist(targets.ok, lib_ok[pool]).min(axis=0)
         pool = sorted(np.array(pool)[np.argsort(near)[:15]].tolist())
     combos = _combos(pool, lib_rgb, P)
-    progress(f"Szybka ocena {len(combos)} zestawów…")
+    progress(f"Quick evaluation of {len(combos)} sets…")
     quick = _quick_scores(targets, combos, lib_rgb, lib_ok)
     best = [combos[i] for i in np.argsort(quick)[:max(top * 2, 200 if settings.precise else 40)]]
     small = targets.coarse(1200 if settings.precise else 700)
@@ -433,7 +434,7 @@ def rank_sets(targets: Targets, settings: Settings, owned: list[str] | None = No
         return found[key]
 
     for k, combo in enumerate(best):
-        progress(f"Dokładna ocena zestawów {k + 1}/{len(best)}…")
+        progress(f"Detailed evaluation of sets {k + 1}/{len(best)}…")
         est(combo)
     if settings.precise:
         index = {f["id"]: i for i, f in enumerate(fil)}
@@ -442,7 +443,7 @@ def rank_sets(targets: Targets, settings: Settings, owned: list[str] | None = No
         starts += [frozenset(index[i] for i in ids) for ids in seeds
                    if len(ids) == P and all(i in index for i in ids)]
         for k, start in enumerate(dict.fromkeys(starts)):
-            progress(f"Dopracowanie zestawów: wymiana szpul {k + 1}/{len(starts)}…")
+            progress(f"Refining sets: swapping spools {k + 1}/{len(starts)}…")
             _improve(tuple(start), est, targets, allowed, lib_rgb, lib_ok)
     out = [{"ids": [fil[i]["id"] for i in _slot_order(c, lib_ok)], "match": m} for c, m in found.items()]
     out.sort(key=lambda r: -r["match"])

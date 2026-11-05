@@ -148,7 +148,7 @@ def load_glb(data: bytes, longest_side_mm: float = 0.0, max_samples: int = 4_000
         m.apply_transform(T)
         meshes.append(m)
     if not meshes:
-        raise ValueError("GLB nie zawiera siatki trójkątów")
+        raise ValueError("The GLB has no triangle mesh")
     # Y-up -> Z-up, scale to longest side, drop onto the plate
     bounds = np.array([m.bounds for m in meshes])
     lo = bounds[:, 0].min(axis=0)
@@ -268,7 +268,7 @@ def load_painted_3mf(data: bytes) -> SourceModel:
     zf = zipfile.ZipFile(io.BytesIO(data))
     info = zf.infolist()
     if len(info) > 20_000 or sum(i.file_size for i in info) > MAX_UNPACKED:
-        raise ValueError("3MF po rozpakowaniu jest za duży")
+        raise ValueError("The 3MF is too large when unpacked")
     names = zf.namelist()
     root = zf.read("3D/3dmodel.model")
     files = {"/3D/3dmodel.model": _parse_objects(root)}
@@ -281,7 +281,7 @@ def load_painted_3mf(data: bytes) -> SourceModel:
         ps = {}
     colours = [c for c in ps.get("filament_colour", []) if c]
     if not colours:
-        raise ValueError("3MF nie ma filament_colour w project_settings.config")
+        raise ValueError("The 3MF has no filament_colour in project_settings.config")
     palette = _state_colours(colours, ps.get("mixed_filament_definitions", ""))
     obj_ext, part_ext = _model_settings_extruders(zf)
 
@@ -311,7 +311,7 @@ def load_painted_3mf(data: bytes) -> SourceModel:
             emit("/3D/3dmodel.model", a["objectid"], _transform(a.get("transform")), obj_ext.get(a["objectid"], 1),
                  a["objectid"])
     if not F:
-        raise ValueError("3MF nie zawiera siatek")
+        raise ValueError("The 3MF has no meshes")
     verts, faces, states, origin = expand_painted_mesh(np.concatenate(V), np.concatenate(F), P, np.array(ST))
     face_rgb = palette[np.clip(states, 1, len(palette)) - 1]
     mesh = trimesh.Trimesh(verts, faces, process=False)
@@ -380,7 +380,7 @@ def fbx_to_glb(files: dict[str, bytes], main: str) -> tuple[bytes, list[str]]:
                            capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=600)
         if not out.exists():
             tail = (r.stdout + r.stderr).strip().splitlines()[-5:]
-            raise ValueError("Blender nie przekonwertował FBX: " + " / ".join(tail))
+            raise ValueError("Blender could not convert the FBX: " + " / ".join(tail))
         missing = []
         for line in r.stdout.splitlines():
             if line.startswith("FSD_MISSING="):
@@ -414,7 +414,7 @@ def obj_to_glb(files: dict[str, bytes], main: str) -> tuple[bytes, list[str]]:
             mtl.write_text(body, encoding="utf-8")
         scene = trimesh.load(Path(tmp) / Path(main).name, force="scene", process=False)
         if not scene.geometry:
-            raise ValueError("OBJ nie zawiera siatki trójkątów")
+            raise ValueError("The OBJ has no triangle mesh")
         return scene.export(file_type="glb"), sorted(set(missing))
 
 
@@ -428,10 +428,10 @@ def load_source(files: dict[str, bytes], main: str, longest_side_mm: float = 0.0
         return load_painted_3mf(files[main]), []
     if fn.endswith(".fbx"):
         glb, missing = fbx_to_glb(files, main)
-        warn = [f"Brak tekstury: {Path(m).name}" for m in missing]
+        warn = [f"Missing texture: {Path(m).name}" for m in missing]
         return load_glb(glb, longest_side_mm, bake=bake), warn
     if fn.endswith(".obj"):
         glb, missing = obj_to_glb(files, main)
         # OBJ has no unit; most exporters write millimetres, Auto falls back to 50 mm when it does not fit
         return load_glb(glb, longest_side_mm, unit_mm=1.0, bake=bake), [f"Brak pliku: {m}" for m in missing]
-    raise ValueError("Obsługiwane formaty: GLB, FBX (z teksturami), OBJ (z MTL i teksturami), pomalowany 3MF (Bambu/Orca)")
+    raise ValueError("Supported formats: GLB, FBX (with textures), OBJ (with MTL and textures), painted 3MF (Bambu/Orca)")

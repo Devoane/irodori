@@ -477,3 +477,28 @@ def test_calibration_rejects_scrambled_photo():
     _, bad = calibration.fit(fr, np.random.default_rng(3).permutation(photo), nominal, pure)
     assert calibration.acceptable(good)
     assert not calibration.acceptable(bad)
+
+
+def test_translations_cover_the_same_keys_and_placeholders():
+    import re
+    folder = Path(__file__).resolve().parent.parent / "frontend" / "i18n"
+    marks = lambda s: sorted(re.findall(r"\{\w+\}|<[^>]+>", s))
+    locales = {p.stem: json.loads(p.read_text(encoding="utf-8")) for p in folder.glob("*.json") if p.stem != "en"}
+    keys = set(next(iter(locales.values())))
+    for code, data in locales.items():
+        assert set(data) == keys, code
+        for key, value in data.items():
+            if isinstance(value, str):
+                assert marks(key) == marks(value), (code, key)
+            else:
+                assert "other" in value and all("{n}" in v for v in value.values()), (code, key)
+
+
+def test_every_string_the_interface_uses_has_a_translation():
+    import re
+    root = Path(__file__).resolve().parent.parent / "frontend"
+    keys = set(json.loads((root / "i18n" / "ja.json").read_text(encoding="utf-8")))
+    js = (root / "app.js").read_text(encoding="utf-8")
+    used = set(re.findall(r"\bt\('((?:[^'\\]|\\.)+)'", js)) | set(re.findall(r"\btn\('([^']+)'", js))
+    used |= set(re.findall(r"setStatus\('([^']+)'", js))
+    assert not {u.replace("\\'", "'") for u in used} - keys

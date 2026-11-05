@@ -75,13 +75,13 @@ def _settings(raw: str | None, base: Settings | None = None) -> Settings:
 def _session(sid: str) -> analysis.Session:
     s = analysis.SESSIONS.get(sid)
     if s is None:
-        raise HTTPException(404, "Sesja wygasła, wczytaj model ponownie")
+        raise HTTPException(404, "Session expired, load the model again")
     return s
 
 
 def _row(s: analysis.Session, idx: int):
     if not (0 <= idx < len(s.rows)):
-        raise HTTPException(404, "Brak takiego wiersza palety")
+        raise HTTPException(404, "No such palette row")
     return s.rows[idx]
 
 
@@ -99,7 +99,7 @@ async def api_analyze(files: list[UploadFile] = File(...), settings: str = Form(
     blobs = {safe_name(f.filename): await f.read() for f in files}
     main = next((n for n in blobs if n.lower().endswith(MODEL_EXT)), None)
     if main is None:
-        raise HTTPException(400, "Wybierz plik GLB, FBX, OBJ albo 3MF")
+        raise HTTPException(400, "Choose a GLB, FBX, OBJ or 3MF file")
     s = analysis.new_session(blobs, main, _settings(settings))
     analysis.start(s)
     return {"session": s.id}
@@ -109,7 +109,7 @@ async def api_analyze(files: list[UploadFile] = File(...), settings: str = Form(
 async def api_reanalyze(sid: str, settings: str = Form("{}"), focus: str = Form("")):
     s = _session(sid)
     if s.busy:
-        raise HTTPException(409, "Analiza w toku")
+        raise HTTPException(409, "Analysis in progress")
     mask = None
     if focus and s.area is not None:
         bits = np.frombuffer(base64.b64decode(focus), dtype=np.uint8)
@@ -135,7 +135,7 @@ def api_status(sid: str):
 def api_source(sid: str):
     s = _session(sid)
     if s.src is None:
-        raise HTTPException(409, "Model jeszcze się wczytuje")
+        raise HTTPException(409, "The model is still loading")
     return Response(s.preview_glb or s.src.preview_glb, media_type="model/gltf-binary")
 
 
@@ -144,7 +144,7 @@ def api_mesh(sid: str):
     """uint32 nV, nF | float32 vertices | uint32 faces | uint8 source rgb per face."""
     s = _session(sid)
     if s.mesh is None:
-        raise HTTPException(409, "Geometria jeszcze się przygotowuje")
+        raise HTTPException(409, "The geometry is still being prepared")
     v = np.ascontiguousarray(s.mesh.vertices, dtype=np.float32)
     f = np.ascontiguousarray(s.mesh.faces, dtype=np.uint32)
     c = np.ascontiguousarray(np.clip(np.round(s.face_rgb), 0, 255), dtype=np.uint8)
@@ -160,15 +160,15 @@ def api_labels(sid: str, idx: int):
 
 @app.post("/api/recolor/{sid}/{idx}")
 async def api_recolor(sid: str, idx: int, colors: str = Form(...), replace: int = Form(0)):
-    """Palette for the user's own colours: a new "Moje kolory" row, or with
+    """Palette for the user's own colours: a new "My colors" row, or with
     replace=1 the edited row itself (same title, other swatches)."""
     s = _session(sid)
     if s.busy:
-        raise HTTPException(409, "Analiza w toku")
+        raise HTTPException(409, "Analysis in progress")
     base = _row(s, idx)
     hexes = json.loads(colors)
     if len(hexes) != len(base.filaments):
-        raise HTTPException(400, "Zła liczba kolorów")
+        raise HTTPException(400, "Wrong number of colors")
     for h in hexes:
         hex_to_rgb(h)
     row = analysis.custom_row(s, base, hexes)
@@ -186,7 +186,7 @@ def api_export(sid: str, idx: int, settings: str = ""):
     s = _session(sid)
     r = _row(s, idx)
     data = analysis.project_bytes(s, r, _settings(settings, s.analysed_settings or s.settings))
-    return _download(data, f"{Path(s.main).stem}_irodori_{len(r.recipes)}kol.3mf",
+    return _download(data, f"{Path(s.main).stem}_irodori_{len(r.recipes)}colors.3mf",
                      "application/vnd.ms-package.3dmanufacturing-3dmodel+xml")
 
 
@@ -194,7 +194,7 @@ def api_export(sid: str, idx: int, settings: str = ""):
 def api_export_glb(sid: str, idx: int):
     s = _session(sid)
     r = _row(s, idx)
-    return _download(predicted_glb(s.mesh, r.entry_rgb[r.labels]), f"{Path(s.main).stem}_przewidywany.glb",
+    return _download(predicted_glb(s.mesh, r.entry_rgb[r.labels]), f"{Path(s.main).stem}_predicted.glb",
                      "model/gltf-binary")
 
 
@@ -210,7 +210,7 @@ def api_gcode(sid: str, idx: int, settings: str = Form("")):
 def api_gcode_status(sid: str, jid: str):
     job = _session(sid).jobs.get(jid)
     if job is None:
-        raise HTTPException(404, "Brak zadania")
+        raise HTTPException(404, "No such job")
     return {"busy": job.busy, "message": job.message, "error": job.error, "result": job.result}
 
 
@@ -219,13 +219,13 @@ def api_gcode_file(sid: str, jid: str, kind: str):
     s = _session(sid)
     job = s.jobs.get(jid)
     if job is None or job.busy or job.error:
-        raise HTTPException(404, "G-code nie jest gotowy")
+        raise HTTPException(404, "The G-code is not ready")
     stem = Path(s.main).stem
     if kind == "gcode":
         return FileResponse(job.dir / "out" / "plate_1.gcode", filename=f"{stem}_irodori.gcode")
     if kind == "3mf":
         return FileResponse(job.dir / "out" / "sliced.3mf", filename=f"{stem}_irodori.gcode.3mf")
-    raise HTTPException(404, "Nieznany plik")
+    raise HTTPException(404, "Unknown file")
 
 
 @app.get("/api/library")
@@ -243,7 +243,7 @@ async def api_inventory(request: Request):
     for c in raw.get("custom", []):
         h = rgb_to_hex(hex_to_rgb(c["hex"]))
         td = c.get("td")
-        custom.append({"id": f"custom-{h[1:]}", "brand": "Własny", "name": str(c.get("name") or h)[:40], "hex": h,
+        custom.append({"id": f"custom-{h[1:]}", "brand": "Custom", "name": str(c.get("name") or h)[:40], "hex": h,
                        "td": float(td) if td not in (None, "") else None, "profile": str(c.get("profile") or "")[:120]})
     ids = {f["id"] for f in json.loads((ROOT / "data" / "filaments.json").read_text(encoding="utf-8"))["filaments"]}
     ids |= {c["id"] for c in custom}
@@ -267,11 +267,11 @@ async def api_set(sid: str, ids: str = Form(...), replace: int = Form(-1), loade
     neutral filament (A/B/C) in place; with loaded=1 the row is the printer's spools."""
     s = _session(sid)
     if s.busy:
-        raise HTTPException(409, "Analiza w toku")
+        raise HTTPException(409, "Analysis in progress")
     _, by_id = load_library()
     ids = ids.split(",")
     if any(i not in by_id for i in ids) or len(ids) != (s.analysed_settings or s.settings).toolheads:
-        raise HTTPException(400, "Nieznany zestaw filamentów")
+        raise HTTPException(400, "Unknown filament set")
     if loaded:
         row = analysis.set_row(s, ids, loaded=True)
     elif replace >= 0:
@@ -290,14 +290,14 @@ def _library_filaments(ids: list[str]) -> list[dict]:
     _, by_id = load_library()
     missing = [i for i in ids if i not in by_id]
     if missing:
-        raise HTTPException(400, "Kalibracja działa tylko dla filamentów z biblioteki")
+        raise HTTPException(400, "Calibration works only for filaments from the library")
     return [by_id[i] for i in ids]
 
 
 @app.get("/api/calibration/card.3mf")
 def api_card(filaments: str, layer_height: float = 0.10):
     data = calibration_card.card_3mf(_library_filaments(filaments.split(",")), layer_height)
-    return _download(data, "irodori_karta_kalibracyjna.3mf", "application/vnd.ms-package.3dmanufacturing-3dmodel+xml")
+    return _download(data, "irodori_calibration_card.3mf", "application/vnd.ms-package.3dmanufacturing-3dmodel+xml")
 
 
 @app.get("/api/calibration/layout")
@@ -313,7 +313,7 @@ async def api_fit(filaments: str = Form(...), samples: str = Form(...)):
     lay = calibration_card.layout(len(fil))
     meas = np.array(json.loads(samples), dtype=np.float64)
     if len(meas) != len(lay["tiles"]):
-        raise HTTPException(400, "Zła liczba próbek")
+        raise HTTPException(400, "Wrong number of samples")
     fr = np.array([t["fractions"] for t in lay["tiles"]])
     nominal = np.array([hex_to_rgb(f["hex"]) for f in fil])
     pure = [next((i for i, t in enumerate(lay["tiles"]) if t["pure"] == k), -1) for k in range(len(fil))]
