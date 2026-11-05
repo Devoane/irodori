@@ -71,9 +71,7 @@ async function load(code) {
 function pickLanguage() {
   let saved = null;
   try { saved = localStorage.getItem(STORE); } catch { /* storage unavailable */ }
-  if (saved in LANGUAGES) return saved;
-  const asked = (navigator.languages || []).map((l) => l.slice(0, 2).toLowerCase());
-  return asked.find((l) => l in LANGUAGES) || 'en';
+  return saved in LANGUAGES ? saved : 'en';
 }
 export async function setLanguage(code) {
   await load(code);

@@ -9,7 +9,6 @@
 "+ files": "+ Dateien",
 "+ folder": "+ Ordner",
 "Analyze without them (or they are embedded in the file)": "Ohne sie analysieren (oder sie sind in der Datei enthalten)",
-"Number of physical filaments. The Snapmaker U1 has 4 toolheads; 5–8 are preview only.": "Anzahl der physischen Filamente. Der Snapmaker U1 hat 4 Druckköpfe; 5–8 nur für die Vorschau.",
 "Toolheads": "Druckköpfe",
 "Analyze": "Analysieren",
 "Settings": "Einstellungen",
@@ -189,7 +188,6 @@
 "from card calibration": "aus der Kartenkalibrierung",
 "Orca mixing model": "Orca-Mischmodell",
 "Colors in the file": "Farben in der Datei",
-"The Snapmaker U1 has 4 toolheads: project and G-code only for 2–4 filaments": "Der Snapmaker U1 hat 4 Druckköpfe: Projekt und G-code nur für 2–4 Filamente",
 "Color match with the model": "Farbübereinstimmung mit dem Modell",
 "time ≈{n}×": "Zeit ≈{n}×",
 "Collapse": "Einklappen",
@@ -253,7 +251,6 @@
 "Building palette {i}/{n}: {title}": "Palette {i}/{n} wird erstellt: {title}",
 "Done in {n} s": "Fertig in {n} s",
 "Error: {e}": "Fehler: {e}",
-"\"Loaded in the printer\" works for 2–4 toolheads (Snapmaker U1)": "„Im Drucker geladen“ funktioniert mit 2–4 Druckköpfen (Snapmaker U1)",
 "Set filaments T1–T{n} in the \"My filaments\" window": "Filamente T1–T{n} im Fenster „Meine Filamente“ festlegen",
 "Loaded in the printer": "Im Drucker geladen",
 "Searching for the best filament sets…": "Suche nach den besten Filament-Sets…",
@@ -313,7 +310,6 @@
 "Missing texture: {name}": "Textur fehlt: {name}",
 "The Z shift puts the whole model below the bed": "Die Z-Verschiebung legt das ganze Modell unter das Druckbett",
 "The Z shift needs a watertight mesh: turn on thin wall thickening": "Die Z-Verschiebung braucht ein dichtes Netz: Verstärkung dünner Wände einschalten",
-"The Snapmaker U1 has 4 toolheads: a 3MF project can be saved for 2–4 filaments": "Der Snapmaker U1 hat 4 Druckköpfe: Ein 3MF-Projekt kann für 2–4 Filamente gespeichert werden",
 "Too many colors (Orca limit: 255)": "Zu viele Farben (Orca-Limit: 255)",
 "Orca exited with code {n}": "Orca wurde mit Code {n} beendet",
 "The file is too large (limit 1 GiB)": "Die Datei ist zu groß (Limit 1 GiB)",
@@ -326,7 +322,6 @@
 "Preview": "Vorschau",
 "Results": "Ergebnisse",
 "Running on other systems": "Start auf anderen Systemen",
-"It takes a colored model and picks 2–4 spools for it. Missing shades come from mixes: recipes in which consecutive layers print with different spools. The result is a 3MF project for Snapmaker Orca or ready G-code for the Snapmaker U1. Everything is calculated on this computer: the server listens only on <code>127.0.0.1</code> and nothing goes to the internet.": "Es nimmt ein farbiges Modell und wählt 2–4 Spulen dafür aus. Fehlende Farbtöne entstehen aus Mischungen: Rezepten, bei denen aufeinanderfolgende Schichten mit verschiedenen Spulen gedruckt werden. Das Ergebnis ist ein 3MF-Projekt für Snapmaker Orca oder fertiger G-code für den Snapmaker U1. Alles wird auf diesem Computer berechnet: Der Server lauscht nur auf <code>127.0.0.1</code>, nichts geht ins Internet.",
 "Drop a model: GLB, OBJ (with .mtl files and textures), FBX (with textures) or a painted 3MF from Bambu/Orca/Prusa.": "Modell ablegen: GLB, OBJ (mit .mtl-Dateien und Texturen), FBX (mit Texturen) oder ein bemaltes 3MF aus Bambu/Orca/Prusa.",
 "Choose the number of toolheads and click <b>Analyze</b>.": "Wähle die Anzahl der Druckköpfe und klicke auf <b>Analysieren</b>.",
 "On the right, compare the results: spool colors, match with the model (%) and relative print time. The clicked result appears in the preview.": "Vergleiche rechts die Ergebnisse: Spulenfarben, Übereinstimmung mit dem Modell (%) und relative Druckzeit. Das angeklickte Ergebnis erscheint in der Vorschau.",
@@ -383,5 +378,10 @@
 "one": "nur {n} Spule",
 "other": "nur {n} Spulen"
 },
-"Blender (needed for FBX)": "Blender (für FBX benötigt)"
+"Blender (needed for FBX)": "Blender (für FBX benötigt)",
+"Number of physical filaments, one per toolhead. Export works for 2–4 toolheads; 5–8 are preview only.": "Anzahl der physischen Filamente, eines pro Druckkopf. Der Export funktioniert für 2–4 Druckköpfe; 5–8 nur für die Vorschau.",
+"Export works for 2–4 toolheads: project and G-code only for 2–4 filaments": "Der Export funktioniert für 2–4 Druckköpfe: Projekt und G-code nur für 2–4 Filamente",
+"Export works for 2–4 toolheads: a 3MF project can be saved for 2–4 filaments": "Der Export funktioniert für 2–4 Druckköpfe: Ein 3MF-Projekt kann für 2–4 Filamente gespeichert werden",
+"\"Loaded in the printer\" works for 2–4 toolheads": "„Im Drucker geladen“ funktioniert mit 2–4 Druckköpfen",
+"For toolchanger printers. It takes a colored model and picks 2–4 spools for it. Missing shades come from mixes: recipes in which consecutive layers print with different spools. The result is a 3MF project for Snapmaker Orca or ready G-code; the export profile is currently made for the Snapmaker U1. Everything is calculated on this computer: the server listens only on <code>127.0.0.1</code> and nothing goes to the internet.": "Für Drucker mit Werkzeugwechsler. Es nimmt ein farbiges Modell und wählt 2–4 Spulen dafür aus. Fehlende Farbtöne entstehen aus Mischungen: Rezepten, bei denen aufeinanderfolgende Schichten mit verschiedenen Spulen gedruckt werden. Das Ergebnis ist ein 3MF-Projekt für Snapmaker Orca oder fertiger G-code; das Exportprofil ist derzeit für den Snapmaker U1 gemacht. Alles wird auf diesem Computer berechnet: Der Server lauscht nur auf <code>127.0.0.1</code>, nichts geht ins Internet."
 }

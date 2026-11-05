@@ -1,14 +1,35 @@
 <p align="center"><img src="frontend/logo.svg" width="90" alt=""></p>
 <h1 align="center">Irodori 彩り</h1>
 
-<p align="center"><b>Turn a colored 3D model into a multicolor print from 4 spools on the Snapmaker U1.</b><br>
+<p align="center"><b>Turn a colored 3D model into a multicolor print on a toolchanger 3D printer.</b><br>
 Runs on your own computer. No account, and your models are never uploaded.</p>
 
 ![The Irodori window with a helmet model and suggested spool sets](docs/screenshot.png)
 
 <sub>Model: "Damaged Helmet" by theblueturtle_, CC BY 4.0. It is not included in this repository.</sub>
 
-The app speaks **English, Polski, Español, Deutsch, Français, Русский and 日本語**. It follows your browser language, and you can change it in the top right corner.
+## Who it is for
+
+Irodori is made for **toolchanger printers**, where each color has its own toolhead. Mixing colors layer by layer means changing filament very often, and a toolchanger can do that without unloading and reloading a single nozzle. Printers with one nozzle and a filament changer (AMS, MMU) are not the target.
+
+| Printer | Status |
+|---|---|
+| Snapmaker U1 | ready-made export, tested in Snapmaker Orca |
+| Other toolchangers | the color analysis and preview work, but the export needs a profile for your printer. [Tell us which one you have](https://github.com/Devoane/irodori/issues) |
+
+## Languages
+
+English is the main language and what the app starts in. Change it in the top right corner of the app, and your choice is remembered.
+
+| Language | In the app |
+|---|---|
+| English (default) | English |
+| Polish | Polski |
+| Spanish | Español |
+| German | Deutsch |
+| French | Français |
+| Russian | Русский |
+| Japanese | 日本語 |
 
 ## What it does
 
@@ -28,7 +49,7 @@ You drop in a colored model. Irodori then:
 | Internet on the first start | one download of about 400 MB of libraries | **yes**, only once |
 | A web browser | the program's window opens in it | **yes** |
 | Snapmaker Orca 2.4 | opens the 3MF project or prepares the G-code | **yes**, to print |
-| Snapmaker U1 printer | the project is made for it | **yes**, to print |
+| A toolchanger printer | prints the project. The ready-made export is for the Snapmaker U1 | **yes**, to print |
 | [Blender](https://www.blender.org/download/) | only for FBX files | no |
 
 ## Install it step by step
@@ -90,7 +111,7 @@ Your problem is not here? [Report it](https://github.com/Devoane/irodori/issues)
 
 ## How it works
 
-The printer only has 4 spools, but the layers are very thin. When blue and yellow layers alternate, from a distance your eye sees green. A screen or a printed newspaper works in a similar way.
+A toolchanger only holds a few spools, but the layers are very thin. When blue and yellow layers alternate, from a distance your eye sees green. A screen or a printed newspaper works in a similar way.
 
 Irodori looks for the 2–4 spools that together cover the model's colors best and builds up to 251 mixes from them. Each part of the model gets the closest mix. It scores results with ΔE2000, a measure of color difference designed around human vision.
 
@@ -98,7 +119,7 @@ The export format, algorithms and tests are described in [docs/technical.md](doc
 
 ## Good to know before printing
 
-- **Snapmaker U1 only.** Projects are made for this printer and Snapmaker Orca 2.4. The 5–8 toolhead mode is preview only.
+- **Export is ready for the Snapmaker U1.** Projects are currently made for this printer and Snapmaker Orca 2.4, and they should not be sent to another printer without its own profile. Export works for 2–4 toolheads; the 5–8 toolhead mode is preview only.
 - **The preview is a prediction.** The real color depends on the filament batch and the light. Card calibration is meant to improve this, but it has not yet been checked on a real print.
 - **Waste can be high.** Mixes need a wipe tower. In one test the tower used 58 g and the model itself 13.5 g.
 - **Very large models are simplified.** The default limit is 1 million triangles.
@@ -124,7 +145,7 @@ The code is available under the [GNU AGPL-3.0](LICENSE). Some of the color logic
 | Antykwa Toruńska | GUST Font License |
 | M PLUS 1, M PLUS 1p, Shippori Mincho | SIL OFL 1.1 |
 
-Irodori is an independent project, not affiliated with Snapmaker or any filament maker. Their names are used only to describe compatibility.
+Irodori is an independent project, not affiliated with any printer or filament maker. Their names are used only to describe compatibility.
 
 ## Contact
 

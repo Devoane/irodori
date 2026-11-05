@@ -327,7 +327,7 @@ def write_project(mesh: trimesh.Trimesh, face_state: np.ndarray, filaments: list
         mesh, face_state, face_part = cut_at_plate(mesh, dz, face_state, face_part)
     n = len(filaments)
     if n > 4:
-        raise ValueError("The Snapmaker U1 has 4 toolheads: a 3MF project can be saved for 2–4 filaments")
+        raise ValueError("Export works for 2–4 toolheads: a 3MF project can be saved for 2–4 filaments")
     if len(recipes) > 255:
         raise ValueError("Too many colors (Orca limit: 255)")
     face_state = np.asarray(face_state)

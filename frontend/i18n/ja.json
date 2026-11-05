@@ -9,7 +9,6 @@
 "+ files": "+ ファイル",
 "+ folder": "+ フォルダー",
 "Analyze without them (or they are embedded in the file)": "なしで解析する(またはファイルに埋め込み済み)",
-"Number of physical filaments. The Snapmaker U1 has 4 toolheads; 5–8 are preview only.": "実際のフィラメント数。Snapmaker U1 は4ヘッドです。5〜8はプレビュー専用です。",
 "Toolheads": "ヘッド",
 "Analyze": "解析",
 "Settings": "設定",
@@ -189,7 +188,6 @@
 "from card calibration": "カードキャリブレーションから",
 "Orca mixing model": "Orca の混色モデル",
 "Colors in the file": "ファイル内の色",
-"The Snapmaker U1 has 4 toolheads: project and G-code only for 2–4 filaments": "Snapmaker U1 は4ヘッドです。プロジェクトと G-code は2〜4フィラメントのみ対応します",
 "Color match with the model": "モデルとの色の一致度",
 "time ≈{n}×": "時間 ≈{n}×",
 "Collapse": "折りたたむ",
@@ -253,7 +251,6 @@
 "Building palette {i}/{n}: {title}": "パレット {i}/{n} を作成中:{title}",
 "Done in {n} s": "{n} 秒で完了",
 "Error: {e}": "エラー:{e}",
-"\"Loaded in the printer\" works for 2–4 toolheads (Snapmaker U1)": "「プリンターに装着中」は2〜4ヘッド(Snapmaker U1)で使えます",
 "Set filaments T1–T{n} in the \"My filaments\" window": "「マイフィラメント」で T1〜T{n} を設定してください",
 "Loaded in the printer": "プリンターに装着中",
 "Searching for the best filament sets…": "最適なフィラメントセットを検索中…",
@@ -313,7 +310,6 @@
 "Missing texture: {name}": "テクスチャがありません:{name}",
 "The Z shift puts the whole model below the bed": "Zシフトでモデル全体がベッドの下になります",
 "The Z shift needs a watertight mesh: turn on thin wall thickening": "Zシフトには密閉メッシュが必要です。薄い壁を厚くする設定をオンにしてください",
-"The Snapmaker U1 has 4 toolheads: a 3MF project can be saved for 2–4 filaments": "Snapmaker U1 は4ヘッドです。3MF プロジェクトは2〜4フィラメントで保存できます",
 "Too many colors (Orca limit: 255)": "色が多すぎます(Orca の上限:255)",
 "Orca exited with code {n}": "Orca がコード {n} で終了しました",
 "The file is too large (limit 1 GiB)": "ファイルが大きすぎます(上限 1GiB)",
@@ -326,7 +322,6 @@
 "Preview": "プレビュー",
 "Results": "結果",
 "Running on other systems": "他のOSでの実行",
-"It takes a colored model and picks 2–4 spools for it. Missing shades come from mixes: recipes in which consecutive layers print with different spools. The result is a 3MF project for Snapmaker Orca or ready G-code for the Snapmaker U1. Everything is calculated on this computer: the server listens only on <code>127.0.0.1</code> and nothing goes to the internet.": "カラーモデルに合わせて2〜4本のスプールを選びます。足りない色はミックス、つまり連続するレイヤーを別々のスプールで印刷するレシピで作ります。結果は Snapmaker Orca 用の3MFプロジェクト、または Snapmaker U1 用の G-code です。計算はすべてこのPCで行われます。サーバーは <code>127.0.0.1</code> のみで待ち受け、インターネットには何も送信しません。",
 "Drop a model: GLB, OBJ (with .mtl files and textures), FBX (with textures) or a painted 3MF from Bambu/Orca/Prusa.": "モデルをドロップします:GLB、OBJ(.mtl とテクスチャ付き)、FBX(テクスチャ付き)、または Bambu/Orca/Prusa のペイント済み3MF。",
 "Choose the number of toolheads and click <b>Analyze</b>.": "ヘッド数を選び、<b>解析</b>をクリックします。",
 "On the right, compare the results: spool colors, match with the model (%) and relative print time. The clicked result appears in the preview.": "右側で結果を比較します:スプールの色、モデルとの一致度(%)、相対的な印刷時間。クリックした結果がプレビューに表示されます。",
@@ -378,5 +373,10 @@
 "only {n} spools": {
 "other": "{n}スプールのみ"
 },
-"Blender (needed for FBX)": "Blender(FBX に必要)"
+"Blender (needed for FBX)": "Blender(FBX に必要)",
+"Number of physical filaments, one per toolhead. Export works for 2–4 toolheads; 5–8 are preview only.": "実際のフィラメント数(ヘッドごとに1本)。エクスポートは2〜4ヘッドに対応します。5〜8はプレビュー専用です。",
+"Export works for 2–4 toolheads: project and G-code only for 2–4 filaments": "エクスポートは2〜4ヘッドに対応します。プロジェクトと G-code は2〜4フィラメントのみです",
+"Export works for 2–4 toolheads: a 3MF project can be saved for 2–4 filaments": "エクスポートは2〜4ヘッドに対応します。3MF プロジェクトは2〜4フィラメントで保存できます",
+"\"Loaded in the printer\" works for 2–4 toolheads": "「プリンターに装着中」は2〜4ヘッドで使えます",
+"For toolchanger printers. It takes a colored model and picks 2–4 spools for it. Missing shades come from mixes: recipes in which consecutive layers print with different spools. The result is a 3MF project for Snapmaker Orca or ready G-code; the export profile is currently made for the Snapmaker U1. Everything is calculated on this computer: the server listens only on <code>127.0.0.1</code> and nothing goes to the internet.": "ツールチェンジャー搭載プリンター向けです。カラーモデルに合わせて2〜4本のスプールを選びます。足りない色はミックス、つまり連続するレイヤーを別々のスプールで印刷するレシピで作ります。結果は Snapmaker Orca 用の3MFプロジェクト、または G-code です。エクスポートプロファイルは現在 Snapmaker U1 用です。計算はすべてこのPCで行われます。サーバーは <code>127.0.0.1</code> のみで待ち受け、インターネットには何も送信しません。"
 }

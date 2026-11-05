@@ -9,7 +9,6 @@
 "+ files": "+ файлы",
 "+ folder": "+ папка",
 "Analyze without them (or they are embedded in the file)": "Анализировать без них (или они встроены в файл)",
-"Number of physical filaments. The Snapmaker U1 has 4 toolheads; 5–8 are preview only.": "Количество физических филаментов. У Snapmaker U1 4 головки; 5–8 только для предпросмотра.",
 "Toolheads": "Головки",
 "Analyze": "Анализ",
 "Settings": "Настройки",
@@ -189,7 +188,6 @@
 "from card calibration": "из калибровки по карте",
 "Orca mixing model": "модель смешивания Orca",
 "Colors in the file": "Цвета в файле",
-"The Snapmaker U1 has 4 toolheads: project and G-code only for 2–4 filaments": "У Snapmaker U1 4 головки: проект и G-code только для 2–4 филаментов",
 "Color match with the model": "Совпадение цвета с моделью",
 "time ≈{n}×": "время ≈{n}×",
 "Collapse": "Свернуть",
@@ -253,7 +251,6 @@
 "Building palette {i}/{n}: {title}": "Создание палитры {i}/{n}: {title}",
 "Done in {n} s": "Готово за {n} с",
 "Error: {e}": "Ошибка: {e}",
-"\"Loaded in the printer\" works for 2–4 toolheads (Snapmaker U1)": "«Заправлено в принтер» работает для 2–4 головок (Snapmaker U1)",
 "Set filaments T1–T{n} in the \"My filaments\" window": "Задайте филаменты T1–T{n} в окне «Мои филаменты»",
 "Loaded in the printer": "Заправлено в принтер",
 "Searching for the best filament sets…": "Поиск лучших наборов филаментов…",
@@ -313,7 +310,6 @@
 "Missing texture: {name}": "Нет текстуры: {name}",
 "The Z shift puts the whole model below the bed": "Сдвиг по Z убирает всю модель под стол",
 "The Z shift needs a watertight mesh: turn on thin wall thickening": "Для сдвига по Z нужна герметичная сетка: включите утолщение тонких стенок",
-"The Snapmaker U1 has 4 toolheads: a 3MF project can be saved for 2–4 filaments": "У Snapmaker U1 4 головки: проект 3MF можно сохранить для 2–4 филаментов",
 "Too many colors (Orca limit: 255)": "Слишком много цветов (лимит Orca: 255)",
 "Orca exited with code {n}": "Orca завершилась с кодом {n}",
 "The file is too large (limit 1 GiB)": "Файл слишком большой (лимит 1 ГиБ)",
@@ -326,7 +322,6 @@
 "Preview": "Предпросмотр",
 "Results": "Результаты",
 "Running on other systems": "Запуск на других системах",
-"It takes a colored model and picks 2–4 spools for it. Missing shades come from mixes: recipes in which consecutive layers print with different spools. The result is a 3MF project for Snapmaker Orca or ready G-code for the Snapmaker U1. Everything is calculated on this computer: the server listens only on <code>127.0.0.1</code> and nothing goes to the internet.": "Программа берёт цветную модель и подбирает к ней 2–4 катушки. Недостающие оттенки получаются из смесей: рецептов, в которых соседние слои печатаются разными катушками. Результат: проект 3MF для Snapmaker Orca или готовый G-code для Snapmaker U1. Всё считается на этом компьютере: сервер слушает только <code>127.0.0.1</code>, в интернет ничего не уходит.",
 "Drop a model: GLB, OBJ (with .mtl files and textures), FBX (with textures) or a painted 3MF from Bambu/Orca/Prusa.": "Перетащите модель: GLB, OBJ (с файлами .mtl и текстурами), FBX (с текстурами) или раскрашенный 3MF из Bambu/Orca/Prusa.",
 "Choose the number of toolheads and click <b>Analyze</b>.": "Выберите число головок и нажмите <b>Анализ</b>.",
 "On the right, compare the results: spool colors, match with the model (%) and relative print time. The clicked result appears in the preview.": "Справа сравните результаты: цвета катушек, совпадение с моделью (%) и относительное время печати. Выбранный результат появится в предпросмотре.",
@@ -393,5 +388,10 @@
 "many": "только {n} катушек",
 "other": "только {n} катушек"
 },
-"Blender (needed for FBX)": "Blender (нужен для FBX)"
+"Blender (needed for FBX)": "Blender (нужен для FBX)",
+"Number of physical filaments, one per toolhead. Export works for 2–4 toolheads; 5–8 are preview only.": "Количество физических филаментов, по одному на головку. Экспорт работает для 2–4 головок; 5–8 только для предпросмотра.",
+"Export works for 2–4 toolheads: project and G-code only for 2–4 filaments": "Экспорт работает для 2–4 головок: проект и G-code только для 2–4 филаментов",
+"Export works for 2–4 toolheads: a 3MF project can be saved for 2–4 filaments": "Экспорт работает для 2–4 головок: проект 3MF можно сохранить для 2–4 филаментов",
+"\"Loaded in the printer\" works for 2–4 toolheads": "«Заправлено в принтер» работает для 2–4 головок",
+"For toolchanger printers. It takes a colored model and picks 2–4 spools for it. Missing shades come from mixes: recipes in which consecutive layers print with different spools. The result is a 3MF project for Snapmaker Orca or ready G-code; the export profile is currently made for the Snapmaker U1. Everything is calculated on this computer: the server listens only on <code>127.0.0.1</code> and nothing goes to the internet.": "Для принтеров со сменой инструмента. Программа берёт цветную модель и подбирает к ней 2–4 катушки. Недостающие оттенки получаются из смесей: рецептов, в которых соседние слои печатаются разными катушками. Результат: проект 3MF для Snapmaker Orca или готовый G-code; профиль экспорта пока сделан для Snapmaker U1. Всё считается на этом компьютере: сервер слушает только <code>127.0.0.1</code>, в интернет ничего не уходит."
 }

@@ -665,7 +665,7 @@ function renderRows() {
       ['Walls', t(m.dual ? 'two wall recipes' : 'one recipe')], ['Predicted colors', t(m.calibrated ? 'from card calibration' : 'Orca mixing model')],
       ...(state.diag?.exact_colors ? [['Colors in the file', state.diag.exact_colors]] : [])]
       .map(([a, b]) => `<dt>${t(a)}</dt><dd>${b ?? '—'}</dd>`).join('');
-    const no3mf = heads > 4 ? ` disabled title="${t('The Snapmaker U1 has 4 toolheads: project and G-code only for 2–4 filaments')}"` : '';
+    const no3mf = heads > 4 ? ` disabled title="${t('Export works for 2–4 toolheads: project and G-code only for 2–4 filaments')}"` : '';
     return `<article class="rowcard${i === state.selected ? ' sel' : ''}" data-i="${i}" ${row.cmy_brand && state.brandsOff.has(row.cmy_brand) ? 'hidden' : ''}>
       <div class="rc-head"><div class="t"><h3>${esc(t(row.title))}</h3>${rowSub(row) ? `<p>${esc(rowSub(row))}</p>` : ''}</div>
         <div class="score"><span class="m ${matchClass(m.match)}" title="${t('Color match with the model')}">${fmt(m.match)}%</span>

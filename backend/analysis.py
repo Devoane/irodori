@@ -206,7 +206,7 @@ def _plans(s: Session, st: Settings, targets: Targets):
     ready = st.toolheads <= 4 and len(loaded) == st.toolheads and all(i in by_id for i in loaded)
     if st.source == "loaded":
         if st.toolheads > 4:
-            raise ValueError('"Loaded in the printer" works for 2–4 toolheads (Snapmaker U1)')
+            raise ValueError('"Loaded in the printer" works for 2–4 toolheads')
         if not ready:
             raise ValueError(f'Set filaments T1–T{st.toolheads} in the "My filaments" window')
         owned = sorted(set(owned) | set(loaded))

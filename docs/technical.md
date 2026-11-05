@@ -1,8 +1,9 @@
 # Irodori: technical details
 
-Colored prints from a few spools. From a textured or painted model it picks 2–4 spools (preview up to 8), builds up to
-251 layer mixes from them, shows the predicted print and saves a project for Snapmaker Orca 2.4 or G-code for the
-Snapmaker U1. It works locally, without internet. User guide: [README](../README.md) and `frontend/help.html`.
+Colored prints from a few spools on toolchanger printers. From a textured or painted model it picks 2–4 spools (preview
+up to 8), builds up to 251 layer mixes from them, shows the predicted print and saves a project for Snapmaker Orca 2.4 or
+G-code. The export template and the tests target the Snapmaker U1 (`backend/templates`); another toolchanger needs its own
+template and profile mapping. It works locally, without internet. User guide: [README](../README.md) and `frontend/help.html`.
 
 ## Environment variables
 
@@ -20,7 +21,7 @@ Snapmaker U1. It works locally, without internet. User guide: [README](../README
 
 ## Translations
 
-English is the source language: a string in the code is its own key. `frontend/i18n/<lang>.json` holds the other
+English is the main language and the default for every new user; the choice in the header menu is remembered. English is also the source language: a string in the code is its own key. `frontend/i18n/<lang>.json` holds the other
 languages, and `frontend/i18n.js` applies them to the static page, to `t()` and `tn()` calls and to server messages.
 A key with `{name}` placeholders also translates a matching message from the server, so the backend only speaks English.
 Plural entries are objects with `one`, `few`, `many` and `other` forms, picked with `Intl.PluralRules`.
