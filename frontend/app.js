@@ -120,9 +120,7 @@ $('resetView').addEventListener('click', () => setCam('iso'));
 
 function printMaterial() {
   const clip = (Number(readSettings().z_offset) || 0) < 0 ? [plateClip] : [];
-  return state.opaque
-    ? new THREE.MeshLambertMaterial({ vertexColors: true, clippingPlanes: clip })
-    : new THREE.MeshPhysicalMaterial({ vertexColors: true, roughness: 0.55, sheen: 0.5, sheenRoughness: 0.7, sheenColor: 0xffffff, clippingPlanes: clip });
+  return new THREE.MeshLambertMaterial({ vertexColors: true, clippingPlanes: clip });
 }
 
 // rotation about the printer axes in X, Y, Z order (export_3mf.place_mesh), then centred and lowered by the Z offset
@@ -239,7 +237,6 @@ $('matMode').addEventListener('click', (e) => {
   const m = e.target.dataset.m; if (!m) return;
   state.opaque = m === 'opaque';
   for (const b of $('matMode').children) b.classList.toggle('on', b.dataset.m === m);
-  if (printMesh) { printMesh.material.dispose(); printMesh.material = printMaterial(); applyPose(); }
   saveSettings(); paintJobs(); updateDirty();
 });
 
