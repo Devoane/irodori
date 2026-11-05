@@ -64,7 +64,7 @@ const state = {
   view: 'source', opaque: false, brushOn: false, brush: 'paint', brushSize: 6,
   mesh: null,            // { nV, nF, src: source rgb per face, cen: face centroids }
   labels: null, focus: null, focusDirty: false,
-  analysed: null, diag: null, library: null, orig: {}, brandsOff: new Set(), gjobs: {},
+  analysed: null, diag: null, library: null, orig: {}, brandsOff: new Set(), gjobs: new WeakMap(),
 };
 
 const analysedHeads = () => state.analysed?.toolheads || readSettings().toolheads;
@@ -643,7 +643,7 @@ function renderRows() {
     const m = row.metrics, n = row.filaments.length;
     const rel = costs[i] > 0 ? costs[i] / fastest : 1;
     const virt = stripOrder(row.entries);
-    const orig = state.orig[i];
+    const orig = state.orig[i], job = state.gjobs.get(row);
     const hasAlts = Object.values(row.alternatives || {}).some((a) => a.length > 1);
     const sw = row.filaments.map((f, k) => {
       const alts = (row.alternatives || {})[k];
@@ -678,8 +678,8 @@ function renderRows() {
         <div class="rc-foot"><details><summary>${t('Advanced')}</summary><dl class="dl">${adv}</dl></details>
           <div class="dlbtns"><button class="btn" type="button" data-act="glb" title="${t('Model with the predicted colors')}">GLB</button>
             <button class="btn" type="button" data-act="3mf" title="${t('Project for Snapmaker Orca')}"${no3mf}>3MF</button>
-            <button class="btn" type="button" data-act="gcode" title="${t('Slice in Snapmaker Orca on this computer')}"${no3mf}>G-code</button></div></div>
-        <div class="gstat" id="gstat${i}">${state.gjobs[i] || ''}</div>
+            <button class="btn" type="button" data-act="gcode" title="${t('Slice in Snapmaker Orca on this computer')}"${no3mf || (job?.busy ? ' disabled' : '')}>G-code</button></div></div>
+        <div class="gstat${job?.err ? ' err' : ''}" id="gstat${i}">${job ? job.html() : ''}</div>
       </div></article>`;
   }).join('');
 }
@@ -689,7 +689,7 @@ $('rows').addEventListener('click', async (e) => {
   const i = +card.dataset.i;
   const t = e.target;
   if (t.dataset.colRow !== undefined) { card.classList.toggle('collapsed'); t.textContent = card.classList.contains('collapsed') ? '+' : '−'; return; }
-  if (t.dataset.act) return exportRow(i, t.dataset.act, t);
+  if (t.dataset.act) return exportRow(i, t.dataset.act);
   if (t.dataset.alt !== undefined) return swapAlt(i, +t.dataset.alt, t.dataset.id);
   if (t.dataset.resetRow !== undefined) return resetRow(i);
   if (t.closest('a, label, details, input')) return;
@@ -742,27 +742,34 @@ async function swapAlt(i, slot, id) {
 }
 
 const exportSettings = () => JSON.stringify(pick(readSettings(), EXPORT));
-async function exportRow(i, kind, btn) {
+async function exportRow(i, kind) {
   if (kind === 'glb') { location.href = `/api/export/${state.sid}/${i}.glb`; return; }
   if (kind === '3mf') { location.href = `/api/export/${state.sid}/${i}.3mf?settings=${encodeURIComponent(exportSettings())}`; return; }
-  const show = (html, err = false) => { state.gjobs[i] = html; const el = $(`gstat${i}`); if (el) { el.innerHTML = html; el.classList.toggle('err', err); } };
-  btn.disabled = true;
+  const row = state.rows[i];
+  const show = (html, { err = false, busy = false } = {}) => {
+    state.gjobs.set(row, { html, err, busy });
+    const at = state.rows.indexOf(row), el = $(`gstat${at}`);
+    if (!el) return;
+    el.innerHTML = html();
+    el.classList.toggle('err', err);
+    document.querySelector(`.rowcard[data-i="${at}"] [data-act=gcode]`).disabled = busy;
+  };
+  show(() => '', { busy: true });
   const fd = new FormData(); fd.append('settings', exportSettings());
   const r = await fetch(`/api/gcode/${state.sid}/${i}`, { method: 'POST', body: fd });
-  if (!r.ok) { show(esc(t((await r.json()).detail)), true); btn.disabled = false; return; }
+  if (!r.ok) { const { detail } = await r.json(); show(() => esc(t(detail)), { err: true }); return; }
   const { job } = await r.json();
   const url = `/api/gcode/${state.sid}/job/${job}`;
   for (;;) {
     const j = await fetch(url).then((x) => x.json());
-    if (j.busy) { show(`<span class="spin"></span>${esc(t(j.message))}`); await new Promise((ok) => setTimeout(ok, 1500)); continue; }
-    if (j.error) show(esc(t(j.message)), true);
+    if (j.busy) { show(() => `<span class="spin"></span>${esc(t(j.message))}`, { busy: true }); await new Promise((ok) => setTimeout(ok, 1500)); continue; }
+    if (j.error) show(() => esc(t(j.message)), { err: true });
     else {
       const res = j.result, tools = Object.entries(res.tools).map(([k, v]) => `T${k}: ${v}`).join(', ');
-      show(`${esc(t('Print time {time}, {grams} g, filament changes {changes} ({tools}).', { time: res.time, grams: res.grams, changes: res.changes, tools }))} <a href="${url}/gcode">${t('Download G-code')}</a> · <a href="${url}/3mf">${t('Download sliced 3MF')}</a>`);
+      show(() => `${esc(t('Print time {time}, {grams} g, filament changes {changes} ({tools}).', { time: res.time, grams: res.grams, changes: res.changes, tools }))} <a href="${url}/gcode">${t('Download G-code')}</a> · <a href="${url}/3mf">${t('Download sliced 3MF')}</a>`);
     }
     break;
   }
-  const b = document.querySelector(`.rowcard[data-i="${i}"] [data-act=gcode]`); if (b) b.disabled = false;
 }
 
 // CMY brand filter: hides rows, no recalculation

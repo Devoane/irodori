@@ -119,5 +119,19 @@ const path = `${out}/${dl.suggestedFilename()}`;
 await dl.saveAs(path);
 log('3mf:', dl.suggestedFilename(), fs.statSync(path).size, 'B');
 
+// a G-code result belongs to its row: it must not survive a new analysis (slicing is stubbed to keep this quick)
+await page.route('**/api/gcode/**', (r) => r.fulfill({ contentType: 'application/json', body: JSON.stringify(r.request().method() === 'POST'
+  ? { job: 'stub' } : { busy: false, result: { time: '1h', grams: 1, changes: 1, tools: { 0: 1 } } }) }));
+await page.click('.rowcard.sel [data-act="gcode"]');
+await page.waitForFunction(() => document.querySelector('.rowcard.sel .gstat').textContent.includes('1h'));
+await page.selectOption('#s_toolheads', '3');
+await page.click('#btnReanalyze');
+await page.waitForTimeout(800);
+await done();
+await page.unroute('**/api/gcode/**');
+const stale = await page.$$eval('.gstat', (l) => l.map((e) => e.textContent).filter(Boolean));
+log('G-code results after a new analysis:', stale.length ? stale : 'none');
+if (stale.length) errors.push('G-code result survived a new analysis');
+
 log('console errors:', errors.length ? errors : 'none');
 await browser.close();
