@@ -112,7 +112,7 @@ def _run(s: Session):
                 s.mesh = None
             mesh_key = (src_key, st.max_triangles, st.repair, st.front_only, st.base, st.base_size)
             if s.mesh is None or s.mesh_key != mesh_key:
-                _status(s, "geometry", "Przygotowanie geometrii do druku…", 0.12)
+                _status(s, "geometry", "Preparing the geometry for printing…", 0.12)
                 n_before = len(s.mesh.faces) if s.mesh is not None else -1
                 s.mesh, s.face_rgb = build_print_mesh(s.src, st.max_triangles, st.repair, st.front_only,
                                                       progress=lambda m: _status(s, "geometry", m))
