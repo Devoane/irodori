@@ -124,6 +124,12 @@ await page.route('**/api/gcode/**', (r) => r.fulfill({ contentType: 'application
   ? { job: 'stub' } : { busy: false, result: { time: '1h', grams: 1, changes: 1, tools: { 0: 1 } } }) }));
 await page.click('.rowcard.sel [data-act="gcode"]');
 await page.waitForFunction(() => document.querySelector('.rowcard.sel .gstat').textContent.includes('1h'));
+const shown = () => page.$eval('.rowcard.sel .gstat', (e) => e.textContent.includes('1h'));
+const height = await page.inputValue('#s_layer_height');
+await page.selectOption('#s_layer_height', height === '0.12' ? '0.14' : '0.12');
+if (await shown()) errors.push('G-code result survived an export setting change');
+await page.selectOption('#s_layer_height', height);
+if (!(await shown())) errors.push('G-code result did not return with its export settings');
 await page.selectOption('#s_toolheads', '3');
 await page.click('#btnReanalyze');
 await page.waitForTimeout(800);

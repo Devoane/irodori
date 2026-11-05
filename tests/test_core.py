@@ -312,7 +312,7 @@ def test_obj_with_mtl_and_texture(tmp_path):
     assert np.allclose(src.sample_rgb.mean(axis=0), [220, 30, 30], atol=3)
     assert max(np.ptp(src.vertices, axis=0)) == pytest.approx(10)        # auto size: kept from the file
     _, warn = load_source({"a.obj": obj.encode(), "m.mtl": mtl.encode()}, "a.obj")
-    assert warn == ["Brak pliku: red.png"]
+    assert warn == ["Missing file: red.png"]
 
 
 def test_settings_validation():
@@ -502,3 +502,109 @@ def test_every_string_the_interface_uses_has_a_translation():
     used = set(re.findall(r"\bt\('((?:[^'\\]|\\.)+)'", js)) | set(re.findall(r"\btn\('([^']+)'", js))
     used |= set(re.findall(r"setStatus\('([^']+)'", js))
     assert not {u.replace("\\'", "'") for u in used} - keys
+
+
+def _guard_status(method="GET", **headers):
+    """Status of one request through LocalOnly, around an app that always answers 200."""
+    import asyncio
+
+    from guard import LocalOnly
+    from starlette.responses import PlainTextResponse
+
+    guarded = LocalOnly(PlainTextResponse("ok"), policy="default-src 'self'")
+    scope = {"type": "http", "asgi": {"version": "3.0"}, "http_version": "1.1", "method": method, "path": "/", "raw_path": b"/",
+             "scheme": "http", "query_string": b"", "server": ("127.0.0.1", 8765), "client": ("127.0.0.1", 1),
+             "headers": [(k.replace("_", "-").lower().encode(), v.encode()) for k, v in {"host": "127.0.0.1:8765", **headers}.items()]}
+    sent = []
+
+    async def receive():
+        return {"type": "http.request", "body": b"", "more_body": False}
+
+    async def send(message):
+        sent.append(message)
+
+    asyncio.run(guarded(scope, receive, send))
+    return next(m["status"] for m in sent if m["type"] == "http.response.start")
+
+
+@pytest.mark.parametrize("headers", [
+    {},
+    {"origin": "http://127.0.0.1:8765", "sec_fetch_site": "same-origin"},
+    {"host": "localhost:8765", "origin": "http://localhost:8765"},
+    {"host": "[::1]:8765", "origin": "http://[::1]:8765"},
+    {"sec_fetch_site": "none"},
+])
+def test_guard_lets_the_app_itself_through(headers):
+    assert _guard_status("POST", **headers) == 200
+
+
+@pytest.mark.parametrize("host", ["evil.com", "evil.com:8765", "127.0.0.1.evil.com", "127.0.0.1@evil.com", "evil.com@127.0.0.1",
+                                  "2130706433", "0.0.0.0", ""])
+def test_guard_refuses_a_foreign_host(host):
+    assert _guard_status(host=host) == 421
+
+
+@pytest.mark.parametrize("headers", [
+    {"origin": "https://evil.com"},
+    {"origin": "http://127.0.0.1.evil.com"},
+    {"origin": "http://evil.com@127.0.0.1:8765"},
+    {"origin": "https://127.0.0.1:8765"},
+    {"origin": "http://localhost:9999"},
+    {"origin": "http://127.0.0.1:9999", "sec_fetch_site": "same-site"},
+    {"origin": "null"},
+    {"origin": "file://"},
+    {"sec_fetch_site": "cross-site"},
+    {"sec_fetch_site": "same-site"},
+])
+def test_guard_refuses_other_sites_and_other_local_ports(headers):
+    assert _guard_status("POST", **headers) == 403
+
+
+def test_guard_size_limit_cannot_be_avoided():
+    assert _guard_status("POST", content_length=str((1 << 30) + 1)) == 413
+    assert _guard_status("POST", content_length="abc") == 413
+    assert _guard_status("POST", transfer_encoding="chunked") == 411
+
+
+@pytest.mark.parametrize("raw", ["[]", "1", '"x"', "null", '{"layer_height": null}', '{"layer_height": NaN}', '{"colored_walls": Infinity}',
+                                 '{"rot_x": 1e999}', '{"colored_walls": 99999999999999999999}', '{"base_size": []}'])
+def test_invalid_settings_are_refused(raw):
+    from server import _settings
+    with pytest.raises(ValueError, match="Invalid settings"):
+        _settings(raw)
+
+
+def test_settings_are_kept_in_range():
+    from server import _settings
+    s = _settings('{"max_recipe_len": 1000000, "max_run": 1000000, "variable_layer": 1000, "z_offset": -100000}')
+    assert (s.max_recipe_len, s.max_run, s.variable_layer, s.z_offset) == (40, 4, 0.0, -1000.0)
+
+
+@pytest.mark.parametrize("name", ["smok_żółć.glb", "彩り.glb", 'a"; x=y\r\nX-Evil: 1.glb'])
+def test_downloads_accept_any_file_name(name):
+    from server import _download
+    value = _download(b"", name, "model/gltf-binary").headers["content-disposition"]
+    assert value.startswith("attachment; filename*=UTF-8''") and '"' not in value and "\r" not in value
+
+
+def test_obj_in_another_encoding_loads(tmp_path):
+    from source import obj_to_glb
+    obj = "# żółć\n".encode("cp1250") + b"v 0 0 0\nv 1 0 0\nv 0 1 0\nf 1 2 3\n"
+    assert obj_to_glb({"a.obj": obj}, "a.obj")[0][:4] == b"glTF"
+
+
+@pytest.mark.parametrize("reference", ["{0}", "../../../../../../..{0}"])
+def test_obj_cannot_read_files_outside_its_upload(tmp_path, reference):
+    secret = tmp_path / "secret.mtl"
+    secret.write_text("newmtl m\nKd 1 0 0\n")
+    reads = []
+
+    def watch(event, args):
+        if event == "open" and args and str(secret) in str(args[0]):
+            reads.append(args[0])
+
+    sys.addaudithook(watch)
+    from source import obj_to_glb
+    obj = f"mtllib {reference.format(secret)}\nusemtl m\nv 0 0 0\nv 1 0 0\nv 0 1 0\nf 1 2 3\n".encode()
+    assert obj_to_glb({"a.obj": obj}, "a.obj")[1] == ["secret.mtl"]
+    assert not reads

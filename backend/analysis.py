@@ -291,7 +291,7 @@ def project_bytes(s: Session, row: Row, settings: Settings) -> bytes:
 
 
 def start_gcode(s: Session, row: Row, settings: Settings) -> Job:
-    job = Job(id=uuid.uuid4().hex[:10], message="Zapisywanie projektu…")
+    job = Job(id=uuid.uuid4().hex[:10], message="Saving the project…")
     s.jobs[job.id] = job
 
     def run():

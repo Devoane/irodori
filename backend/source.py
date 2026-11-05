@@ -412,6 +412,7 @@ def obj_to_glb(files: dict[str, bytes], main: str) -> tuple[bytes, list[str]]:
                     missing.append(name)
                 body = body.replace(ref, name)          # textures sit next to the MTL here
             mtl.write_text(body, encoding="utf-8")
+        (Path(tmp) / Path(main).name).write_text(text, encoding="utf-8")     # trimesh cannot read other encodings
         scene = trimesh.load(Path(tmp) / Path(main).name, force="scene", process=False)
         if not scene.geometry:
             raise ValueError("The OBJ has no triangle mesh")
@@ -433,5 +434,5 @@ def load_source(files: dict[str, bytes], main: str, longest_side_mm: float = 0.0
     if fn.endswith(".obj"):
         glb, missing = obj_to_glb(files, main)
         # OBJ has no unit; most exporters write millimetres, Auto falls back to 50 mm when it does not fit
-        return load_glb(glb, longest_side_mm, unit_mm=1.0, bake=bake), [f"Brak pliku: {m}" for m in missing]
+        return load_glb(glb, longest_side_mm, unit_mm=1.0, bake=bake), [f"Missing file: {m}" for m in missing]
     raise ValueError("Supported formats: GLB, FBX (with textures), OBJ (with MTL and textures), painted 3MF (Bambu/Orca)")

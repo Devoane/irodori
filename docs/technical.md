@@ -12,7 +12,7 @@ template and profile mapping. It works locally, without internet. User guide: [R
 
 ## Security
 
-- The server listens on 127.0.0.1 only. `backend/guard.py` rejects requests with a foreign `Host` header (DNS rebinding),
+- The server listens on 127.0.0.1 only. `backend/guard.py` rejects requests with a foreign `Host` header (DNS rebinding), requests from any other origin, including other ports on this computer (`Origin`, `Sec-Fetch-Site`), and bodies without a declared size or over 1 GiB (`Content-Length`). A strict CSP blocks outside resources.
   a foreign `Origin` or `Sec-Fetch-Site: cross-site` (CSRF), and bodies larger than 1 GiB.
 - CSP `default-src 'self'` with a hash for the import map. Fonts and libraries live in `frontend/`; the page connects to nothing outside.
 - Uploaded file names are reduced to the bare name (no folders, no `..`). A 3MF that unpacks to more than 4 GiB is rejected.

@@ -112,6 +112,7 @@ Check the cost before you print. The sliced G-code for this avocado gives:
 
 | What | Why | Required? |
 |---|---|---|
+| Linux or Windows | macOS is not supported | **yes** |
 | [Python 3.11 or newer](https://www.python.org/downloads/) | runs the program | **yes** |
 | Internet on the first start | one download of about 400 MB of libraries | **yes**, only once |
 | A web browser | the program's window opens in it | **yes** |
@@ -138,10 +139,9 @@ Linux usually has Python already. Check with `python3 --version`.
 | System | What to do |
 |---|---|
 | **Windows** | double-click `Irodori.bat` |
-| **macOS** | right-click `Irodori.command`, choose **Open** and confirm |
 | **Linux** | open a terminal in the program folder and type `./run.sh` |
 
-The first start takes a few minutes because it downloads the libraries. Do not close the window, even if nothing seems to happen for a while. Your browser then opens by itself. If it does not, go to **http://127.0.0.1:8765/**.
+The first start takes a few minutes because it downloads the libraries. Do not close the window, even if nothing seems to happen for a while. The program then opens in its own browser window, apart from your tabs, cookies and extensions. This needs a Chrome-type browser (Chrome, Edge, Chromium, Brave, Vivaldi) or Firefox. If no window appears, go to **http://127.0.0.1:8765/**.
 
 Keep the terminal window open while you work.
 
@@ -167,7 +167,6 @@ Close the terminal window or press `Ctrl+C` in it. On Linux you can also run `./
 | `python` is not recognized, or the window closes at once | Reinstall Python and tick **Add python.exe to PATH** |
 | The first start seems stuck | Wait. The libraries are about 400 MB. Check your internet |
 | The browser does not open | Go to http://127.0.0.1:8765/ yourself |
-| macOS refuses to open the file | Right-click it and choose **Open** |
 | `Permission denied` on Linux | Type `python3 irodori.py` |
 | `Program Snapmaker Orca not found` | Install Orca, or download the 3MF and open it by hand. You can also set the path in the `IRODORI_ORCA` variable |
 | `Program Blender (needed for FBX) not found` | Install Blender, or save the model as GLB |
@@ -190,7 +189,7 @@ The export format, algorithms and tests are described in [docs/technical.md](doc
 - **The preview is a prediction.** The real color depends on the filament batch and the light. Card calibration is meant to improve this, but it has not yet been checked on a real print.
 - **Waste can be high.** Mixes need a wipe tower. In one test the tower used 58 g and the model itself 13.5 g.
 - **Very large models are simplified.** The default limit is 1 million triangles.
-- **Tested on Linux.** The Windows and macOS launchers are included but have not been tried on those systems. If something fails, please report it.
+- **Tested on Linux.** The Windows launcher is included but has not been tried on that system. If something fails, please report it. macOS is not supported.
 - **Translations are unreviewed.** They were written with an AI assistant, and native speakers have not checked them. Filament names stay as the catalog gives them.
 
 ## Help translate

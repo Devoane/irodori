@@ -1,4 +1,4 @@
-"""External tools (Snapmaker Orca, Blender) and their folders on Linux, Windows and macOS.
+"""External tools (Snapmaker Orca, Blender) and their folders on Linux and Windows.
 
 Every lookup can be overridden: IRODORI_ORCA, IRODORI_BLENDER (executables),
 IRODORI_ORCA_CONFIG (Orca's settings folder), IRODORI_CONTAINER (a distrobox
@@ -20,8 +20,6 @@ def orca_config_dir() -> Path:
         return Path(os.environ["IRODORI_ORCA_CONFIG"])
     if sys.platform == "win32":
         return Path(os.environ.get("APPDATA", HOME / "AppData" / "Roaming")) / "Snapmaker_Orca"
-    if sys.platform == "darwin":
-        return HOME / "Library" / "Application Support" / "Snapmaker_Orca"
     return Path(os.environ.get("XDG_CONFIG_HOME", HOME / ".config")) / "Snapmaker_Orca"
 
 
@@ -47,13 +45,11 @@ def _find(env: str, names: list[str], candidates: list[str], what: str) -> list[
 
 def orca_cmd() -> list[str]:
     return _find("IRODORI_ORCA", ["snapmaker-orca", "snapmaker_orca"],
-                 _program_files("Snapmaker*Orca*", "snapmaker-orca.exe") + _program_files("Snapmaker*Orca*", "*Orca*.exe")
-                 + sorted(glob.glob("/Applications/Snapmaker*Orca*.app/Contents/MacOS/*")),
+                 _program_files("Snapmaker*Orca*", "snapmaker-orca.exe") + _program_files("Snapmaker*Orca*", "*Orca*.exe"),
                  "Snapmaker Orca")
 
 
 def blender_cmd() -> list[str]:
     return _find("IRODORI_BLENDER", ["blender"],
-                 _program_files("Blender Foundation", "Blender*", "blender.exe")
-                 + ["/Applications/Blender.app/Contents/MacOS/Blender"],
+                 _program_files("Blender Foundation", "Blender*", "blender.exe"),
                  "Blender (needed for FBX)")

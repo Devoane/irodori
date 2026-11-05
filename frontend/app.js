@@ -240,7 +240,7 @@ $('matMode').addEventListener('click', (e) => {
   state.opaque = m === 'opaque';
   for (const b of $('matMode').children) b.classList.toggle('on', b.dataset.m === m);
   if (printMesh) { printMesh.material.dispose(); printMesh.material = printMaterial(); applyPose(); }
-  saveSettings(); updateDirty();
+  saveSettings(); paintJobs(); updateDirty();
 });
 
 // ---------------------------------------------------------------- priority brush
@@ -383,6 +383,7 @@ function onSetting(k) {
   if (['rot_x', 'rot_y', 'rot_z', 'z_offset'].includes(k)) applyPose();
   if (k.startsWith('rainbow') || k === 'brightness' || k === 'saturation') refreshColors();
   if (k === 'variable_layer' || k === 'layer_height') renderRows();
+  paintJobs();
   updateDirty();
 }
 loadSaved();
@@ -643,7 +644,7 @@ function renderRows() {
     const m = row.metrics, n = row.filaments.length;
     const rel = costs[i] > 0 ? costs[i] / fastest : 1;
     const virt = stripOrder(row.entries);
-    const orig = state.orig[i], job = state.gjobs.get(row);
+    const orig = state.orig[i], job = visibleJob(row);
     const hasAlts = Object.values(row.alternatives || {}).some((a) => a.length > 1);
     const sw = row.filaments.map((f, k) => {
       const alts = (row.alternatives || {})[k];
@@ -742,20 +743,29 @@ async function swapAlt(i, slot, id) {
 }
 
 const exportSettings = () => JSON.stringify(pick(readSettings(), EXPORT));
+// A finished G-code result only applies to the export settings it was sliced with.
+function visibleJob(row) {
+  const job = state.gjobs.get(row);
+  return job && (job.busy || job.settings === exportSettings()) ? job : null;
+}
+function paintJob(row) {
+  const at = state.rows.indexOf(row), el = $(`gstat${at}`), job = visibleJob(row);
+  if (!el) return;
+  el.innerHTML = job ? job.html() : '';
+  el.classList.toggle('err', !!job?.err);
+  document.querySelector(`.rowcard[data-i="${at}"] [data-act=gcode]`).disabled = !!job?.busy;
+}
+function paintJobs() {
+  for (const row of state.rows) if (state.gjobs.has(row)) paintJob(row);
+}
 async function exportRow(i, kind) {
   if (kind === 'glb') { location.href = `/api/export/${state.sid}/${i}.glb`; return; }
   if (kind === '3mf') { location.href = `/api/export/${state.sid}/${i}.3mf?settings=${encodeURIComponent(exportSettings())}`; return; }
   const row = state.rows[i];
-  const show = (html, { err = false, busy = false } = {}) => {
-    state.gjobs.set(row, { html, err, busy });
-    const at = state.rows.indexOf(row), el = $(`gstat${at}`);
-    if (!el) return;
-    el.innerHTML = html();
-    el.classList.toggle('err', err);
-    document.querySelector(`.rowcard[data-i="${at}"] [data-act=gcode]`).disabled = busy;
-  };
+  const settings = exportSettings();
+  const show = (html, { err = false, busy = false } = {}) => { state.gjobs.set(row, { html, err, busy, settings }); paintJob(row); };
   show(() => '', { busy: true });
-  const fd = new FormData(); fd.append('settings', exportSettings());
+  const fd = new FormData(); fd.append('settings', settings);
   const r = await fetch(`/api/gcode/${state.sid}/${i}`, { method: 'POST', body: fd });
   if (!r.ok) { const { detail } = await r.json(); show(() => esc(t(detail)), { err: true }); return; }
   const { job } = await r.json();

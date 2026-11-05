@@ -6,3 +6,5 @@ __pycache__/
 data/inventory.json
 data/calibration/
 tests/samples/
+data/*.pid
+data/browser/

@@ -263,6 +263,10 @@
 "From the ranking (est. {n}%)": "Du classement (est. {n} %)",
 "Custom": "Personnalisé",
 "Custom {hex}": "Personnalisé {hex}",
+"Invalid settings": "Réglages non valides",
+"Invalid data": "Données non valides",
+"Missing file: {name}": "Fichier manquant : {name}",
+"Saving the project…": "Enregistrement du projet…",
 "Slicing in Snapmaker Orca (this can take a few minutes)…": "Découpe dans Snapmaker Orca (cela peut prendre quelques minutes)…",
 "Compact": "Compact",
 "Standard": "Standard",
@@ -355,7 +359,6 @@
 "Calibration → choose a set → download the 3MF card, print it, photograph it head-on in diffuse light, upload the photo and click the 4 corners. Print at the layer height you usually use. After recalculating, \"Print\" colors come from your photo instead of the mixing model.": "Calibration → choisissez un jeu → téléchargez la carte 3MF, imprimez-la, photographiez-la de face en lumière diffuse, importez la photo et cliquez sur les 4 coins. Imprimez avec votre hauteur de couche habituelle. Après recalcul, les couleurs « Impression » viennent de votre photo et non du modèle de mélange.",
 "The program reports the error on check tiles, which it left out of the fit, and compares it with the model alone. A calibration that improves nothing or has an error of ΔE 8 or more is not saved. Measurements belong to spools and their pairs, so another set of the same spools needs no new card.": "Le programme indique l'erreur sur les cases de contrôle, exclues de l'ajustement, et la compare au modèle seul. Une calibration qui n'améliore rien ou dont l'erreur atteint ΔE 8 n'est pas enregistrée. Les mesures appartiennent aux bobines et à leurs paires : un autre jeu avec les mêmes bobines ne nécessite pas de nouvelle carte.",
 "install Python 3.11+ from python.org, then double-click <code>Irodori.bat</code>": "installez Python 3.11+ depuis python.org, puis double-cliquez sur <code>Irodori.bat</code>",
-"double-click <code>Irodori.command</code> (Python 3.11+)": "double-cliquez sur <code>Irodori.command</code> (Python 3.11+)",
 "The first run creates a <code>.venv</code> folder and installs the dependencies. Snapmaker Orca (for G-code) and Blender (for FBX) are found automatically; set another path in <code>IRODORI_ORCA</code> and <code>IRODORI_BLENDER</code>.": "Le premier lancement crée le dossier <code>.venv</code> et installe les dépendances. Snapmaker Orca (pour le G-code) et Blender (pour le FBX) sont trouvés automatiquement ; indiquez un autre chemin dans <code>IRODORI_ORCA</code> et <code>IRODORI_BLENDER</code>.",
 "Irodori · Help": "Irodori · Aide",
 "{n} similar": {

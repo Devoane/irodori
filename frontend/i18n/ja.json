@@ -263,6 +263,10 @@
 "From the ranking (est. {n}%)": "ランキングから(推定 {n}%)",
 "Custom": "カスタム",
 "Custom {hex}": "カスタム {hex}",
+"Invalid settings": "設定が無効です",
+"Invalid data": "データが無効です",
+"Missing file: {name}": "ファイルがありません: {name}",
+"Saving the project…": "プロジェクトを保存中…",
 "Slicing in Snapmaker Orca (this can take a few minutes)…": "Snapmaker Orca でスライス中(数分かかる場合があります)…",
 "Compact": "コンパクト",
 "Standard": "標準",
@@ -355,7 +359,6 @@
 "Calibration → choose a set → download the 3MF card, print it, photograph it head-on in diffuse light, upload the photo and click the 4 corners. Print at the layer height you usually use. After recalculating, \"Print\" colors come from your photo instead of the mixing model.": "キャリブレーション → セットを選択 → 3MFカードをダウンロードして印刷し、拡散光の下で正面から撮影、写真をアップロードして4つの角をクリックします。普段使うレイヤー高さで印刷してください。再計算後、「印刷」の色は混色モデルではなく写真から取得されます。",
 "The program reports the error on check tiles, which it left out of the fit, and compares it with the model alone. A calibration that improves nothing or has an error of ΔE 8 or more is not saved. Measurements belong to spools and their pairs, so another set of the same spools needs no new card.": "フィッティングから除外した検証マスの誤差を表示し、モデルのみの場合と比較します。改善がない、または誤差が ΔE 8 以上のキャリブレーションは保存しません。測定値はスプールとその組み合わせに紐づくため、同じスプールの別セットに新しいカードは不要です。",
 "install Python 3.11+ from python.org, then double-click <code>Irodori.bat</code>": "python.org から Python 3.11 以降をインストールし、<code>Irodori.bat</code> をダブルクリックします",
-"double-click <code>Irodori.command</code> (Python 3.11+)": "<code>Irodori.command</code> をダブルクリックします(Python 3.11 以降)",
 "The first run creates a <code>.venv</code> folder and installs the dependencies. Snapmaker Orca (for G-code) and Blender (for FBX) are found automatically; set another path in <code>IRODORI_ORCA</code> and <code>IRODORI_BLENDER</code>.": "初回起動時に <code>.venv</code> フォルダーを作成し、依存関係をインストールします。Snapmaker Orca(G-code 用)と Blender(FBX 用)は自動で検出します。別のパスは <code>IRODORI_ORCA</code> と <code>IRODORI_BLENDER</code> で指定できます。",
 "Irodori · Help": "Irodori · ヘルプ",
 "{n} similar": {

@@ -3,7 +3,8 @@
 The server listens on 127.0.0.1 only, but any web page open in the browser can
 still send requests to it. Requests are refused unless they come from this app:
 the Host header must name the loopback address (stops DNS rebinding), and
-cross-site requests are rejected by Origin and Sec-Fetch-Site (stops CSRF).
+requests from any other origin, other local ports included, are rejected by
+Origin and Sec-Fetch-Site (stops CSRF).
 Responses carry a strict Content Security Policy; the app needs no outside
 resources at all.
 """
@@ -13,20 +14,12 @@ import base64
 import hashlib
 import re
 from pathlib import Path, PurePath
-from urllib.parse import urlsplit
 
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import PlainTextResponse
 
-LOOPBACK = {"127.0.0.1", "localhost", "::1"}
+HOST = re.compile(r"(?:127\.0\.0\.1|localhost|\[::1\])(?::\d{1,5})?", re.I)
 MAX_UPLOAD = 1 << 30            # 1 GiB per request
-
-
-def _host(value: str) -> str | None:
-    try:
-        return urlsplit("//" + value).hostname
-    except ValueError:
-        return None
 
 
 def csp(index_html: Path) -> str:
@@ -53,13 +46,18 @@ class LocalOnly(BaseHTTPMiddleware):
 
     async def dispatch(self, request, call_next):
         h = request.headers
-        if _host(h.get("host", "")) not in LOOPBACK:
+        host = h.get("host", "")
+        if not HOST.fullmatch(host):
             return PlainTextResponse("Bad Host header", status_code=421)
         origin = h.get("origin")
-        if origin and origin != "null" and _host(urlsplit(origin).netloc) not in LOOPBACK:
+        if origin == "null":            # our own same-origin navigations with no-referrer, never a change of state
+            foreign = request.method not in ("GET", "HEAD")
+        else:
+            foreign = origin is not None and origin.lower() != f"http://{host.lower()}"
+        if foreign or h.get("sec-fetch-site") not in (None, "same-origin", "none"):
             return PlainTextResponse("Request from another site", status_code=403)
-        if h.get("sec-fetch-site") == "cross-site" or (origin == "null" and request.method not in ("GET", "HEAD")):
-            return PlainTextResponse("Request from another site", status_code=403)
+        if "transfer-encoding" in h:    # a body without a declared size would dodge the limit below
+            return PlainTextResponse("The request must declare its size", status_code=411)
         length = h.get("content-length") or "0"
         if not length.isdigit() or int(length) > MAX_UPLOAD:
             return PlainTextResponse("The file is too large (limit 1 GiB)", status_code=413)

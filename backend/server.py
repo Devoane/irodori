@@ -3,9 +3,11 @@ from __future__ import annotations
 
 import base64
 import json
+import math
 import struct
 from dataclasses import asdict, fields
 from pathlib import Path
+from urllib.parse import quote
 
 import numpy as np
 from fastapi import FastAPI, File, Form, HTTPException, Request, UploadFile
@@ -30,10 +32,19 @@ app.add_middleware(LocalOnly, policy=csp(ROOT / "frontend" / "index.html"))
 def _settings(raw: str | None, base: Settings | None = None) -> Settings:
     s = Settings() if base is None else Settings(**asdict(base))
     names = {f.name for f in fields(Settings)}
-    for k, v in (json.loads(raw) if raw else {}).items():
+    values = json.loads(raw) if raw else {}
+    if not isinstance(values, dict):
+        raise ValueError("Invalid settings")
+    for k, v in values.items():
         if k in names:
             cur = getattr(s, k)
-            setattr(s, k, bool(v) if isinstance(cur, bool) else type(cur)(v))
+            try:
+                v = bool(v) if isinstance(cur, bool) else type(cur)(v)
+            except (TypeError, ValueError, OverflowError):
+                raise ValueError("Invalid settings") from None
+            if isinstance(v, (int, float)) and not abs(v) <= 1e9:      # also refuses NaN and infinity
+                raise ValueError("Invalid settings")
+            setattr(s, k, v)
     s.toolheads = int(np.clip(s.toolheads, 2, 8))
     if s.capacity not in (0, 64, 255):
         s.capacity = s.toolheads                     # physical filaments only
@@ -44,10 +55,12 @@ def _settings(raw: str | None, base: Settings | None = None) -> Settings:
     s.interweave = int(np.clip(s.interweave, 0, 10))
     s.max_triangles = int(np.clip(s.max_triangles, 16, 1_000_000))
     s.colored_walls = int(np.clip(s.colored_walls, 1, 1000))
+    s.max_recipe_len = int(np.clip(s.max_recipe_len, 2, 40))
+    s.max_run = int(np.clip(s.max_run, 1, 4))
     s.backing = float(np.clip(s.backing, 0.0, 0.6))
     s.longest_side = float(np.clip(s.longest_side, 0, 1000))
     s.layer_height = round(float(np.clip(s.layer_height, 0.04, 0.28)), 2)
-    if not s.variable_layer > s.layer_height:
+    if not s.layer_height < s.variable_layer <= 0.28:
         s.variable_layer = 0.0
     if not 0 < s.detailed_top < s.layer_height:
         s.detailed_top = 0.0
@@ -57,7 +70,7 @@ def _settings(raw: str | None, base: Settings | None = None) -> Settings:
     s.rainbow_h = float(np.clip(s.rainbow_h, 0, 10))
     s.rainbow_offset = float(np.mod(s.rainbow_offset, 360))
     s.rainbow_white = float(np.clip(s.rainbow_white, 0, 75))
-    s.z_offset = min(0.0, float(s.z_offset))
+    s.z_offset = float(np.clip(s.z_offset, -1000, 0))
     if s.repair not in ("auto", "on", "off"):
         s.repair = "auto"
     if s.base not in STYLES:
@@ -86,7 +99,9 @@ def _row(s: analysis.Session, idx: int):
 
 
 def _download(data: bytes, name: str, media: str) -> Response:
-    return Response(data, media_type=media, headers={"Content-Disposition": f'attachment; filename="{name}"'})
+    quoted = quote(name)
+    disposition = f'attachment; filename="{name}"' if quoted == name else f"attachment; filename*=UTF-8''{quoted}"
+    return Response(data, media_type=media, headers={"Content-Disposition": disposition})
 
 
 @app.get("/api/health")
@@ -167,9 +182,11 @@ async def api_recolor(sid: str, idx: int, colors: str = Form(...), replace: int 
         raise HTTPException(409, "Analysis in progress")
     base = _row(s, idx)
     hexes = json.loads(colors)
-    if len(hexes) != len(base.filaments):
+    if not isinstance(hexes, list) or len(hexes) != len(base.filaments):
         raise HTTPException(400, "Wrong number of colors")
     for h in hexes:
+        if not isinstance(h, str):
+            raise ValueError("Invalid data")
         hex_to_rgb(h)
     row = analysis.custom_row(s, base, hexes)
     if replace:
@@ -239,16 +256,22 @@ def api_library():
 @app.put("/api/inventory")
 async def api_inventory(request: Request):
     raw = await request.json()
-    custom = []
-    for c in raw.get("custom", []):
-        h = rgb_to_hex(hex_to_rgb(c["hex"]))
-        td = c.get("td")
-        custom.append({"id": f"custom-{h[1:]}", "brand": "Custom", "name": str(c.get("name") or h)[:40], "hex": h,
-                       "td": float(td) if td not in (None, "") else None, "profile": str(c.get("profile") or "")[:120]})
-    ids = {f["id"] for f in json.loads((ROOT / "data" / "filaments.json").read_text(encoding="utf-8"))["filaments"]}
-    ids |= {c["id"] for c in custom}
-    inv = {"owned": [i for i in dict.fromkeys(raw.get("owned", [])) if i in ids], "custom": custom,
-           "loaded": [i for i in raw.get("loaded", []) if i in ids][:4]}
+    try:
+        custom = []
+        for c in raw.get("custom", [])[:500]:
+            h = rgb_to_hex(hex_to_rgb(c["hex"]))
+            td = c.get("td")
+            td = float(td) if td not in (None, "") else None
+            if td is not None and not (math.isfinite(td) and 0 <= td <= 100):
+                raise ValueError("Invalid data")
+            custom.append({"id": f"custom-{h[1:]}", "brand": "Custom", "name": str(c.get("name") or h)[:40], "hex": h,
+                           "td": td, "profile": str(c.get("profile") or "")[:120]})
+        ids = {f["id"] for f in json.loads((ROOT / "data" / "filaments.json").read_text(encoding="utf-8"))["filaments"]}
+        ids |= {c["id"] for c in custom}
+        inv = {"owned": [i for i in dict.fromkeys(raw.get("owned", [])) if i in ids], "custom": custom,
+               "loaded": [i for i in raw.get("loaded", []) if i in ids][:4]}
+    except (AttributeError, KeyError, TypeError):
+        raise ValueError("Invalid data") from None
     save_inventory(inv)
     return inv
 
@@ -296,6 +319,8 @@ def _library_filaments(ids: list[str]) -> list[dict]:
 
 @app.get("/api/calibration/card.3mf")
 def api_card(filaments: str, layer_height: float = 0.10):
+    if not 0.04 <= layer_height <= 0.28:
+        raise ValueError("Invalid data")
     data = calibration_card.card_3mf(_library_filaments(filaments.split(",")), layer_height)
     return _download(data, "irodori_calibration_card.3mf", "application/vnd.ms-package.3dmanufacturing-3dmodel+xml")
 
@@ -312,7 +337,7 @@ async def api_fit(filaments: str = Form(...), samples: str = Form(...)):
     fil = _library_filaments(ids)
     lay = calibration_card.layout(len(fil))
     meas = np.array(json.loads(samples), dtype=np.float64)
-    if len(meas) != len(lay["tiles"]):
+    if meas.shape != (len(lay["tiles"]), 3) or not np.isfinite(meas).all():
         raise HTTPException(400, "Wrong number of samples")
     fr = np.array([t["fractions"] for t in lay["tiles"]])
     nominal = np.array([hex_to_rgb(f["hex"]) for f in fil])
